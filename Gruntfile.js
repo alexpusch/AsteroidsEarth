@@ -50,7 +50,7 @@ module.exports = function (grunt) {
         },
         connect: {
             options: {
-                port: 9001,
+                port: 9002,
                 livereload: 35729,
                 // change this to '0.0.0.0' to access the server from outside
                 hostname: 'localhost'
@@ -77,6 +77,15 @@ module.exports = function (grunt) {
                 options: {
                     open: true,
                     base: '<%= yeoman.dist %>'
+                }
+            }
+        },
+        jasmine: {
+            pivotal: {
+                src: '.tmp/scripts/*.js',
+                options: {
+                  specs: '.tmp/spec/*specs.js',
+                  helpers: 'test/spec/*Helper.js'
                 }
             }
         },
@@ -307,6 +316,8 @@ module.exports = function (grunt) {
         }
     });
 
+    grunt.loadNpmTasks('grunt-contrib-jasmine');
+
     grunt.registerTask('server', function (target) {
         if (target === 'dist') {
             return grunt.task.run(['build', 'connect:dist:keepalive']);
@@ -326,6 +337,7 @@ module.exports = function (grunt) {
         'concurrent:test',
         'autoprefixer',
         'connect:test',
+        'jasmine'
     ]);
 
     grunt.registerTask('build', [
