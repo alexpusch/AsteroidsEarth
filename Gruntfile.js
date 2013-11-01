@@ -1,6 +1,12 @@
 // Generated on 2013-10-25 using generator-webapp 0.4.3
 'use strict';
 
+// grunt::
+//  compile cs and sruff
+//  runs server
+//  compile tests
+//  
+
 // # Globbing
 // for performance reasons we're only matching one level down:
 // 'test/spec/{,*/}*.js'
@@ -20,13 +26,16 @@ module.exports = function (grunt) {
             dist: 'dist'
         },
         watch: {
+            options: {
+                nospawn: true
+            }, 
             coffee: {
                 files: ['<%= yeoman.app %>/scripts/{,*/}*.coffee'],
                 tasks: ['coffee:dist']
             },
             coffeeTest: {
                 files: ['test/spec/{,*/}*.coffee'],
-                tasks: ['coffee:test']
+                tasks: ['coffee:test', 'jasmine:pivotal:build']
             },
             compass: {
                 files: ['<%= yeoman.app %>/styles/{,*/}*.{scss,sass}'],
@@ -47,6 +56,10 @@ module.exports = function (grunt) {
                     '<%= yeoman.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
                 ]
             }
+            // jasmine: {
+            //     files: ['app/scripts/*.coffee', 'test/spec/{,*/}*.coffee'],
+            //     tasks: ['jasmine']
+            // }
         },
         connect: {
             options: {
@@ -57,7 +70,7 @@ module.exports = function (grunt) {
             },
             livereload: {
                 options: {
-                    open: true,
+                    open: false,
                     base: [
                         '.tmp',
                         '<%= yeoman.app %>'
@@ -66,10 +79,9 @@ module.exports = function (grunt) {
             },
             test: {
                 options: {
+                    port: 9003,
                     base: [
-                        '.tmp',
-                        'test',
-                        '<%= yeoman.app %>'
+                        '.',
                     ]
                 }
             },
@@ -84,8 +96,9 @@ module.exports = function (grunt) {
             pivotal: {
                 src: '.tmp/scripts/*.js',
                 options: {
-                  specs: '.tmp/spec/*specs.js',
-                  helpers: 'test/spec/*Helper.js'
+                    specs: '.tmp/spec/*specs.js',
+                    helpers: '.tmp/spec/*helper.js',
+                    vendor: ['app/bower_components/jquery/jquery.js', 'app/vendor/**/*.js']
                 }
             }
         },
@@ -101,17 +114,6 @@ module.exports = function (grunt) {
                 }]
             },
             server: '.tmp'
-        },
-        jshint: {
-            options: {
-                jshintrc: '.jshintrc'
-            },
-            all: [
-                'Gruntfile.js',
-                '<%= yeoman.app %>/scripts/{,*/}*.js',
-                '!<%= yeoman.app %>/scripts/vendor/*',
-                'test/spec/{,*/}*.js'
-            ]
         },
         coffee: {
             dist: {
@@ -303,7 +305,8 @@ module.exports = function (grunt) {
             ],
             test: [
                 'coffee',
-                'copy:styles'
+                'copy:styles',
+                'jasmine:pivotal:build'
             ],
             dist: [
                 'coffee',
@@ -315,8 +318,10 @@ module.exports = function (grunt) {
             ]
         }
     });
-
+    
     grunt.loadNpmTasks('grunt-contrib-jasmine');
+
+    grunt.registerTask("jasmine-server", ["jasmine:pivotal:build", "connect:test:keepalive"]);
 
     grunt.registerTask('server', function (target) {
         if (target === 'dist') {
@@ -325,8 +330,10 @@ module.exports = function (grunt) {
 
         grunt.task.run([
             'clean:server',
+            'concurrent:test',
             'concurrent:server',
             'autoprefixer',
+            'connect:test',
             'connect:livereload',
             'watch'
         ]);
