@@ -1,6 +1,6 @@
-define ['box2d'], (box2d) ->
+define ['box2d'], (B2D) ->
   
-  class window.VectorHelpers
+  class VectorHelpers
     @createDirectionVector: (angle) ->
       rotationMatrix = B2D.Mat22.FromAngle angle
       v = new B2D.Vec2 1, 0

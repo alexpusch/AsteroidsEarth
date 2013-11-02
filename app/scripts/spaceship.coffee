@@ -1,6 +1,4 @@
-define ['box2d'], (box2d) ->
-
-
+define ['box2d', 'vector_helpers'], (B2D, VectorHelpers) ->
   
   class Spaceship
     constructor: ->
@@ -14,7 +12,7 @@ define ['box2d'], (box2d) ->
 
     getEntityDef: ->
       bodyDef = new B2D.BodyDef
-      bodyDef.type = B2D.Dynamics.b2Body.b2_staticBody
+      bodyDef.type = B2D.Body.b2_dynamicBody
 
       fixtureDef = new B2D.FixtureDef
       fixtureDef.shape = new B2D.PolygonShape
@@ -26,8 +24,4 @@ define ['box2d'], (box2d) ->
     fireMainThrusters: ->
       angle = @body.GetAngle()
       direction = VectorHelpers.createDirectionVector angle
-      @body.applyForce(new B2D.Vec2(1,0), new B2D.Vec2(0,0))
-
-
-
-  window.Spaceship = Spaceship
+      @body.ApplyForce(new B2D.Vec2(10,0), new B2D.Vec2(0,0))

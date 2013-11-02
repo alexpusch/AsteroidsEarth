@@ -1,4 +1,4 @@
-define ['box2d', 'vector_helpers'], ->
+define ['box2d', 'vector_helpers'], (B2D, VectorHelpers) ->
   describe "VectorHelpersSpec", ->
     beforeEach ->
       this.addMatchers

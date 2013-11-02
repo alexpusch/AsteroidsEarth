@@ -1,4 +1,4 @@
-define ['box2d', 'world'], ->
+define ['box2d', 'world'], (B2D, World) ->
   describe "World", ->
     describe "registerEntity", ->
       beforeEach ->

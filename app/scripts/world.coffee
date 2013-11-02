@@ -1,7 +1,6 @@
-define ['box2d'], (box2d) ->
-
+define ['box2d'], (B2D) ->
   
-  class window.World
+  class World
     constructor: ->
       @world = new B2D.World(new B2D.Vec2(0, 0),  true)
 
@@ -18,16 +17,16 @@ define ['box2d'], (box2d) ->
       @world.GetBodyCount()
 
     update: ->
-      console.log "update"
+      # console.log "update"
       @world.Step(1 / 60, 10, 10);
       @world.DrawDebugData();
       @world.ClearForces();
 
     setupDebugRenderer: (canvas) ->
-      debugDraw = new B2D.b2DebugDraw
+      debugDraw = new B2D.DebugDraw
       debugDraw.SetSprite(canvas.getContext("2d"))
       debugDraw.SetDrawScale(30.0);
       debugDraw.SetFillAlpha(0.5);
       debugDraw.SetLineThickness(1.0);
-      debugDraw.SetFlags(B2D.b2DebugDraw.e_shapeBit | B2D.b2DebugDraw.e_jointBit);
+      debugDraw.SetFlags(B2D.DebugDraw.e_shapeBit | B2D.DebugDraw.e_jointBit);
       @world.SetDebugDraw(debugDraw);

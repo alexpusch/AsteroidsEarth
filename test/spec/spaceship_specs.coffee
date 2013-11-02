@@ -1,4 +1,4 @@
-define ['box2d', 'spaceship'], ->
+define ['box2d', 'spaceship'], (B2D, Spaceship)->
   describe "Spaceship", ->
     beforeEach ->
       @spaceship = new Spaceship
@@ -6,15 +6,15 @@ define ['box2d', 'spaceship'], ->
       @spaceship.setBody(@body)
 
     describe "setBody", ->
-      it "sets the spaceship body to the givven body", ->
+      it "sets the spaceship body to the given body", ->
         expect(@spaceship.body).toBe @body
 
     describe "fire main thrusters", ->
       it "a force is applied forwards", ->
-        @spaceship.body.applyForce = jasmine.createSpy('applyForce')
+        @spaceship.body.ApplyForce = jasmine.createSpy('applyForce')
         @spaceship.body.GetAngle = jasmine.createSpy('getAngle').andReturn(0)
         @spaceship.fireMainThrusters()
-        expect(@spaceship.body.applyForce).toHaveBeenCalledWith(new B2D.Vec2(1,0), new B2D.Vec2(0,0))
+        expect(@spaceship.body.ApplyForce).toHaveBeenCalledWith(new B2D.Vec2(1,0), new B2D.Vec2(0,0))
 
     describe "fire left thruster", ->
       it "a force is applied to the left", ->
