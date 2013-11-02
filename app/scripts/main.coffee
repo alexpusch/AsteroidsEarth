@@ -5,6 +5,7 @@ require ['world', 'spaceship'], (World, Spaceship) ->
     world.setupDebugRenderer $('canvas')[0]
     window.spaceship = new Spaceship
       speed: 10
+      angularSpeed: 10
 
     world.registerEntity spaceship
 
