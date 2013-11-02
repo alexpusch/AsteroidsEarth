@@ -1,8 +1,9 @@
 define ['box2d'], (B2D) ->
   
   class World
-    constructor: ->
+    constructor: (options)->
       @world = new B2D.World(new B2D.Vec2(0, 0),  true)
+      @size = options.size
       @entities = []
 
     registerEntity: (entity) ->
@@ -20,8 +21,22 @@ define ['box2d'], (B2D) ->
 
     update: ->
       # console.log "update"
-      _.each @entities, (e)->
-        e.update()
+      _.each @entities, (e) =>
+        position = e.getPosition()
+        
+        if position.x > @size.width
+          position.x = position.x % @size.width
+        if position.x < 0
+          position.x = @size.width + position.x
+
+        if position.y > @size.height or position.y < 0
+          position.y = position.y % @size.height
+        if position.y < 0
+          position.y = @size.height + position.y
+
+        e.setPosition(position)
+
+        e.update?()
 
       @world.Step(1 / 60, 10, 10);
       @world.DrawDebugData();

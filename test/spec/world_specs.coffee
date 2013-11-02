@@ -1,9 +1,12 @@
-define ['box2d', 'world'], (B2D, World) ->
+define ['box2d', 'world', 'entity'], (B2D, World, Entity) ->
   describe "World", ->
     beforeEach ->
       @world = new World
-      @entity = createEntitySpy()
-      @entity.setBody = jasmine.createSpy('setBody')
+        size: 
+          width: 100
+          height: 100
+
+      @entity = new Entity
 
     describe "registerEntity", ->
       it "added the entity to the worlds bodies", ->     
@@ -13,6 +16,8 @@ define ['box2d', 'world'], (B2D, World) ->
         expect(@world.getBodyCount()).toEqual(bodyCount + 1)
 
       it "sets the entity body to the created body", ->
+        spyOn @entity, 'setBody'
+
         @world.registerEntity @entity
         expect(@entity.setBody).toHaveBeenCalled()
 
@@ -27,5 +32,17 @@ define ['box2d', 'world'], (B2D, World) ->
         @world.registerEntity @entity
         @world.update()
         expect(@entity.update).toHaveBeenCalled()
+
+      it "warps entities from one edge of the screen to the oposite", ->
+        @world.registerEntity @entity
+        @entity.setPosition(new B2D.Vec2 103, 0)
+        @world.update()
+        expect(@entity.getPosition()).toBeVector new B2D.Vec2 3, 0
+
+      it "warps entities from the start of the screen to the end", ->
+        @world.registerEntity @entity
+        @entity.setPosition(new B2D.Vec2 -3, 0)
+        @world.update()
+        expect(@entity.getPosition()).toBeVector new B2D.Vec2 97, 0        
 
 

@@ -3,6 +3,9 @@ require ['world', 'spaceship', 'player'], (World, Spaceship, Player) ->
   if $('canvas').length > 0
 
     world = new World
+      size:
+        width: 200
+        height: 200
     world.setupDebugRenderer $('canvas')[0]
     window.spaceship = new Spaceship
       speed: 2500
