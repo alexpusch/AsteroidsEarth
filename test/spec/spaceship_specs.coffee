@@ -9,10 +9,6 @@ define ['box2d', 'spaceship'], (B2D, Spaceship)->
       @body.GetWorldPoint = (x) -> x
       @spaceship.setBody(@body)
 
-    describe "setBody", ->
-      it "sets the spaceship body to the given body", ->
-        expect(@spaceship.body).toBe @body
-
     describe "fire main thrusters", ->
       it "turns on main thrusters", ->
         @spaceship.fireMainThrusters()

@@ -1,6 +1,6 @@
-define ['box2d', 'vector_helpers'], (B2D, VectorHelpers) ->
+define ['box2d', 'entity', 'vector_helpers'], (B2D, Entity, VectorHelpers) ->
   
-  class Spaceship
+  class Spaceship extends Entity
     constructor: (options) ->
       @speed = options.speed
       @angularSpeed = options.angularSpeed
@@ -8,9 +8,6 @@ define ['box2d', 'vector_helpers'], (B2D, VectorHelpers) ->
         main: 'off'
         left: 'off'
         right: 'off'
-
-    setBody: (body) ->
-      @body = body
 
     getEntityDef: ->
       bodyDef = new B2D.BodyDef
