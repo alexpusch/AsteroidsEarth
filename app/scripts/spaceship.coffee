@@ -28,7 +28,7 @@ define ['box2d', 'vector_helpers'], (B2D, VectorHelpers) ->
       @body.ApplyForce(direction, @body.GetWorldPoint(new B2D.Vec2(0,0)))
 
     fireLeftThrusters: ->
-      @body.ApplyTorque @angularSpeed
+      @body.ApplyTorque -@angularSpeed
 
     fireRightThrusters: ->
-      @body.ApplyTorque -@angularSpeed
+      @body.ApplyTorque @angularSpeed
