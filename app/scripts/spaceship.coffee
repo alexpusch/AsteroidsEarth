@@ -1,29 +1,33 @@
-class Spaceship
-  constructor: ->
-    @thrusters = 
-      main: false
-      left: false
-      right: false
-
-  setBody: (body) ->
-    @body = body
-
-  getEntityDef: ->
-    bodyDef = new Box2D.Dynamics.b2BodyDef
-    bodyDef.type = Box2D.Dynamics.b2Body.b2_staticBody
-
-    fixtureDef = new Box2D.Dynamics.b2FixtureDef
-    fixtureDef.shape = new Box2D.Collision.Shapes.b2PolygonShape
-    fixtureDef.shape.SetAsBox(20, 2)
-
-    bodyDef: bodyDef
-    fixtureDef: fixtureDef
-
-  fireMainThrusters: ->
-    angle = @body.GetAngle()
-    direction = VectorHelpers.createDirectionVector angle
-    @body.applyForce(new Box2D.Common.Math.b2Vec2(1,0), new Box2D.Common.Math.b2Vec2(0,0))
+define ['box2d'], (box2d) ->
 
 
+  
+  class Spaceship
+    constructor: ->
+      @thrusters = 
+        main: false
+        left: false
+        right: false
 
-window.Spaceship = Spaceship
+    setBody: (body) ->
+      @body = body
+
+    getEntityDef: ->
+      bodyDef = new B2D.BodyDef
+      bodyDef.type = B2D.Dynamics.b2Body.b2_staticBody
+
+      fixtureDef = new B2D.FixtureDef
+      fixtureDef.shape = new B2D.PolygonShape
+      fixtureDef.shape.SetAsBox(20, 2)
+
+      bodyDef: bodyDef
+      fixtureDef: fixtureDef
+
+    fireMainThrusters: ->
+      angle = @body.GetAngle()
+      direction = VectorHelpers.createDirectionVector angle
+      @body.applyForce(new B2D.Vec2(1,0), new B2D.Vec2(0,0))
+
+
+
+  window.Spaceship = Spaceship

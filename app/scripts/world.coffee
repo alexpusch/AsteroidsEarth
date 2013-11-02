@@ -1,30 +1,33 @@
-class window.World
-  constructor: ->
-    @world = new Box2D.Dynamics.b2World(new Box2D.Common.Math.b2Vec2(0, 0),  true)
+define ['box2d'], (box2d) ->
 
-  registerEntity: (entity) ->
-    fixtureDef =  entity.getEntityDef().fixtureDef
-    bodyDef = entity.getEntityDef().bodyDef
+  
+  class window.World
+    constructor: ->
+      @world = new B2D.World(new B2D.Vec2(0, 0),  true)
 
-    body = @world.CreateBody bodyDef
-    body.CreateFixture fixtureDef
+    registerEntity: (entity) ->
+      fixtureDef =  entity.getEntityDef().fixtureDef
+      bodyDef = entity.getEntityDef().bodyDef
 
-    entity.setBody body
+      body = @world.CreateBody bodyDef
+      body.CreateFixture fixtureDef
 
-  getBodyCount: ->
-    @world.GetBodyCount()
+      entity.setBody body
 
-  update: ->
-    console.log "update"
-    @world.Step(1 / 60, 10, 10);
-    @world.DrawDebugData();
-    @world.ClearForces();
+    getBodyCount: ->
+      @world.GetBodyCount()
 
-  setupDebugRenderer: (canvas) ->
-    debugDraw = new Box2D.Dynamics.b2DebugDraw
-    debugDraw.SetSprite(canvas.getContext("2d"))
-    debugDraw.SetDrawScale(30.0);
-    debugDraw.SetFillAlpha(0.5);
-    debugDraw.SetLineThickness(1.0);
-    debugDraw.SetFlags(Box2D.Dynamics.b2DebugDraw.e_shapeBit | Box2D.Dynamics.b2DebugDraw.e_jointBit);
-    @world.SetDebugDraw(debugDraw);
+    update: ->
+      console.log "update"
+      @world.Step(1 / 60, 10, 10);
+      @world.DrawDebugData();
+      @world.ClearForces();
+
+    setupDebugRenderer: (canvas) ->
+      debugDraw = new B2D.b2DebugDraw
+      debugDraw.SetSprite(canvas.getContext("2d"))
+      debugDraw.SetDrawScale(30.0);
+      debugDraw.SetFillAlpha(0.5);
+      debugDraw.SetLineThickness(1.0);
+      debugDraw.SetFlags(B2D.b2DebugDraw.e_shapeBit | B2D.b2DebugDraw.e_jointBit);
+      @world.SetDebugDraw(debugDraw);

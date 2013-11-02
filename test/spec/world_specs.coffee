@@ -1,16 +1,17 @@
-describe "World", ->
-  describe "registerEntity", ->
-    beforeEach ->
-      @world = new World
-      @entity = createEntitySpy()
-      @entity.setBody = jasmine.createSpy('setBody')
+define ['box2d', 'world'], ->
+  describe "World", ->
+    describe "registerEntity", ->
+      beforeEach ->
+        @world = new World
+        @entity = createEntitySpy()
+        @entity.setBody = jasmine.createSpy('setBody')
 
-    it "added the entity to the worlds bodies", ->     
-      bodyCount = @world.getBodyCount()
-      @world.registerEntity @entity
+      it "added the entity to the worlds bodies", ->     
+        bodyCount = @world.getBodyCount()
+        @world.registerEntity @entity
 
-      expect(@world.getBodyCount()).toEqual(bodyCount + 1)
+        expect(@world.getBodyCount()).toEqual(bodyCount + 1)
 
-    it "sets the entity body to the created body", ->
-      @world.registerEntity @entity
-      expect(@entity.setBody).toHaveBeenCalled()
+      it "sets the entity body to the created body", ->
+        @world.registerEntity @entity
+        expect(@entity.setBody).toHaveBeenCalled()
