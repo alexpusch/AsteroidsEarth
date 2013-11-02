@@ -4,6 +4,10 @@ define ['box2d', 'vector_helpers'], (B2D, VectorHelpers) ->
     constructor: (options) ->
       @speed = options.speed
       @angularSpeed = options.angularSpeed
+      @thrusters =
+        main: 'off'
+        left: 'off'
+        right: 'off'
 
     setBody: (body) ->
       @body = body
@@ -22,13 +26,42 @@ define ['box2d', 'vector_helpers'], (B2D, VectorHelpers) ->
       fixtureDef: fixtureDef
 
     fireMainThrusters: ->
+      @thrusters.main = 'on'
+
+    fireLeftThrusters: ->
+      @thrusters.left = 'on'
+
+    fireRightThrusters: ->
+      @thrusters.right = 'on'
+
+    turnMainThrustersOff: ->
+      @thrusters.main = 'off'
+
+    turnLeftThrustersOff: ->
+      @thrusters.left = 'off'
+
+    turnRightThrustersOff: ->
+      @thrusters.right = 'off'
+
+    update: ->
+      if @_thrustersOn 'main'
+        @_mainThrustersAction()
+      else if @_thrustersOn 'left'
+        @_leftThrustersAction()
+      else if @_thrustersOn 'right'
+        @_rightThrustersACtion()
+
+    _thrustersOn: (type)->
+      @thrusters[type] == 'on'
+
+    _mainThrustersAction: ->
       angle = @body.GetAngle()
       direction = VectorHelpers.createDirectionVector angle
       direction.Multiply(@speed)
       @body.ApplyForce(direction, @body.GetWorldPoint(new B2D.Vec2(0,0)))
 
-    fireLeftThrusters: ->
+    _leftThrustersAction: ->
       @body.ApplyTorque -@angularSpeed
 
-    fireRightThrusters: ->
+    _rightThrustersACtion: ->
       @body.ApplyTorque @angularSpeed
