@@ -67,3 +67,14 @@ define ['box2d', 'spaceship'], (B2D, Spaceship)->
           @spaceship.fireRightThrusters()
           @spaceship.update()
           expect(@spaceship.body.ApplyTorque).toHaveBeenCalledWith(10)
+
+      describe "both right and main thrusters are on", ->
+        it "applies a force forwards and a toruqe to the right", ->
+          @spaceship.body.GetAngle = jasmine.createSpy('getAngle').andReturn(0)
+          @spaceship.body.ApplyTorque = jasmine.createSpy('ApplyTorque')
+          @spaceship.body.ApplyForce = jasmine.createSpy('ApplyForce')
+          @spaceship.fireMainThrusters()
+          @spaceship.fireRightThrusters()
+          @spaceship.update()
+          expect(@spaceship.body.ApplyForce).toHaveBeenCalledWith(new B2D.Vec2(10,0), new B2D.Vec2(0,0))
+          expect(@spaceship.body.ApplyTorque).toHaveBeenCalledWith(10)

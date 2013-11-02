@@ -15,13 +15,19 @@ define ['box2d', 'vector_helpers'], (B2D, VectorHelpers) ->
     getEntityDef: ->
       bodyDef = new B2D.BodyDef
       bodyDef.type = B2D.Body.b2_dynamicBody
-
+      bodyDef.position = new B2D.Vec2 30,30
+      bodyDef.angularDamping = 5
       fixtureDef = new B2D.FixtureDef
-      fixtureDef.shape = new B2D.PolygonShape
-      fixtureDef.shape.SetAsBox(1, 1)
       fixtureDef.mass = 1
       fixtureDef.density = 1
+      fixtureDef.friction = 0
+      fixtureDef.shape = new B2D.PolygonShape
+      fixtureDef.shape.SetAsArray [ 
+          new B2D.Vec2(0, -3),
+          new B2D.Vec2(8, 0),
+          new B2D.Vec2(0, 3)], 3
 
+      # fixtureDef.shape.SetAsBox(1, 1)
       bodyDef: bodyDef
       fixtureDef: fixtureDef
 
@@ -46,9 +52,9 @@ define ['box2d', 'vector_helpers'], (B2D, VectorHelpers) ->
     update: ->
       if @_thrustersOn 'main'
         @_mainThrustersAction()
-      else if @_thrustersOn 'left'
+      if @_thrustersOn 'left'
         @_leftThrustersAction()
-      else if @_thrustersOn 'right'
+      if @_thrustersOn 'right'
         @_rightThrustersACtion()
 
     _thrustersOn: (type)->
