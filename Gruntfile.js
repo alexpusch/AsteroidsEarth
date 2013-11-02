@@ -94,11 +94,15 @@ module.exports = function (grunt) {
         },
         jasmine: {
             pivotal: {
-                src: '.tmp/scripts/*.js',
+                src: ['.tmp/script/box2d.js', '.tmp/scripts/*.js'],
                 options: {
                     specs: '.tmp/spec/*specs.js',
                     helpers: '.tmp/spec/*helper.js',
-                    vendor: ['app/bower_components/jquery/jquery.js', 'app/vendor/**/*.js']
+                    vendor: ['app/bower_components/jquery/jquery.js', 'app/vendor/**/*.js'],
+                    template: require('grunt-template-jasmine-requirejs'),
+                    templateOptions: {
+                      requireConfigFile: 'config.js'
+                    }
                 }
             }
         },
@@ -182,7 +186,8 @@ module.exports = function (grunt) {
         'bower-install': {
             app: {
                 html: '<%= yeoman.app %>/index.html',
-                ignorePath: '<%= yeoman.app %>/'
+                ignorePath: '<%= yeoman.app %>/',
+                rjsConfig: 'config.js'
             }
         },
         // not enabled since usemin task does concat and uglify
@@ -320,6 +325,7 @@ module.exports = function (grunt) {
     });
     
     grunt.loadNpmTasks('grunt-contrib-jasmine');
+    // grunt.loadNpmTasks('grunt-bower-requirejs');
 
     grunt.registerTask("jasmine-server", ["jasmine:pivotal:build", "connect:test:keepalive"]);
 
