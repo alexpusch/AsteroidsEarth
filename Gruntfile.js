@@ -100,7 +100,7 @@ module.exports = function (grunt) {
                     helpers: '.tmp/spec/*helper.js',
                     vendor: ['app/bower_components/jquery/jquery.js',
                              'app/bower_components/underscore/underscore.js',
-                             'app/vendor/**/*.js'],
+                             'app/bower_components/box2dweb/Box2dWeb-2.1.a.3.js'],
                     template: require('grunt-template-jasmine-requirejs'),
                     templateOptions: {
                       requireConfigFile: 'config.js'
