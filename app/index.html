@@ -2,7 +2,7 @@
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
 <!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<!--[if gt IE 8]><!--> <html> <!--<![endif]-->
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -19,7 +19,7 @@
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
         <h1>Space Wars</h1>
-
+        <canvas id='canvas'></canvas>
         <!-- build:js scripts/vendor.js -->
         <!-- bower:js -->
         <script src="bower_components/jquery/jquery.js"></script>
@@ -37,7 +37,8 @@
         </script>
 
         <!-- build:js scripts/main.js -->
-        <script src="scripts/main.js"></script>
+        <script src='vendor/box2dWeb/Box2dWeb-2.1.a.3.js'> </script>
         <!-- endbuild -->
+        <script data-main="scripts/main" src="bower_components/requirejs/require.js"></script>
 </body>
 </html>
