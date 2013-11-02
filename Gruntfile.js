@@ -98,7 +98,9 @@ module.exports = function (grunt) {
                 options: {
                     specs: '.tmp/spec/*specs.js',
                     helpers: '.tmp/spec/*helper.js',
-                    vendor: ['app/bower_components/jquery/jquery.js', 'app/vendor/**/*.js'],
+                    vendor: ['app/bower_components/jquery/jquery.js',
+                             'app/bower_components/underscore/underscore.js',
+                             'app/vendor/**/*.js'],
                     template: require('grunt-template-jasmine-requirejs'),
                     templateOptions: {
                       requireConfigFile: 'config.js'
