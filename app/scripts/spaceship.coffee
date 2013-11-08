@@ -5,7 +5,9 @@ define ['box2d', 'entity', 'vector_helpers'], (B2D, Entity, VectorHelpers) ->
       @speed = options.speed
       @angularSpeed = options.angularSpeed
       @length = 8
-      @cannonOffset = new B2D.Vec2(@length + 1)
+      @bulletSpeed = 30000
+      @cannonOffset = new B2D.Vec2(@length + 5)
+      @cannonRate = 200
       @thrusters =
         main: 'off'
         left: 'off'
@@ -48,16 +50,29 @@ define ['box2d', 'entity', 'vector_helpers'], (B2D, Entity, VectorHelpers) ->
     turnRightThrustersOff: ->
       @thrusters.right = 'off'
 
+    fireCannon: ->
+      if @cannonIntervalHandler == null
+        console.log "fire cannon!!"
+        @cannonIntervalHandler = setInterval(
+          => 
+           @fireBullet()
+        , @cannonRate)
+
+    turnCannonOff: ->
+      clearInterval @cannonIntervalHandler
+      @cannonIntervalHandler = null
+
     fireBullet: ->
+      console.log "fire bullet"
       angle = @getAngle()
       position = @getPosition()
       transformCannonOffest = @cannonOffset.Copy()
+      transformCannonOffest = VectorHelpers.rotate transformCannonOffest, angle
       transformCannonOffest.Add(position)
       spaceshipSpeed = @body.GetLinearVelocity()
 
-      bulletSpeed = spaceshipSpeed.Copy()
-      bulletSpeed.Normalize()
-      bulletSpeed.Multiply(10000)
+      bulletSpeed = @_getDirectionVector()
+      bulletSpeed.Multiply(@bulletSpeed)
       bulletSpeed.Add(spaceshipSpeed)
 
       bullet = EntityFactory.createBullet()
