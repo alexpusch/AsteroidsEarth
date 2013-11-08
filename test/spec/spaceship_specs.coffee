@@ -56,11 +56,11 @@ define ['box2d', 'spaceship'], (B2D, Spaceship)->
         expect(EntityFactory.createBullet).toHaveBeenCalled()
 
       it "fires the bullet in the current cannon position", ->
-        @spaceship.setAngle 90 * Math.PI/180
+        @spaceship.setAngle MathHelpers.d2r 90
         @spaceship.setPosition new B2D.Vec2(0,0)
 
         @spaceship.fireBullet()
-        expect(@bullet.setPosition).toHaveBeenCalledWith new B2D.Vec2(9, 0)
+        expect(@bullet.setPosition).toHaveBeenCalledWith new B2D.Vec2(0, 9)
       
       it "fires the bullet in the angle of the spaceship", ->
         @spaceship.setAngle 3
