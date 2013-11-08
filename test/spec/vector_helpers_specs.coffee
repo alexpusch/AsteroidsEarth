@@ -1,9 +1,9 @@
 define ['box2d', 'vector_helpers', 'math_helpers'], (B2D, VectorHelpers, MathHelpers) ->
   describe "VectorHelpersSpec", ->
-    describe "rotateVector", ->
+    describe "rotate", ->
       it "returns a rotated vector" , ->
         vec = new B2D.Vec2(1,0)
-        result = VectorHelpers.rotateVector(vec, MathHelpers.d2r 90)
+        result = VectorHelpers.rotate(vec, MathHelpers.d2r 90)
         expect(result).toBeVector new B2D.Vec2(0,1)
 
     describe "createDirectionVector", ->
