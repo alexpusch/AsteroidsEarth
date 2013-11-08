@@ -48,7 +48,7 @@ define ['box2d', 'entity', 'vector_helpers'], (B2D, Entity, VectorHelpers) ->
     turnRightThrustersOff: ->
       @thrusters.right = 'off'
 
-    fireCannon: ->
+    fireBullet: ->
       angle = @getAngle()
       position = @getPosition()
       transformCannonOffest = @cannonOffset.Copy()

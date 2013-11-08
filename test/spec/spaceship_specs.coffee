@@ -45,32 +45,32 @@ define ['box2d', 'spaceship'], (B2D, Spaceship)->
         @spaceship.turnRightThrustersOff()
         expect(@spaceship.thrusters.right).toBe 'off'
 
-    describe "fire cannon", ->
+    describe "fire bullet", ->
       beforeEach ->
         @bullet = jasmine.createSpyObj 'bullet', ['setPosition', 'setSpeed', 'setAngle']
         window.EntityFactory = jasmine.createSpyObj 'EntityFactory', ['createBullet']
         window.EntityFactory.createBullet.andReturn @bullet
 
       it "creates a bullet", ->
-        @spaceship.fireCannon()
+        @spaceship.fireBullet()
         expect(EntityFactory.createBullet).toHaveBeenCalled()
 
       it "fires the bullet in the current cannon position", ->
         @spaceship.setAngle 90 * Math.PI/180
         @spaceship.setPosition new B2D.Vec2(0,0)
 
-        @spaceship.fireCannon()
+        @spaceship.fireBullet()
         expect(@bullet.setPosition).toHaveBeenCalledWith new B2D.Vec2(9, 0)
       
       it "fires the bullet in the angle of the spaceship", ->
         @spaceship.setAngle 3
 
-        @spaceship.fireCannon()
+        @spaceship.fireBullet()
         expect(@bullet.setAngle).toHaveBeenCalledWith 3
 
       it "fires the bullet with the speed of the speceship plus 10000", ->
         @spaceship.setSpeed new B2D.Vec2 0, 1000
-        @spaceship.fireCannon()
+        @spaceship.fireBullet()
 
         expect(@bullet.setSpeed).toHaveBeenCalledWith new B2D.Vec2 0, 11000
 
