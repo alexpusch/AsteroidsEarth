@@ -9,11 +9,8 @@ define ['entity'], (Entity) ->
       fixtureDef.mass = 1
       fixtureDef.density = 1
       fixtureDef.friction = 0
-      fixtureDef.shape = new B2D.PolygonShape
-      fixtureDef.shape.SetAsArray [ 
-          new B2D.Vec2(0, -3),
-          new B2D.Vec2(8, 0),
-          new B2D.Vec2(0, 3)], 3
+      fixtureDef.shape = new B2D.CircleShape 1
+
 
       # fixtureDef.shape.SetAsBox(1, 1)
       bodyDef: bodyDef
