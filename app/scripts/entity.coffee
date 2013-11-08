@@ -23,3 +23,12 @@ define ['box2d'], (B2D)->
 
     setPosition: (position)->
       @body.SetPosition position
+
+    setSpeed: (speed)->
+      @body.SetLinearVelocity speed
+
+    getAngle: ->
+      @body.GetAngle()
+
+    setAngle: (angle) ->
+      @body.SetAngle angle
