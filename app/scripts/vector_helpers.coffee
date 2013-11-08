@@ -1,9 +1,13 @@
 define ['box2d'], (B2D) ->
   
   class VectorHelpers
-    @createDirectionVector: (angle) ->
+    @rotateVector: (vector, angle) ->
       rotationMatrix = B2D.Mat22.FromAngle angle
-      v = new B2D.Vec2 1, 0
-      v.MulM rotationMatrix
+      result = vector.Copy()  
+      result.MulM rotationMatrix
+  
+      result
 
-      v
+    @createDirectionVector: (angle) ->
+      v = new B2D.Vec2 1, 0
+      VectorHelpers.rotateVector v, angle
