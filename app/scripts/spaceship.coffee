@@ -4,6 +4,8 @@ define ['box2d', 'entity', 'vector_helpers'], (B2D, Entity, VectorHelpers) ->
     constructor: (options) ->
       @speed = options.speed
       @angularSpeed = options.angularSpeed
+      @length = 8
+      @cannonOffset = new B2D.Vec2(@length + 1)
       @thrusters =
         main: 'off'
         left: 'off'
@@ -21,7 +23,7 @@ define ['box2d', 'entity', 'vector_helpers'], (B2D, Entity, VectorHelpers) ->
       fixtureDef.shape = new B2D.PolygonShape
       fixtureDef.shape.SetAsArray [ 
           new B2D.Vec2(0, -3),
-          new B2D.Vec2(8, 0),
+          new B2D.Vec2(@length, 0),
           new B2D.Vec2(0, 3)], 3
 
       # fixtureDef.shape.SetAsBox(1, 1)
@@ -46,6 +48,23 @@ define ['box2d', 'entity', 'vector_helpers'], (B2D, Entity, VectorHelpers) ->
     turnRightThrustersOff: ->
       @thrusters.right = 'off'
 
+    fireCannon: ->
+      angle = @getAngle()
+      position = @getPosition()
+      transformCannonOffest = @cannonOffset.Copy()
+      transformCannonOffest.Add(position)
+      spaceshipSpeed = @body.GetLinearVelocity()
+
+      bulletSpeed = spaceshipSpeed.Copy()
+      bulletSpeed.Normalize()
+      bulletSpeed.Multiply(10000)
+      bulletSpeed.Add(spaceshipSpeed)
+
+      bullet = EntityFactory.createBullet()
+      bullet.setAngle angle
+      bullet.setPosition transformCannonOffest
+      bullet.setSpeed(bulletSpeed)
+
     update: ->
       if @_thrustersOn 'main'
         @_mainThrustersAction()
@@ -58,8 +77,7 @@ define ['box2d', 'entity', 'vector_helpers'], (B2D, Entity, VectorHelpers) ->
       @thrusters[type] == 'on'
 
     _mainThrustersAction: ->
-      angle = @body.GetAngle()
-      direction = VectorHelpers.createDirectionVector angle
+      direction = @_getDirectionVector()
       direction.Multiply(@speed)
       @body.ApplyForce(direction, @body.GetWorldPoint(new B2D.Vec2(0,0)))
 
@@ -68,3 +86,9 @@ define ['box2d', 'entity', 'vector_helpers'], (B2D, Entity, VectorHelpers) ->
 
     _rightThrustersACtion: ->
       @body.ApplyTorque @angularSpeed
+
+    _getDirectionVector: ->
+      angle = @body.GetAngle()
+      direction = VectorHelpers.createDirectionVector angle
+
+      direction

@@ -5,9 +5,15 @@ define ['box2d', 'spaceship'], (B2D, Spaceship)->
         speed: 10
         angularSpeed: 10
 
-      @body = {};
-      @body.GetWorldPoint = (x) -> x
-      @spaceship.setBody(@body)
+      @world = new B2D.World(new B2D.Vec2(0, 0),  true)
+
+      fixtureDef =  @spaceship.getEntityDef().fixtureDef
+      bodyDef = @spaceship.getEntityDef().bodyDef
+
+      @body = @world.CreateBody bodyDef
+      @body.CreateFixture fixtureDef
+
+      @spaceship.setBody @body
 
     describe "fire main thrusters", ->
       it "turns on main thrusters", ->
@@ -39,6 +45,36 @@ define ['box2d', 'spaceship'], (B2D, Spaceship)->
         @spaceship.turnRightThrustersOff()
         expect(@spaceship.thrusters.right).toBe 'off'
 
+    describe "fire cannon", ->
+      beforeEach ->
+        @bullet = jasmine.createSpyObj 'bullet', ['setPosition', 'setSpeed', 'setAngle']
+        window.EntityFactory = jasmine.createSpyObj 'EntityFactory', ['createBullet']
+        window.EntityFactory.createBullet.andReturn @bullet
+
+      it "creates a bullet", ->
+        @spaceship.fireCannon()
+        expect(EntityFactory.createBullet).toHaveBeenCalled()
+
+      it "fires the bullet in the current cannon position", ->
+        @spaceship.setAngle 90 * Math.PI/180
+        @spaceship.setPosition new B2D.Vec2(0,0)
+
+        @spaceship.fireCannon()
+        expect(@bullet.setPosition).toHaveBeenCalledWith new B2D.Vec2(9, 0)
+      
+      it "fires the bullet in the angle of the spaceship", ->
+        @spaceship.setAngle 3
+
+        @spaceship.fireCannon()
+        expect(@bullet.setAngle).toHaveBeenCalledWith 3
+
+      it "fires the bullet with the speed of the speceship plus 10000", ->
+        @spaceship.setSpeed new B2D.Vec2 0, 1000
+        @spaceship.fireCannon()
+
+        expect(@bullet.setSpeed).toHaveBeenCalledWith new B2D.Vec2 0, 11000
+
+
     describe "update", ->
       describe "main thrusters are on", ->
         it "a force is applied forwards", ->
@@ -46,7 +82,7 @@ define ['box2d', 'spaceship'], (B2D, Spaceship)->
           @spaceship.body.GetAngle = jasmine.createSpy('getAngle').andReturn(0)
           @spaceship.fireMainThrusters()
           @spaceship.update()
-          expect(@spaceship.body.ApplyForce).toHaveBeenCalledWith(new B2D.Vec2(10,0), new B2D.Vec2(0,0))
+          expect(@spaceship.body.ApplyForce.mostRecentCall.args[0]).toBeVector(new B2D.Vec2(10,0))
 
       describe "left thrusters are on", ->
         it "a toruqe is applied to the left", ->
@@ -72,5 +108,5 @@ define ['box2d', 'spaceship'], (B2D, Spaceship)->
           @spaceship.fireMainThrusters()
           @spaceship.fireRightThrusters()
           @spaceship.update()
-          expect(@spaceship.body.ApplyForce).toHaveBeenCalledWith(new B2D.Vec2(10,0), new B2D.Vec2(0,0))
+          expect(@spaceship.body.ApplyForce.mostRecentCall.args[0]).toBeVector new B2D.Vec2(10,0)
           expect(@spaceship.body.ApplyTorque).toHaveBeenCalledWith(10)
