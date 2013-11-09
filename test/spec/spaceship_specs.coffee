@@ -15,6 +15,13 @@ define ['box2d', 'spaceship', 'math_helpers'], (B2D, Spaceship, MathHelpers)->
 
       @spaceship.setBody @body
 
+    describe "getVertices", ->
+      it "returns the vertices of the spaceship", ->
+        vertices = @spaceship.getVertices()
+        expect(vertices[0]).toBeVector new B2D.Vec2(0, -3)
+        expect(vertices[1]).toBeVector new B2D.Vec2(8, 0)
+        expect(vertices[2]).toBeVector new B2D.Vec2(0, 3)
+
     describe "fire main thrusters", ->
       it "turns on main thrusters", ->
         @spaceship.fireMainThrusters()
@@ -60,7 +67,7 @@ define ['box2d', 'spaceship', 'math_helpers'], (B2D, Spaceship, MathHelpers)->
         @spaceship.setPosition new B2D.Vec2(0,0)
 
         @spaceship.fireBullet()
-        expect(@bullet.setPosition.mostRecentCall.args[0]).toBeVector new B2D.Vec2(0, 9)
+        expect(@bullet.setPosition.mostRecentCall.args[0]).toBeVector new B2D.Vec2(0, 13)
       
       it "fires the bullet in the angle of the spaceship", ->
         @spaceship.setAngle 3
@@ -69,11 +76,10 @@ define ['box2d', 'spaceship', 'math_helpers'], (B2D, Spaceship, MathHelpers)->
         expect(@bullet.setAngle).toHaveBeenCalledWith 3
 
       it "fires the bullet with the speed of the speceship plus 30000", ->
-        @spaceship.setSpeed new B2D.Vec2 0, 1000
+        @spaceship.setSpeed new B2D.Vec2 1000, 0
         @spaceship.fireBullet()
 
-        expect(@bullet.setSpeed).toHaveBeenCalledWith new B2D.Vec2 0, 31000
-
+        expect(@bullet.setSpeed).toHaveBeenCalledWith new B2D.Vec2 31000, 0
 
     describe "update", ->
       describe "main thrusters are on", ->

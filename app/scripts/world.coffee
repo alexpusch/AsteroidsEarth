@@ -19,6 +19,9 @@ define ['box2d'], (B2D) ->
     getBodyCount: ->
       @world.GetBodyCount()
 
+    getEntities: ->
+      @entities
+
     update: ->
       # console.log "update"
       _.each @entities, (e) =>

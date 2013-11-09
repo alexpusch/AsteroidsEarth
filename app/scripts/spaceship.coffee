@@ -6,6 +6,7 @@ define ['box2d', 'entity', 'vector_helpers'], (B2D, Entity, VectorHelpers) ->
       @speed = options.speed
       @angularSpeed = options.angularSpeed
       @length = 8
+      @width = 6
       @bulletSpeed = 30000
       @cannonOffset = new B2D.Vec2(@length + 5)
       @cannonRate = 200
@@ -25,9 +26,9 @@ define ['box2d', 'entity', 'vector_helpers'], (B2D, Entity, VectorHelpers) ->
       fixtureDef.friction = 0
       fixtureDef.shape = new B2D.PolygonShape
       fixtureDef.shape.SetAsArray [ 
-          new B2D.Vec2(0, -3),
+          new B2D.Vec2(0, -@width/2),
           new B2D.Vec2(@length, 0),
-          new B2D.Vec2(0, 3)], 3
+          new B2D.Vec2(0, @width/2)], 3
 
       # fixtureDef.shape.SetAsBox(1, 1)
       bodyDef: bodyDef
@@ -88,6 +89,9 @@ define ['box2d', 'entity', 'vector_helpers'], (B2D, Entity, VectorHelpers) ->
         @_leftThrustersAction()
       if @_thrustersOn 'right'
         @_rightThrustersACtion()
+
+    getVertices: ->
+      @body.GetFixtureList().GetShape().GetVertices()
 
     _thrustersOn: (type)->
       @thrusters[type] == 'on'
