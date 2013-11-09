@@ -2,7 +2,8 @@ define ['entity'], (Entity) ->
   class Bullet extends Entity
     constructor: ->
       super 'bullet'
-      
+      @radius = 0.5
+
     getEntityDef: ->
       bodyDef = new B2D.BodyDef
       bodyDef.type = B2D.Body.b2_dynamicBody
@@ -13,9 +14,12 @@ define ['entity'], (Entity) ->
       fixtureDef.mass = 0.2
       fixtureDef.density = 1
       fixtureDef.friction = 0
-      fixtureDef.shape = new B2D.CircleShape 0.5
+      fixtureDef.shape = new B2D.CircleShape @radius
 
 
       # fixtureDef.shape.SetAsBox(1, 1)
       bodyDef: bodyDef
       fixtureDef: fixtureDef
+
+    getRadius: ->
+      @radius

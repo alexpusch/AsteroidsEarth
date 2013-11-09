@@ -1,4 +1,4 @@
-require ['entity_factory', 'world', 'spaceship', 'player', 'spaceship_renderer', 'world_renderer'], (EntityFactory, World, Spaceship, Player, SpaceshipRenderer, WorldRenderer) ->
+require ['entity_factory', 'world', 'spaceship', 'player', 'spaceship_renderer', 'bullet_renderer', 'world_renderer'], (EntityFactory, World, Spaceship, Player, SpaceshipRenderer, BulletRenderer, WorldRenderer) ->
   console.log "main works!!"
   if $('#game-container').length > 0
     world = new World
@@ -20,6 +20,7 @@ require ['entity_factory', 'world', 'spaceship', 'player', 'spaceship_renderer',
       container: '#game-container'
 
     world_renderer.registerRenderer('spaceship', SpaceshipRenderer)
+    world_renderer.registerRenderer('bullet', BulletRenderer)
 
     mainLoop = ->
       world.update()
