@@ -53,8 +53,7 @@ define ['box2d', 'entity', 'vector_helpers'], (B2D, Entity, VectorHelpers) ->
       @thrusters.right = 'off'
 
     fireCannon: ->
-      if @cannonIntervalHandler == null
-        console.log "fire cannon!!"
+      unless @cannonIntervalHandler?
         @cannonIntervalHandler = setInterval(
           => 
            @fireBullet()
