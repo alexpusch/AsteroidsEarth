@@ -2,6 +2,7 @@ define ['box2d', 'entity', 'vector_helpers'], (B2D, Entity, VectorHelpers) ->
   
   class Spaceship extends Entity
     constructor: (options) ->
+      super 'spaceship'
       @speed = options.speed
       @angularSpeed = options.angularSpeed
       @length = 8

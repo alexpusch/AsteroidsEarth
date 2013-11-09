@@ -1,5 +1,8 @@
 define ['entity'], (Entity) ->
   class Bullet extends Entity
+    constructor: ->
+      super 'bullet'
+      
     getEntityDef: ->
       bodyDef = new B2D.BodyDef
       bodyDef.type = B2D.Body.b2_dynamicBody

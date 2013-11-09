@@ -1,5 +1,8 @@
 define ['box2d'], (B2D)->
   class Entity
+    constructor: (@type)->
+      @id = "#{@type}_#{Math.random()}"
+
     setBody: (body) ->
       @body = body
 
@@ -32,3 +35,6 @@ define ['box2d'], (B2D)->
 
     setAngle: (angle) ->
       @body.SetAngle angle
+
+    toString: ->
+      @id
