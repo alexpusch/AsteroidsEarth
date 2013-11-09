@@ -11,6 +11,7 @@ define ->
       @graphics.moveTo(vertices[0].x,vertices[0].y)
       @graphics.lineTo(vertices[1].x,vertices[1].y)
       @graphics.lineTo(vertices[2].x,vertices[2].y)
+      @graphics.lineTo(vertices[0].x,vertices[0].y)
 
       @graphics.endFill()    
       @stage.addChild(@graphics)
