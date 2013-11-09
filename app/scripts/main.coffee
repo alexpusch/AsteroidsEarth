@@ -1,6 +1,6 @@
-require ['entity_factory', 'world', 'spaceship', 'player'], (EntityFactory, World, Spaceship, Player) ->
+require ['entity_factory', 'world', 'spaceship', 'player', 'spaceship_renderer', 'world_renderer'], (EntityFactory, World, Spaceship, Player, SpaceshipRenderer, WorldRenderer) ->
   console.log "main works!!"
-  if $('canvas').length > 0
+  if $('#game-container').length > 0
     world = new World
       size:
         width: 200
@@ -8,13 +8,23 @@ require ['entity_factory', 'world', 'spaceship', 'player'], (EntityFactory, Worl
     
     window.EntityFactory = new EntityFactory world
 
-    world.setupDebugRenderer $('canvas')[0]
+    # world.setupDebugRenderer $('canvas')[0]
 
     window.spaceship = window.EntityFactory.createSpaceship()
 
     player = new Player()
     player.control spaceship
 
-    window.setInterval -> 
+    world_renderer = new WorldRenderer()
+    world_renderer.setupRenderer
+      container: '#game-container'
+
+    world_renderer.registerRenderer('spaceship', SpaceshipRenderer)
+
+    mainLoop = ->
       world.update()
-    , 1000 / 60
+      world_renderer.render(world)
+
+      requestAnimFrame mainLoop
+
+    requestAnimFrame mainLoop
