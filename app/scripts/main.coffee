@@ -1,13 +1,14 @@
-require ['entity_factory', 'world', 'spaceship', 'player', 'spaceship_renderer', 'bullet_renderer', 'world_renderer'], (EntityFactory, World, Spaceship, Player, SpaceshipRenderer, BulletRenderer, WorldRenderer) ->
+require ['entity_factory', 'world', 'spaceship', 'player', 'spaceship_renderer', 'bullet_renderer', 'world_renderer', 'camera'], (EntityFactory, World, Spaceship, Player, SpaceshipRenderer, BulletRenderer, WorldRenderer, Camera) ->
   console.log "main works!!"
   if $('#game-container').length > 0
     width = $('#game-container').width()
     height = $('#game-container').height()
 
+    scale = 30
     world = new World
       size:
-        width: width
-        height: height
+        width: width/scale
+        height: height/scale
     
     window.EntityFactory = new EntityFactory world
 
@@ -18,7 +19,12 @@ require ['entity_factory', 'world', 'spaceship', 'player', 'spaceship_renderer',
     player = new Player()
     player.control spaceship
 
-    world_renderer = new WorldRenderer()
+    camera = new Camera()
+    camera.zoom(scale)
+
+    world_renderer = new WorldRenderer
+      camera: camera
+
     world_renderer.setupRenderer
       container: $('#game-container')
 
