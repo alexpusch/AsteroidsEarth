@@ -30,6 +30,9 @@ define ['box2d'], (B2D)->
     setSpeed: (speed)->
       @body.SetLinearVelocity speed
 
+    getSpeed: ->
+      @body.GetLinearVelocity()
+
     getAngle: ->
       @body.GetAngle()
 
