@@ -4,10 +4,10 @@ define ['world', 'spaceship', 'bullet'], (World, Spaceship, Bullet)->
 
     createSpaceship: () ->
       spaceship = new Spaceship
-        speed: 40000
-        angularSpeed: 500000
-        width: 20
-        length: 30
+        speed: 40
+        angularSpeed: 50
+        width: 2
+        length: 3
 
       @world.registerEntity spaceship
 
@@ -15,6 +15,7 @@ define ['world', 'spaceship', 'bullet'], (World, Spaceship, Bullet)->
 
     createBullet: ->
       bullet = new Bullet
+        radius: 0.1
 
       @world.registerEntity bullet
       bullet
