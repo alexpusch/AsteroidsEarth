@@ -4,11 +4,10 @@ define ->
       @graphics = new PIXI.Graphics()
 
       @graphics.beginFill(0xFF3300)
-      @graphics.lineStyle(10, 0xffd900, 1)
+      @graphics.lineStyle(1, 0xffd900, 1)
 
       @graphics.drawCircle(0,0, @bullet.getRadius())
-
-      @graphics.endFill()    
+      @graphics.endFill()
       @stage.addChild(@graphics)
 
     render: () ->

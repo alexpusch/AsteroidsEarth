@@ -4,9 +4,9 @@ define ->
       @graphics = new PIXI.Graphics()
 
       vertices = @spaceship.getVertices()
-
+      console.log vertices
       @graphics.beginFill(0xFF3300)
-      @graphics.lineStyle(10, 0xffd900, 1)
+      @graphics.lineStyle(0, 0xffd900, 1)
 
       @graphics.moveTo(vertices[0].x,vertices[0].y)
       @graphics.lineTo(vertices[1].x,vertices[1].y)

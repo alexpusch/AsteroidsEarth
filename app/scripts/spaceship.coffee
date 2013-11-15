@@ -5,9 +5,9 @@ define ['box2d', 'entity', 'vector_helpers'], (B2D, Entity, VectorHelpers) ->
       super 'spaceship'
       @speed = options.speed
       @angularSpeed = options.angularSpeed
-      @length = 8
-      @width = 6
-      @bulletSpeed = 30000
+      @length = 30
+      @width = 20
+      @bulletSpeed = 3000000
       @cannonOffset = new B2D.Vec2(@length + 5)
       @cannonRate = 200
       @thrusters =
@@ -64,7 +64,6 @@ define ['box2d', 'entity', 'vector_helpers'], (B2D, Entity, VectorHelpers) ->
       @cannonIntervalHandler = null
 
     fireBullet: ->
-      console.log "fire bullet"
       angle = @getAngle()
       position = @getPosition()
       transformCannonOffest = @cannonOffset.Copy()
