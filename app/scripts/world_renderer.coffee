@@ -7,8 +7,12 @@ define ->
     setupRenderer: (options) ->
       @stage = new PIXI.Stage(0xFFFFFF, true) 
       @stage.setInteractive(false)
-      @renderer = PIXI.autoDetectRenderer(620, 380, null, false, true)
-      $(options.container).append(@renderer.view)
+
+      width = options.container.width()
+      height = options.container.height()
+
+      @renderer = PIXI.autoDetectRenderer(width, height, null, false, true)
+      options.container.append(@renderer.view)
 
     registerRenderer: (type, renderer) ->
       @renderersTypes[type] = renderer
