@@ -4,6 +4,8 @@ define ['box2d', 'spaceship', 'math_helpers'], (B2D, Spaceship, MathHelpers)->
       @spaceship = new Spaceship
         speed: 10
         angularSpeed: 10
+        width: 20
+        length: 30
 
       @world = new B2D.World(new B2D.Vec2(0, 0),  true)
 
@@ -18,9 +20,9 @@ define ['box2d', 'spaceship', 'math_helpers'], (B2D, Spaceship, MathHelpers)->
     describe "getVertices", ->
       it "returns the vertices of the spaceship", ->
         vertices = @spaceship.getVertices()
-        expect(vertices[0]).toBeVector new B2D.Vec2(0, -3)
-        expect(vertices[1]).toBeVector new B2D.Vec2(8, 0)
-        expect(vertices[2]).toBeVector new B2D.Vec2(0, 3)
+        expect(vertices[0]).toBeVector new B2D.Vec2(0, -10)
+        expect(vertices[1]).toBeVector new B2D.Vec2(30, 0)
+        expect(vertices[2]).toBeVector new B2D.Vec2(0, 10)
 
     describe "fire main thrusters", ->
       it "turns on main thrusters", ->
@@ -67,7 +69,7 @@ define ['box2d', 'spaceship', 'math_helpers'], (B2D, Spaceship, MathHelpers)->
         @spaceship.setPosition new B2D.Vec2(0,0)
 
         @spaceship.fireBullet()
-        expect(@bullet.setPosition.mostRecentCall.args[0]).toBeVector new B2D.Vec2(0, 13)
+        expect(@bullet.setPosition.mostRecentCall.args[0]).toBeVector new B2D.Vec2(0, 35)
       
       it "fires the bullet in the angle of the spaceship", ->
         @spaceship.setAngle 3
