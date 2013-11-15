@@ -3,6 +3,7 @@ define ->
     constructor: (options) ->
       @renderersTypes = {}
       @renderers = {}
+      @camera = options.camera
 
     setupRenderer: (options) ->
       @stage = new PIXI.Stage(0xFFFFFF, true) 
@@ -28,7 +29,7 @@ define ->
 
     getRenderer: (entity) ->
       unless @renderers[entity.toString()]?
-        @renderers[entity.toString()] = new (@getRendererType(entity.type))(@stage, entity)
+        @renderers[entity.toString()] = new (@getRendererType(entity.type))(@stage, @camera, entity)
 
       @renderers[entity.toString()]
 

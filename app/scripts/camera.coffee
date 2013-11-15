@@ -20,3 +20,9 @@ define ->
       clone.Multiply @zoomMultiplier
 
       clone
+
+    getZoom: ->
+      @zoomMultiplier
+
+    getTranslation: ->
+      @translation

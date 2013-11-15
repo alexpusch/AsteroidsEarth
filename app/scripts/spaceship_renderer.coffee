@@ -1,6 +1,6 @@
-define ->
+define ['conversions'], (Conversions) ->
   class SpaceshipRenderer
-    constructor: (@stage, @spaceship) ->
+    constructor: (@stage, @camera, @spaceship) ->
       @graphics = new PIXI.Graphics()
 
       vertices = @spaceship.getVertices()
@@ -17,9 +17,10 @@ define ->
       @stage.addChild(@graphics)
 
     render: () ->
-      b2dPosition = @spaceship.getPosition()
-      pixiPosition = new PIXI.Point b2dPosition.x, b2dPosition.y
+      vec2Position = @camera.project(@spaceship.getPosition())
+      pixiPosition = Conversions.B2DtoPIXI.toPoint vec2Position
       @graphics.position = pixiPosition
+      @graphics.scale = new PIXI.Point @camera.getZoom() ,@camera.getZoom()
       @graphics.rotation = @spaceship.getAngle()
 
 

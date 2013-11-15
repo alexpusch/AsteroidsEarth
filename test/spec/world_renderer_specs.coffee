@@ -1,25 +1,28 @@
 define ['world_renderer', 'entity'], (WorldRenderer, Entity)->
   describe 'world renderer', ->
+    beforeEach ->
+      class @MockRenderer
+
+      camera = {}
+      @worldRenderer = new WorldRenderer 
+        camera: camera 
+
     describe 'register renderer', ->
       it 'adds the renderer to the registry', ->
-        class MockRenderer         
+        @worldRenderer.registerRenderer('name', @MockRenderer)
 
-        worldRenderer = new WorldRenderer()
-        worldRenderer.registerRenderer('name', MockRenderer)
-
-        expect(worldRenderer.getRendererType('name')).toEqual MockRenderer
+        expect(@worldRenderer.getRendererType('name')).toEqual @MockRenderer
 
     describe 'getRenderer', ->
       it 'returns an instance of the registered renderer', ->
-        class MockRenderer         
+        class @MockRenderer         
 
-        worldRenderer = new WorldRenderer()
-        worldRenderer.registerRenderer('name', MockRenderer)
+        @worldRenderer.registerRenderer('name', @MockRenderer)
 
         entity = 
           type: 'name'
         
-        expect(worldRenderer.getRenderer(entity)).toEqual jasmine.any(MockRenderer)
+        expect(@worldRenderer.getRenderer(entity)).toEqual jasmine.any(@MockRenderer)
 
       it 'returns the same instance if called twice', ->
 
@@ -40,11 +43,10 @@ define ['world_renderer', 'entity'], (WorldRenderer, Entity)->
         class MockRenderer2
           render: render2
 
-        worldRenderer = new WorldRenderer(world)
-        worldRenderer.registerRenderer('type1', MockRenderer1)
-        worldRenderer.registerRenderer('type2', MockRenderer2)
+        @worldRenderer.registerRenderer('type1', MockRenderer1)
+        @worldRenderer.registerRenderer('type2', MockRenderer2)
 
-        worldRenderer.render world
+        @worldRenderer.render world
 
         expect(render1).toHaveBeenCalled()
         expect(render2).toHaveBeenCalled()
