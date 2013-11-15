@@ -5,10 +5,10 @@ define ['box2d', 'entity', 'vector_helpers'], (B2D, Entity, VectorHelpers) ->
       super 'spaceship'
       @speed = options.speed
       @angularSpeed = options.angularSpeed
-      @length = 30
-      @width = 20
-      @bulletSpeed = 3000000
-      @cannonOffset = new B2D.Vec2(@length + 5)
+      @length = options.length
+      @width = options.width
+      @bulletSpeed = 10
+      @cannonOffset = new B2D.Vec2(@length)
       @cannonRate = 200
       @thrusters =
         main: 'off'
@@ -18,8 +18,9 @@ define ['box2d', 'entity', 'vector_helpers'], (B2D, Entity, VectorHelpers) ->
     getEntityDef: ->
       bodyDef = new B2D.BodyDef
       bodyDef.type = B2D.Body.b2_dynamicBody
-      bodyDef.position = new B2D.Vec2 30,30
+      bodyDef.position = new B2D.Vec2 0,0
       bodyDef.angularDamping = 5
+      bodyDef.linearDamping = 1
       fixtureDef = new B2D.FixtureDef
       fixtureDef.mass = 1
       fixtureDef.density = 1
@@ -69,17 +70,17 @@ define ['box2d', 'entity', 'vector_helpers'], (B2D, Entity, VectorHelpers) ->
       transformCannonOffest = @cannonOffset.Copy()
       transformCannonOffest = VectorHelpers.rotate transformCannonOffest, angle
       transformCannonOffest.Add(position)
+      console.log transformCannonOffest
       spaceshipSpeed = @body.GetLinearVelocity()
 
       bulletSpeed = @_getDirectionVector()
       bulletSpeed.Multiply(@bulletSpeed)
       bulletSpeed.Add(spaceshipSpeed)
-
       bullet = EntityFactory.createBullet()
       bullet.setAngle angle
       bullet.setPosition transformCannonOffest
       bullet.setSpeed(bulletSpeed)
-
+      window.bullet = bullet
     update: ->
       if @_thrustersOn 'main'
         @_mainThrustersAction()
