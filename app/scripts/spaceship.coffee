@@ -70,7 +70,6 @@ define ['box2d', 'entity', 'vector_helpers'], (B2D, Entity, VectorHelpers) ->
       transformCannonOffest = @cannonOffset.Copy()
       transformCannonOffest = VectorHelpers.rotate transformCannonOffest, angle
       transformCannonOffest.Add(position)
-      console.log transformCannonOffest
       spaceshipSpeed = @body.GetLinearVelocity()
 
       bulletSpeed = @_getDirectionVector()

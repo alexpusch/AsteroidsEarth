@@ -15,7 +15,6 @@ define ->
         @mapping[e.keyCode]?.apply(this, ['off'])
 
     setLeftThrusters: (state) ->
-      console.log 'left'
       if state == 'on'
         @spaceship.fireLeftThrusters()
       else 

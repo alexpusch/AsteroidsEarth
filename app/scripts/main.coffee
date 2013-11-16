@@ -1,10 +1,9 @@
 require ['entity_factory', 'world', 'spaceship', 'player', 'spaceship_renderer', 'bullet_renderer', 'world_renderer', 'camera'], (EntityFactory, World, Spaceship, Player, SpaceshipRenderer, BulletRenderer, WorldRenderer, Camera) ->
-  console.log "main works!!"
   if $('#game-container').length > 0
     width = $('#game-container').width()
     height = $('#game-container').height()
 
-    scale = 30
+    scale = 10
     world = new World
       size:
         width: width/scale
