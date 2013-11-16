@@ -9,14 +9,14 @@ define ['world', 'spaceship', 'bullet', 'astroid'], (World, Spaceship, Bullet, A
         width: 2
         length: 3
 
-
     createBullet: ->
       @_createEntity Bullet, 
-        radius: 0.1
+        radius: 0.2
 
-    createAstroid: ->
+    createAstroid: (planet) ->
       @_createEntity Astroid,
         radius: 4
+        planet: planet
 
     _createEntity: (entityType, options) ->
       entity = new entityType options

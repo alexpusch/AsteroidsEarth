@@ -1,7 +1,14 @@
 beforeEach ->
+  EPSILON = 0.001
+
   this.addMatchers
     toBeVector: (expected) ->
-      EPSILON = 0.001
-      
-      Math.abs(this.actual.x - expected.x) < EPSILON and
-      Math.abs(this.actual.y - expected.y) < EPSILON
+      Math.abs(@actual.x - expected.x) < EPSILON and
+      Math.abs(@actual.y - expected.y) < EPSILON
+
+    toBeInDirection: (expected) ->
+      expected.Normalize()
+      @actual.Normalize()
+
+      Math.abs(@actual.x - expected.x) < EPSILON and
+      Math.abs(@actual.y - expected.y) < EPSILON
