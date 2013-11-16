@@ -1,21 +1,25 @@
-define ['world', 'spaceship', 'bullet'], (World, Spaceship, Bullet)->
+define ['world', 'spaceship', 'bullet', 'astroid'], (World, Spaceship, Bullet, Astroid)->
   class EntityFactory
     constructor: (@world) ->
 
     createSpaceship: () ->
-      spaceship = new Spaceship
+      @_createEntity Spaceship,
         speed: 40
         angularSpeed: 50
         width: 2
         length: 3
 
-      @world.registerEntity spaceship
-
-      spaceship
 
     createBullet: ->
-      bullet = new Bullet
+      @_createEntity Bullet, 
         radius: 0.1
 
-      @world.registerEntity bullet
-      bullet
+    createAstroid: ->
+      @_createEntity Astroid,
+        radius: 4
+
+    _createEntity: (entityType, options) ->
+      entity = new entityType options
+      @world.registerEntity entity
+
+      entity
