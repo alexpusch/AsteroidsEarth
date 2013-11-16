@@ -23,7 +23,6 @@ define ['box2d'], (B2D) ->
       @entities
 
     update: ->
-      # console.log "update"
       _.each @entities, (e) =>
         position = e.getPosition()
         
@@ -41,8 +40,7 @@ define ['box2d'], (B2D) ->
 
         e.update?()
 
-      @world.Step(1 / 60, 10, 10);
-      @world.DrawDebugData();
+      @world.Step(@_getFrameTime(), 10, 10);
       @world.ClearForces();
 
     setupDebugRenderer: (canvas) ->
@@ -53,3 +51,13 @@ define ['box2d'], (B2D) ->
       debugDraw.SetLineThickness(1.0);
       debugDraw.SetFlags(B2D.DebugDraw.e_shapeBit | B2D.DebugDraw.e_jointBit);
       @world.SetDebugDraw(debugDraw);
+
+    _getFrameTime: ->
+      time = (new Date).getTime()
+      frameTime = if @lastTime? 
+        (time - @lastTime)/1000
+      else
+        1/60
+      @lastTime = time
+
+      frameTime
