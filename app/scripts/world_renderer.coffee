@@ -20,7 +20,11 @@ define ->
 
     render: (world) ->
       _.each world.getEntities(), (entity) =>
-        @getRenderer(entity).render(entity)
+        if entity.exists()
+          @getRenderer(entity).render(entity)
+        else
+          @getRenderer(entity).destroy()
+          delete @renderers[entity.toString()]
 
       @renderer?.render(@stage);
 
