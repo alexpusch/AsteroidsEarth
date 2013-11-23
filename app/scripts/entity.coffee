@@ -2,6 +2,7 @@ define ['box2d'], (B2D)->
   class Entity
     constructor: (@type)->
       @id = "#{@type}_#{Math.random()}"
+      @exists = true
 
     setBody: (body) ->
       @body = body
@@ -41,3 +42,10 @@ define ['box2d'], (B2D)->
 
     toString: ->
       @id
+
+    destroy: ->
+      exists = false
+
+    handleEnterWorld: ->
+
+    handleExitWorld: ->

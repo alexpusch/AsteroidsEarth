@@ -5,6 +5,8 @@ define ['box2d'], (B2D) ->
       @world = new B2D.World(new B2D.Vec2(0, 0),  true)
       @size = options.size
       @entities = []
+      @outWorldEntities = {}
+      @inWorldEntities = {}
 
     registerEntity: (entity) ->
       fixtureDef =  entity.getEntityDef().fixtureDef
@@ -24,19 +26,10 @@ define ['box2d'], (B2D) ->
 
     update: ->
       _.each @entities, (e) =>
-        position = e.getPosition()
-        
-        if position.x > @size.width
-          position.x = position.x % @size.width
-        if position.x < 0
-          position.x = @size.width + position.x
-
-        if position.y > @size.height or position.y < 0
-          position.y = position.y % @size.height
-        if position.y < 0
-          position.y = @size.height + position.y
-
-        e.setPosition(position)
+        unless e.exists
+          @world.DestroyBody e.body
+       
+        @_callWorldCallbacks e      
 
         e.update?()
 
@@ -61,3 +54,23 @@ define ['box2d'], (B2D) ->
       @lastTime = time
 
       frameTime
+    
+    _outOfWorld: (position) ->
+      (position.x > @size.width) or (position.x < 0) or (position.y > @size.height) or (position.y < 0 )
+
+    _callWorldCallbacks: (e) ->
+      position = e.getPosition()
+      if @_outOfWorld(position)
+        unless @outWorldEntities[e]?
+          @outWorldEntities[e] = e
+
+        if @inWorldEntities[e]?
+          delete @inWorldEntities[e]
+          e.handleExitWorld()
+      else 
+        if @outWorldEntities[e]?
+          delete @outWorldEntities[e]
+          e.handleEnterWorld()
+
+        unless @inWorldEntities[e]?
+          @inWorldEntities[e] = e

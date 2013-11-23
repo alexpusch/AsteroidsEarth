@@ -33,16 +33,70 @@ define ['box2d', 'world', 'entity'], (B2D, World, Entity) ->
         @world.update()
         expect(@entity.update).toHaveBeenCalled()
 
-      it "warps entities from one edge of the screen to the oposite", ->
+    describe "call handleEnterWorld", ->
+      it "calls the handleEnterWorld callback for entities that enters the world", ->
+        spyOn @entity, "handleEnterWorld"
+
         @world.registerEntity @entity
         @entity.setPosition(new B2D.Vec2 103, 0)
         @world.update()
-        expect(@entity.getPosition()).toBeVector new B2D.Vec2 3, 0
-
-      it "warps entities from the start of the screen to the end", ->
-        @world.registerEntity @entity
-        @entity.setPosition(new B2D.Vec2 -3, 0)
+        @entity.setPosition(new B2D.Vec2 97, 0)
         @world.update()
-        expect(@entity.getPosition()).toBeVector new B2D.Vec2 97, 0        
 
+        expect(@entity.handleEnterWorld).toHaveBeenCalled()
 
+      it "calles the handleEnterWorld callback only once", ->
+        @world.registerEntity @entity
+        @entity.setPosition(new B2D.Vec2 103, 0)
+        @world.update()
+        @entity.setPosition(new B2D.Vec2 97, 0)
+        @world.update()
+
+        spyOn @entity, "handleEnterWorld"
+        @entity.setPosition(new B2D.Vec2 95, 0)
+        @world.update()       
+
+        expect(@entity.handleEnterWorld).not.toHaveBeenCalled()
+
+      it "does not call the handleEnterWorld callback for entites that where created in the world", ->
+        spyOn @entity, "handleEnterWorld"
+        @world.registerEntity @entity
+      
+        @entity.setPosition(new B2D.Vec2 95, 0)
+        @world.update()       
+
+        expect(@entity.handleEnterWorld).not.toHaveBeenCalled()
+
+    describe "call handleExitWorld", ->
+      it "calls the handleExitWorld callback for entities that exists the world", ->
+        spyOn @entity, "handleExitWorld"
+
+        @world.registerEntity @entity
+        @entity.setPosition(new B2D.Vec2 97, 0)
+        @world.update()
+        @entity.setPosition(new B2D.Vec2 103, 0)
+        @world.update()
+
+        expect(@entity.handleExitWorld).toHaveBeenCalled()
+
+      it "calles the handleExitWorld callback only once", ->
+        @world.registerEntity @entity
+        @entity.setPosition(new B2D.Vec2 97, 0)
+        @world.update()
+        @entity.setPosition(new B2D.Vec2 103, 0)
+        @world.update()
+
+        spyOn @entity, "handleExitWorld"
+        @entity.setPosition(new B2D.Vec2 105, 0)
+        @world.update()       
+
+        expect(@entity.handleExitWorld).not.toHaveBeenCalled()
+
+      it "does not call the handleExitWorld callback for entites that where created in the world", ->
+        spyOn @entity, "handleExitWorld"
+        @world.registerEntity @entity
+      
+        @entity.setPosition(new B2D.Vec2 195, 0)
+        @world.update()       
+
+        expect(@entity.handleExitWorld).not.toHaveBeenCalled()
