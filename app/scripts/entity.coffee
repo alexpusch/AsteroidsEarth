@@ -1,8 +1,9 @@
-define ['box2d'], (B2D)->
+define ['box2d', 'events'], (B2D, Events)->
   class Entity
     constructor: (@type)->
       @id = "#{@type}_#{Math.random()}"
       @_exists = true
+      @events = new Events()
 
     setBody: (body) ->
       @body = body
@@ -45,10 +46,14 @@ define ['box2d'], (B2D)->
 
     destroy: ->
       @_exists = false
+      @events.trigger 'destroy', this
 
     exists: ->
       @_exists
       
+    on: (eventName, callback)->
+      @events.on eventName, callback
+
     handleEnterWorld: ->
 
     handleExitWorld: ->
