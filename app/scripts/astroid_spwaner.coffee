@@ -1,23 +1,39 @@
-define ['planet'], (Planet) ->
+define ['planet', 'wave'], (Planet, Wave) ->
   class AstroidSpwaner
     constructor: (options) ->
       @width = options.width
       @height = options.height
-      @planet = options.planet
 
     startSpwaning: ->
-      netSpwan = _.random 2000, 6000
-      setTimeout =>
-        @spwanAstroid()
-        @startSpwaning()
-      , netSpwan
+      @startNextWave(0)
 
-    spwanAstroid: ->
-      size = _.random 10,20
+    startNextWave: (waveIndex) ->
+      wavePlan = @generageWavePlan(waveIndex)
+      console.log "wave plan #{waveIndex}"
+      console.log #{wavePlan}
+      wave = new Wave wavePlan
+      wave.on 'waveDestroyed', =>
+        @startNextWave(waveIndex + 1)
+
+      wave.start()
+
+    generageWavePlan: (waveIndex)->
+      @currentWaveCount = Math.floor(Math.pow((waveIndex + 1), 1.2))
+      wavePlan = []
+      for i in [0..@currentWaveCount]
+        wavePlan.push @_generageRandomAstroidPlan() 
+
+      wavePlan 
+
+    _generageRandomAstroidPlan: ->
+      radius = _.random 3,5
       position = @_getRandomPosition()
-      console.log position
-      astroid = window.EntityFactory.createAstroid @planet
-      astroid.setPosition position
+      offset = _.random 1000, 3000
+      
+      astroidPlan = 
+        radius: radius
+        position: position
+        offset: offset
 
     _getRandomPosition: ->
       side = _.random 1, 4
@@ -26,7 +42,15 @@ define ['planet'], (Planet) ->
       randomY = _.random 0, @width
 
       switch side
-        when 1 then new B2D.Vec2(randomX, -50)
-        when 2 then new B2D.Vec2(randomX, @height + 50)
-        when 3 then new B2D.Vec2(-50, randomY)
-        when 4 then new B2D.Vec2(@width + 50, randomX)
+        when 1 
+          x:randomX
+          y: - 5
+        when 2
+          x: randomX
+          y: @height + 5
+        when 3 
+          x:-5
+          y: randomY
+        when 4 
+          x: @width + 5
+          y: randomX

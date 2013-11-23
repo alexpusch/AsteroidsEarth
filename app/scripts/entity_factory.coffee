@@ -13,17 +13,23 @@ define ['world', 'spaceship', 'bullet', 'astroid', 'planet'], (World, Spaceship,
       @_createEntity Bullet, 
         radius: 0.2
 
-    createAstroid: (planet) ->
+    createAstroid: (options = {}) ->
+      options.planet = @planet
       @_createEntity Astroid,
-        radius: 4
-        planet: planet
+        options
 
     createPlanet: ->
-      @_createEntity Planet,
+      @planet = @_createEntity Planet,
         radius: 10
+
+      @planet
 
     _createEntity: (entityType, options) ->
       entity = new entityType options
       @world.registerEntity entity
+
+      if options.position?
+        b2dPosition = new B2D.Vec2(options.position.x, options.position.y)
+        entity.setPosition b2dPosition
 
       entity

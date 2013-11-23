@@ -24,10 +24,13 @@ define ['entity_factory', 'world', 'spaceship', 'bullet', 'astroid'], (EntityFac
 
     describe "createAstroid", ->
       beforeEach ->
+        @planet = @ef.createPlanet()
         @astroid = @ef.createAstroid()
 
-      it "returns a new astroid", ->
+      it "returns a new astroid using the previously created planet", ->
+        
         expect(@astroid).toEqual(jasmine.any Astroid)
+        expect(@astroid.planet).toEqual @planet
 
       it "registerEntity it with the given world", ->
         expect(@world.registerEntity).toHaveBeenCalledWith @astroid

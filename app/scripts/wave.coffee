@@ -21,14 +21,14 @@ define ['events'], (Events)->
       @events.on eventName, callback
 
     _spwanAstroid: (astroidPlan)->
+      console.log "spwaning astroid"
       options = 
           radius: astroidPlan.radius
           position: astroidPlan.position
-          
+
       astroid = window.EntityFactory.createAstroid options
 
       astroid.on 'destroy', =>
         @activeAstroids--
         if @activeAstroids == 0
-          console.log 'wave ended!'
           @events.trigger 'waveDestroyed'
