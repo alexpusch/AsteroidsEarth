@@ -69,7 +69,7 @@ define ['box2d', 'spaceship', 'math_helpers'], (B2D, Spaceship, MathHelpers)->
         @spaceship.setPosition new B2D.Vec2(0,0)
 
         @spaceship.fireBullet()
-        expect(@bullet.setPosition.mostRecentCall.args[0]).toBeVector new B2D.Vec2(0, 35)
+        expect(@bullet.setPosition.mostRecentCall.args[0]).toBeVector new B2D.Vec2(0, 30)
       
       it "fires the bullet in the angle of the spaceship", ->
         @spaceship.setAngle 3
@@ -77,11 +77,11 @@ define ['box2d', 'spaceship', 'math_helpers'], (B2D, Spaceship, MathHelpers)->
         @spaceship.fireBullet()
         expect(@bullet.setAngle).toHaveBeenCalledWith 3
 
-      it "fires the bullet with the speed of the speceship plus 30000", ->
+      it "fires the bullet with the speed of the speceship plus 30", ->
         @spaceship.setSpeed new B2D.Vec2 1000, 0
         @spaceship.fireBullet()
 
-        expect(@bullet.setSpeed).toHaveBeenCalledWith new B2D.Vec2 31000, 0
+        expect(@bullet.setSpeed).toHaveBeenCalledWith new B2D.Vec2 1030, 0
 
     describe "update", ->
       describe "main thrusters are on", ->

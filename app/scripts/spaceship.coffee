@@ -7,7 +7,7 @@ define ['box2d', 'entity', 'vector_helpers'], (B2D, Entity, VectorHelpers) ->
       @angularSpeed = options.angularSpeed
       @length = options.length
       @width = options.width
-      @bulletSpeed = 10
+      @bulletSpeed = 30
       @cannonOffset = new B2D.Vec2(@length)
       @cannonRate = 200
       @thrusters =
@@ -18,7 +18,7 @@ define ['box2d', 'entity', 'vector_helpers'], (B2D, Entity, VectorHelpers) ->
     getEntityDef: ->
       bodyDef = new B2D.BodyDef
       bodyDef.type = B2D.Body.b2_dynamicBody
-      bodyDef.position = new B2D.Vec2 0,0
+      bodyDef.position = new B2D.Vec2 10,10
       bodyDef.angularDamping = 5
       bodyDef.linearDamping = 1
       fixtureDef = new B2D.FixtureDef
