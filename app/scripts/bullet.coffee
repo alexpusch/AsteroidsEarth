@@ -20,3 +20,6 @@ define ['entity'], (Entity) ->
 
     getRadius: ->
       @radius
+
+    handleExitWorld: ->
+      @destroy()

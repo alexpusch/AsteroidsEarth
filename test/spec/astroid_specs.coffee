@@ -1,29 +1,36 @@
 define ['box2d', 'astroid'], (B2D, Astroid) ->
   describe 'Astroid', ->
-    describe 'update', ->
-      it 'moves it self towards a planet', ->
-        planet = 
+    beforeEach ->
+      planet = 
           getPosition: ->
             new B2D.Vec2(0,0)
 
-        astroid = new Astroid
-          radius: 1
-          planet: planet
+      @astroid = new Astroid
+        radius: 1
+        planet: planet
 
 
-        @world = new B2D.World(new B2D.Vec2(0, 0),  true)
+      @world = new B2D.World(new B2D.Vec2(0, 0),  true)
 
-        fixtureDef =  astroid.getEntityDef().fixtureDef
-        bodyDef = astroid.getEntityDef().bodyDef
+      fixtureDef =  @astroid.getEntityDef().fixtureDef
+      bodyDef = @astroid.getEntityDef().bodyDef
 
-        @body = @world.CreateBody bodyDef
-        @body.CreateFixture fixtureDef
+      @body = @world.CreateBody bodyDef
+      @body.CreateFixture fixtureDef
 
-        astroid.setBody @body
-        astroid.setPosition(new B2D.Vec2(1,1))
-        astroid.update()
+      @astroid.setBody @body
+
+    describe 'update', ->
+      it 'moves it self towards a planet', ->
+        @astroid.setPosition(new B2D.Vec2(1,1))
+        @astroid.update()
         @world.Step(1/60, 10, 10)
 
         speed = @body.GetLinearVelocity()
         speed.Normalize()
         expect(speed).toBeInDirection(new B2D.Vec2(-1,-1))
+
+    describe 'handleExitWorld', ->
+      it 'destories the astroid', ->
+        @astroid.handleExitWorld()
+        expect(@astroid.exists()).toBe false
