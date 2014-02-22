@@ -1,4 +1,28 @@
-require ['entity_factory', 'world', 'spaceship', 'player', 'spaceship_renderer', 'bullet_renderer', 'world_renderer', 'camera', 'planet', 'astroid_spwaner'], (EntityFactory, World, Spaceship, Player, SpaceshipRenderer, BulletRenderer, WorldRenderer, Camera, Planet, AstroidSpwaner) ->
+require ['entity_factory',
+         'world', 
+         'scene_renderer',
+         'spaceship', 
+         'player', 
+         'spaceship_renderer', 
+         'bullet_renderer', 
+         'camera', 
+         'planet', 
+         'astroid_spwaner', 
+         'score', 
+         'score_renderer'], (
+          EntityFactory, 
+          World, 
+          SceneRenderer,
+          Spaceship, 
+          Player, 
+          SpaceshipRenderer, 
+          BulletRenderer, 
+          Camera, 
+          Planet, 
+          AstroidSpwaner, 
+          Score, 
+          ScoreRenderer) ->
+
   if $('#game-container').length > 0
     width = $('#game-container').width()
     height = $('#game-container').height()
@@ -19,7 +43,7 @@ require ['entity_factory', 'world', 'spaceship', 'player', 'spaceship_renderer',
     player.control spaceship
 
     camera = new Camera()
-    camera.zoom(scale/2)
+    camera.zoom(scale)
 
     planet = window.EntityFactory.createPlanet()
     planet.setPosition(new B2D.Vec2(width/scale/2, height/scale/2))
@@ -33,20 +57,25 @@ require ['entity_factory', 'world', 'spaceship', 'player', 'spaceship_renderer',
 
     astroidSpwaner.startSpwaning()
 
-    world_renderer = new WorldRenderer
+    renderer = new SceneRenderer
       camera: camera
-
-    world_renderer.setupRenderer
+    
+    renderer.setupRenderer
       container: $('#game-container')
 
-    world_renderer.registerRenderer('spaceship', SpaceshipRenderer)
-    world_renderer.registerRenderer('bullet', BulletRenderer)
-    world_renderer.registerRenderer('astroid', BulletRenderer)
-    world_renderer.registerRenderer('planet', BulletRenderer)
+    score = new Score
+      upInterval: 10
+    score.start()
+
+    renderer.registerRenderer('spaceship', SpaceshipRenderer)
+    renderer.registerRenderer('bullet', BulletRenderer)
+    renderer.registerRenderer('astroid', BulletRenderer)
+    renderer.registerRenderer('planet', BulletRenderer)
+    renderer.registerRenderer('score', ScoreRenderer)
 
     mainLoop = ->
       world.update()
-      world_renderer.render(world)
+      renderer.render(world, score)
 
       requestAnimFrame mainLoop
 
