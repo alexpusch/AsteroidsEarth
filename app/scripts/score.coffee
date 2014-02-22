@@ -1,6 +1,7 @@
-define ->
-  class Score
+define ["typed_object"], (TypedObject) ->
+  class Score extends TypedObject
     constructor: (options) ->
+      super "score"
       @score = 0
       @upInterval = options.upInterval
 

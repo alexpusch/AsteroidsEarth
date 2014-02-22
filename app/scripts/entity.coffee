@@ -1,6 +1,7 @@
-define ['box2d', 'events'], (B2D, Events)->
-  class Entity
-    constructor: (@type)->
+define ['typed_object', 'box2d', 'events'], (TypedObject, B2D, Events)->
+  class Entity extends TypedObject
+    constructor: (type) ->
+      super type
       @id = "#{@type}_#{Math.random()}"
       @_exists = true
       @events = new Events()
@@ -40,9 +41,6 @@ define ['box2d', 'events'], (B2D, Events)->
 
     setAngle: (angle) ->
       @body.SetAngle angle
-
-    toString: ->
-      @id
 
     destroy: ->
       @_exists = false
