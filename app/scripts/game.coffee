@@ -29,11 +29,16 @@ define ['entity_factory',
       @height = container.height()
 
       @scale = 10
+      @gameOver = false
       @world = new World
         size:
           width: @width/@scale
           height: @height/@scale
       
+      @world.events.on "astroidWorldCollistion", =>
+        @endGame()
+        console.log "game over"
+
       window.EntityFactory = new EntityFactory @world
 
       # world.setupDebugRenderer $('canvas')[0]
@@ -87,10 +92,14 @@ define ['entity_factory',
     start: ->
       @score.start()
 
-      mainLoop = =>
+      @mainLoop()
+
+    mainLoop: ->
+      unless @gameOver
         @world.update()
         @renderer.render(@world, @score)
 
-        requestAnimFrame mainLoop
+        requestAnimFrame => @mainLoop()
 
-      requestAnimFrame mainLoop
+    endGame: ->
+      @gameOver = true

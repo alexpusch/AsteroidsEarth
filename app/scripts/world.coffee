@@ -1,5 +1,27 @@
-define ['box2d'], (B2D) ->
+define ['box2d', 'events'], (B2D, Events) ->
   
+  class WorldDistractionListener
+    constructor: ->
+      @events = new Events()
+
+    BeginContact: (contact)->
+      entityA = contact.GetFixtureA().GetBody().GetUserData()
+      entityB = contact.GetFixtureB().GetBody().GetUserData()
+
+      if (entityA.type == "planet" and entityB.type == "astroid") or
+         (entityA.type == "astroid" and entityB.type == "planet")
+
+        @events.trigger "astroidWorldCollistion"
+
+    EndContact: ->
+      # console.log "end contact"
+
+    PreSolve: ->
+      # console.log "presolve"
+
+    PostSolve: ->
+      # console.log "PostSolve"
+
   class World
     constructor: (options)->
       @world = new B2D.World(new B2D.Vec2(0, 0),  true)
@@ -7,6 +29,13 @@ define ['box2d'], (B2D) ->
       @entities = []
       @outWorldEntities = {}
       @inWorldEntities = {}
+      @events = new Events()
+
+      worldDistractionListener = new WorldDistractionListener
+      worldDistractionListener.events.on "astroidWorldCollistion", =>
+        @events.trigger "astroidWorldCollistion"
+
+      @world.SetContactListener worldDistractionListener
 
     registerEntity: (entity) ->
       fixtureDef =  entity.getEntityDef().fixtureDef
@@ -14,6 +43,7 @@ define ['box2d'], (B2D) ->
 
       body = @world.CreateBody bodyDef
       body.CreateFixture fixtureDef
+      body.SetUserData(entity)
 
       entity.setBody body
       @entities.push entity
