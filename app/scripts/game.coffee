@@ -5,6 +5,7 @@ define ['entity_factory',
          'player', 
          'spaceship_renderer', 
          'bullet_renderer', 
+         'astroid_renderer'
          'camera', 
          'planet', 
          'astroid_spwaner', 
@@ -17,6 +18,7 @@ define ['entity_factory',
           Player, 
           SpaceshipRenderer, 
           BulletRenderer, 
+          AstroidRenderer,
           Camera, 
           Planet, 
           AstroidSpwaner, 
@@ -85,7 +87,7 @@ define ['entity_factory',
     registerRenderers: ->
       @renderer.registerRenderer('spaceship', SpaceshipRenderer)
       @renderer.registerRenderer('bullet', BulletRenderer)
-      @renderer.registerRenderer('astroid', BulletRenderer)
+      @renderer.registerRenderer('astroid', AstroidRenderer)
       @renderer.registerRenderer('planet', BulletRenderer)
       @renderer.registerRenderer('score', ScoreRenderer)
 
