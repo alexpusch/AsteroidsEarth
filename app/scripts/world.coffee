@@ -46,6 +46,10 @@ define ['box2d', 'events'], (B2D, Events) ->
       body.SetUserData(entity)
 
       entity.setBody body
+
+      entity.on "destroy", =>
+        @world.DestroyBody body
+
       @entities.push entity
 
     getBodyCount: ->
