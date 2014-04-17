@@ -1,26 +1,50 @@
 define ['box2d', 'events'], (B2D, Events) ->
   
-  class WorldDistractionListener
-    constructor: ->
+  class WorldContactListener
+    constructor: (@worldBody) ->
       @events = new Events()
 
     BeginContact: (contact)->
-      entityA = contact.GetFixtureA().GetBody().GetUserData()
-      entityB = contact.GetFixtureB().GetBody().GetUserData()
+      bodyA = contact.GetFixtureA().GetBody()
+      bodyB = contact.GetFixtureB().GetBody()
 
-      if (entityA.type == "planet" and entityB.type == "astroid") or
-         (entityA.type == "astroid" and entityB.type == "planet")
+      if( otherBody = @_findWorldBody(bodyA, bodyB))
+        @events.trigger "entityEnter", otherBody.GetUserData()
+      else
+        @_handleEntitiesCollision bodyA, bodyB
 
-        @events.trigger "astroidWorldCollistion"
+    EndContact: (contact) ->
+      bodyA = contact.GetFixtureA().GetBody()
+      bodyB = contact.GetFixtureB().GetBody()
 
-    EndContact: ->
-      # console.log "end contact"
+      if( otherBody = @_findWorldBody(bodyA, bodyB))
+        @events.trigger "entityExit", otherBody.GetUserData()
 
     PreSolve: ->
       # console.log "presolve"
 
     PostSolve: ->
       # console.log "PostSolve"
+
+    _findWorldBody: (bodyA, bodyB) ->
+      otherBody = null
+
+      if( bodyA == @worldBody ||  bodyB == @worldBody)
+        if bodyA == @worldBody
+          otherBody = bodyB
+        else
+          otherBody = bodyA
+
+      otherBody
+
+    _handleEntitiesCollision: (bodyA, bodyB) ->
+      entityA = bodyA.GetUserData()
+      entityB = bodyB.GetUserData()
+
+      if (entityA.type == "planet" and entityB.type == "astroid") or
+         (entityA.type == "astroid" and entityB.type == "planet")
+
+        @events.trigger "astroidWorldCollistion"
 
   class World
     constructor: (options)->
@@ -31,11 +55,18 @@ define ['box2d', 'events'], (B2D, Events) ->
       @inWorldEntities = {}
       @events = new Events()
 
-      worldDistractionListener = new WorldDistractionListener
-      worldDistractionListener.events.on "astroidWorldCollistion", =>
-        @events.trigger "astroidWorldCollistion"
+      @worldBody = @_createWorldBody()
 
-      @world.SetContactListener worldDistractionListener
+      worldContactListener = new WorldContactListener @worldBody
+
+      worldContactListener.events.on "astroidWorldCollistion", =>
+        @events.trigger "astroidWorldCollistion"
+      worldContactListener.events.on "entityEnter", (entity) ->
+        entity.handleEnterWorld()
+      worldContactListener.events.on "entityExit", (entity) ->
+        entity.handleExitWorld()
+
+      @world.SetContactListener worldContactListener
 
     registerEntity: (entity) ->
       fixtureDef =  entity.getEntityDef().fixtureDef
@@ -47,9 +78,6 @@ define ['box2d', 'events'], (B2D, Events) ->
 
       entity.setBody body
 
-      entity.on "destroy", =>
-        @world.DestroyBody body
-
       @entities.push entity
 
     getBodyCount: ->
@@ -60,11 +88,10 @@ define ['box2d', 'events'], (B2D, Events) ->
 
     update: ->
       _.each @entities, (e) =>
-        unless e.exists
+        unless e.exists()
           @world.DestroyBody e.body
+          @entities = _(@entities).without e
        
-        @_callWorldCallbacks e      
-
         e.update?()
 
       @world.Step(@_getFrameTime(), 10, 10);
@@ -79,6 +106,22 @@ define ['box2d', 'events'], (B2D, Events) ->
       debugDraw.SetFlags(B2D.DebugDraw.e_shapeBit | B2D.DebugDraw.e_jointBit);
       @world.SetDebugDraw(debugDraw);
 
+    _createWorldBody: ->
+      bodyDef = new B2D.BodyDef
+      bodyDef.type = B2D.Body.b2_staticBody
+      bodyDef.position = new B2D.Vec2 @size.width/2,@size.height/2
+      fixtureDef = new B2D.FixtureDef
+      fixtureDef.mass = 1
+      fixtureDef.density = 1
+      fixtureDef.friction = 0
+      fixtureDef.shape = new B2D.PolygonShape
+      fixtureDef.shape.SetAsBox(@size.width, @size.height)
+      fixtureDef.isSensor = true     
+      worldBody = @world.CreateBody bodyDef
+      worldBody.CreateFixture fixtureDef
+
+      worldBody
+
     _getFrameTime: ->
       time = (new Date).getTime()
       frameTime = if @lastTime? 
@@ -88,23 +131,3 @@ define ['box2d', 'events'], (B2D, Events) ->
       @lastTime = time
 
       frameTime
-    
-    _outOfWorld: (position) ->
-      (position.x > @size.width) or (position.x < 0) or (position.y > @size.height) or (position.y < 0 )
-
-    _callWorldCallbacks: (e) ->
-      position = e.getPosition()
-      if @_outOfWorld(position)
-        unless @outWorldEntities[e]?
-          @outWorldEntities[e] = e
-
-        if @inWorldEntities[e]?
-          delete @inWorldEntities[e]
-          e.handleExitWorld()
-      else 
-        if @outWorldEntities[e]?
-          delete @outWorldEntities[e]
-          e.handleEnterWorld()
-
-        unless @inWorldEntities[e]?
-          @inWorldEntities[e] = e
