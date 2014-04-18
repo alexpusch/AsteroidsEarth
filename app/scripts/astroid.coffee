@@ -21,14 +21,14 @@ define ['entity'], (Entity) ->
       fixtureDef: fixtureDef
 
     update: ->
-      unless @forceWasApplied
-        force = @planet.getPosition().Copy()
-        force.Subtract(@getPosition())
-        force.Normalize()
-        force.Multiply(1000)
+      force = @planet.getPosition().Copy()
+      force.Subtract(@getPosition())
+      distance = force.Length()
+      force.Normalize()
+      G = 1000
+      force.Multiply( G * ( @body.GetMass())/(distance*distance))
 
-        @body.ApplyForce force, @body.GetWorldPoint(new B2D.Vec2(0,0))
-        @forceWasApplied = true
+      @body.ApplyForce force, @body.GetWorldPoint(new B2D.Vec2(0,0))
 
     getRadius: ->
       @radius
