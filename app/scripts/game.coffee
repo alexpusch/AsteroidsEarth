@@ -27,15 +27,20 @@ define ['entity_factory',
 
   class Game
     constructor: (@container) ->
-      @width = container.width()
-      @height = container.height()
+      @viewportWidth = container.width()
+      @viewportHeight = container.height()
+      
+      @pixleToUnitRatio = 8
+      @zoom = @pixleToUnitRatio/2
+      @worldWidth = @viewportWidth/@pixleToUnitRatio
+      @worldHeight = @viewportWidth/@pixleToUnitRatio
 
-      @scale = 10
       @gameOver = false
+
       @world = new World
         size:
-          width: @width/@scale
-          height: @height/@scale
+          width: @worldWidth
+          height: @worldHeight
       
       @world.events.on "astroidWorldCollistion", =>
         @endGame()
@@ -60,20 +65,20 @@ define ['entity_factory',
 
     createPlanet: ->
       @planet = window.EntityFactory.createPlanet()
-      @planet.setPosition(new B2D.Vec2(@width/@scale/2, @height/@scale/2))
+      @planet.setPosition(new B2D.Vec2(@worldWidth/2, @worldHeight/2))
 
     createAstroidSpawner: ->
       astroidSpwaner = new AstroidSpwaner
-        width: @width/@scale
-        height: @height/@scale
+        width: @worldWidth
+        height: @worldHeight
         planet: @planet
 
       astroidSpwaner.startSpwaning()
 
     createRenderer: ->
       camera = new Camera()
-      camera.zoom(@scale)
-
+      camera.zoom(@zoom)
+      window.camera = camera
       @renderer = new SceneRenderer
         camera: camera
       
