@@ -115,7 +115,7 @@ define ['box2d', 'events'], (B2D, Events) ->
       fixtureDef.density = 1
       fixtureDef.friction = 0
       fixtureDef.shape = new B2D.PolygonShape
-      fixtureDef.shape.SetAsBox(@size.width, @size.height)
+      fixtureDef.shape.SetAsBox(@size.width/2, @size.height/2)
       fixtureDef.isSensor = true     
       worldBody = @world.CreateBody bodyDef
       worldBody.CreateFixture fixtureDef
