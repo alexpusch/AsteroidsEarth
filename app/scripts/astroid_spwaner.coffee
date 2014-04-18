@@ -27,7 +27,7 @@ define ['planet', 'wave'], (Planet, Wave) ->
 
     _generageRandomAstroidPlan: ->
       radius = _.random 3,5
-      position = @_getRandomPosition()
+      position = @_getRandomPosition radius
       offset = _.random 1000, 3000
       
       astroidPlan = 
@@ -35,22 +35,26 @@ define ['planet', 'wave'], (Planet, Wave) ->
         position: position
         offset: offset
 
-    _getRandomPosition: ->
+    _getRandomPosition: (astroidRadius) ->
       side = _.random 1, 4
       
       randomX = _.random 0, @height
       randomY = _.random 0, @width
 
       switch side
+        # top
         when 1 
           x:randomX
-          y: - 5
+          y: -astroidRadius + 1
+        # bottom
         when 2
           x: randomX
-          y: @height + 5
+          y: @height + astroidRadius - 1
+        # left
         when 3 
-          x:-5
+          x: - astroidRadius + 1
           y: randomY
+        # right
         when 4 
-          x: @width + 5
+          x: @width + astroidRadius - 1
           y: randomX
