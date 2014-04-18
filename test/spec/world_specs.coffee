@@ -58,15 +58,6 @@ define ['box2d', 'world', 'entity'], (B2D, World, Entity) ->
 
         expect(@entity.handleEnterWorld).not.toHaveBeenCalled()
 
-      it "does not call the handleEnterWorld callback for entites that where created in the world", ->
-        spyOn @entity, "handleEnterWorld"
-        @world.registerEntity @entity
-      
-        @entity.setPosition(new B2D.Vec2 95, 0)
-        @world.update()       
-
-        expect(@entity.handleEnterWorld).not.toHaveBeenCalled()
-
     describe "call handleExitWorld", ->
       it "calls the handleExitWorld callback for entities that exists the world", ->
         spyOn @entity, "handleExitWorld"
