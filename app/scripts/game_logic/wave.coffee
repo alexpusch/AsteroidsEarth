@@ -12,6 +12,7 @@ define ['events'], (Events)->
         return
 
       astroidPlan = @wavePlan[waveIndex]
+
       setTimeout =>
         @_spwanAstroid astroidPlan
         @continueWave(waveIndex + 1)

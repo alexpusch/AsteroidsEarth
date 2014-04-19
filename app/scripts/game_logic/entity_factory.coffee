@@ -12,6 +12,7 @@ define ['world', 'spaceship', 'bullet', 'astroid', 'planet'], (World, Spaceship,
     createBullet: ->
       @_createEntity Bullet, 
         radius: 0.2
+        density: 5000
 
     createAstroid: (options = {}) ->
       options.planet = @planet
@@ -21,7 +22,7 @@ define ['world', 'spaceship', 'bullet', 'astroid', 'planet'], (World, Spaceship,
     createPlanet: ->
       @planet = @_createEntity Planet,
         radius: 10
-
+      
       @planet
 
     _createEntity: (entityType, options) ->

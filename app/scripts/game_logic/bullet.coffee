@@ -11,7 +11,7 @@ define ['entity'], (Entity) ->
       bodyDef.bullet = true
       
       fixtureDef = new B2D.FixtureDef
-      fixtureDef.density = 1
+      fixtureDef.density = 100
       fixtureDef.friction = 0
       fixtureDef.shape = new B2D.CircleShape @radius
 

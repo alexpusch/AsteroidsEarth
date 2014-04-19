@@ -41,20 +41,21 @@ define ['planet', 'wave'], (Planet, Wave) ->
       randomX = _.random 0, @height
       randomY = _.random 0, @width
 
+      offset = 0.1
       switch side
         # top
         when 1 
           x:randomX
-          y: -astroidRadius + 1
+          y: -astroidRadius + offset
         # bottom
         when 2
           x: randomX
-          y: @height + astroidRadius - 1
+          y: @height + astroidRadius - offset
         # left
         when 3 
-          x: - astroidRadius + 1
+          x: - astroidRadius + offset
           y: randomY
         # right
         when 4 
-          x: @width + astroidRadius - 1
+          x: @width + astroidRadius - offset
           y: randomX
