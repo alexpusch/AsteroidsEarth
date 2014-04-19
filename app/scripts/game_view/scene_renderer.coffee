@@ -1,4 +1,4 @@
-define ['world_renderer'], (WorldRenderer) ->
+define ->
   class SceneRenderer
     constructor: (options) ->
       @renderersTypes = {}
@@ -9,7 +9,7 @@ define ['world_renderer'], (WorldRenderer) ->
     render: (world, score) ->
       @renderEntities(world.getEntities())
       @renderHud([score])
-      @stage.getRenderer()?.render(@stage.getStage())
+      @stage.getPixiRenderer()?.render(@stage.getPixiStage())
 
     renderHud: (entities) ->
       _.each entities, (entity) =>
@@ -25,13 +25,13 @@ define ['world_renderer'], (WorldRenderer) ->
 
     getRenderer: (entity) ->
       unless @renderers[entity.toString()]?
-        @renderers[entity.toString()] = new (@getRendererType(entity.type))(@stage.getStage(), @camera, entity)
+        @renderers[entity.toString()] = new (@getRendererType(entity.type))(@stage, @camera, entity)
 
       @renderers[entity.toString()]
     
     getHudRenderer: (entity) ->
       unless @renderers[entity.toString()]?
-        @renderers[entity.toString()] = new (@getRendererType(entity.type))(@stage.getStage(), entity)
+        @renderers[entity.toString()] = new (@getRendererType(entity.type))(@stage, entity)
 
       @renderers[entity.toString()]
 

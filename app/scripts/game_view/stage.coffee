@@ -10,11 +10,14 @@ define ->
       @pixiRenderer = PIXI.autoDetectRenderer(@width, @height)
       container.append(@pixiRenderer.view)
 
-    getStage: ->
+    getPixiStage: ->
       @stage
 
-    getRenderer: ->
+    getPixiRenderer: ->
       @pixiRenderer
+
+    render: ->
+      @pixiRenderer.render(@stage)
 
     getWidth: ->
       @width

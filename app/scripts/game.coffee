@@ -3,29 +3,29 @@ define ['entity_factory',
          'scene_renderer',
          'spaceship', 
          'player', 
-         'spaceship_renderer', 
-         'bullet_renderer', 
-         'astroid_renderer'
+         'spaceship_view', 
+         'bullet_view', 
+         'astroid_view'
          'camera', 
          'planet', 
          'astroid_spwaner', 
          'score', 
-         'score_renderer',
-         'start_screen'], (
+         'score_view',
+         'start_screen_view'], (
           EntityFactory, 
           World, 
           SceneRenderer,
           Spaceship, 
           Player, 
-          SpaceshipRenderer, 
-          BulletRenderer, 
-          AstroidRenderer,
+          SpaceshipView, 
+          BulletView, 
+          AstroidView,
           Camera, 
           Planet, 
           AstroidSpwaner, 
           Score, 
-          ScoreRenderer,
-          StartScreen) ->
+          ScoreView,
+          StartScreenView) ->
 
   class Game
     constructor: (@stage) ->
@@ -38,14 +38,8 @@ define ['entity_factory',
       @worldWidth = @viewportWidth/@pixleToUnitRatio
       @worldHeight = @viewportWidth/@pixleToUnitRatio
 
-      @world = new World
-        size:
-          width: @worldWidth
-          height: @worldHeight
-      
-      @world.events.on "astroidWorldCollistion", =>
-        @endGame()
-        console.log "game over"
+    start: ->
+      @world = @createWorld()
 
       window.EntityFactory = new EntityFactory @world
 
@@ -56,52 +50,69 @@ define ['entity_factory',
       player = new Player()
       player.control spaceship
 
-      @createPlanet()
-      @createAstroidSpawner()
+      @planet = @createPlanet()
+      @astroidSpwaner = @createAstroidSpawner()
+      @sceneRenderer = @createSceneRenderer()
+      @score = @createScore()
 
-      @createRenderer()
-      
-      @createHUD()
       @registerRenderers()
 
-      @startScreen = new StartScreen @stage
-      @startScreen.events.on "gameStartClicked", =>
-        @startScreen.remove()
-        delete @startScreen
-        @startGame()
+      @startScreen = @createStartScreen()
+
+      @mainLoop()
+
+    createWorld: ->
+      world = new World
+        size:
+          width: @worldWidth
+          height: @worldHeight
+      
+      world.events.on "astroidWorldCollistion", =>
+        @endGame()
+        console.log "game over"
+
+      world
 
     createPlanet: ->
-      @planet = window.EntityFactory.createPlanet()
-      @planet.setPosition(new B2D.Vec2(@worldWidth/2, @worldHeight/2))
+      planet = window.EntityFactory.createPlanet()
+      planet.setPosition(new B2D.Vec2(@worldWidth/2, @worldHeight/2))
+
+      planet
 
     createAstroidSpawner: ->
-      @astroidSpwaner = new AstroidSpwaner
+      new AstroidSpwaner
         width: @worldWidth
         height: @worldHeight
         planet: @planet
 
-    createRenderer: ->
+    createSceneRenderer: ->
       camera = new Camera()
       camera.zoom(@zoom)
       window.camera = camera
-      @renderer = new SceneRenderer
+      
+      new SceneRenderer
         stage: @stage
         camera: camera
       
-    createHUD: ->
+    createScore: ->
       @score = new Score
         upInterval: 10
 
-    registerRenderers: ->
-      @renderer.registerRenderer('spaceship', SpaceshipRenderer)
-      @renderer.registerRenderer('bullet', BulletRenderer)
-      @renderer.registerRenderer('astroid', AstroidRenderer)
-      @renderer.registerRenderer('planet', BulletRenderer)
-      @renderer.registerRenderer('score', ScoreRenderer)
+    createStartScreen: ->
+      startScreen = new StartScreenView @stage
+      startScreen.events.on "gameStartClicked", =>
+        @startScreen.destroy()
+        delete @startScreen
+        @startGame()
 
-    start: ->
-      @startScreen.show()
-      @mainLoop()
+      startScreen
+
+    registerRenderers: ->
+      @sceneRenderer.registerRenderer('spaceship', SpaceshipView)
+      @sceneRenderer.registerRenderer('bullet', BulletView)
+      @sceneRenderer.registerRenderer('astroid', AstroidView)
+      @sceneRenderer.registerRenderer('planet', BulletView)
+      @sceneRenderer.registerRenderer('score', ScoreView)
 
     startGame: ->
       @gameState = "gameOn"
@@ -110,11 +121,12 @@ define ['entity_factory',
 
     mainLoop: ->
       switch @gameState
+        when "startScreen" then @startScreen.render()
         when "gameOn" 
           @world.update()
-          @renderer.render(@world, @score)
+          @sceneRenderer.render(@world, @score)
 
-      @stage.getRenderer().render(@stage.getStage())
+      @stage.render()
       requestAnimFrame => @mainLoop()
 
     endGame: ->

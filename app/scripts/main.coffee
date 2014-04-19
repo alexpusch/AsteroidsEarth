@@ -1,4 +1,4 @@
-define  ['stage','start_screen', 'game'], (Stage, StartScreen, Game) ->
+define  ['stage', 'game'], (Stage, Game) ->
 
   container = $("#game-container")
 
