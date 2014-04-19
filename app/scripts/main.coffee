@@ -1,6 +1,8 @@
-define  ['game'], (Game) ->
+define  ['stage','start_screen', 'game'], (Stage, StartScreen, Game) ->
 
   container = $("#game-container")
+
   if container.length > 0
-    game = new Game(container)
+    stage = new Stage container
+    game = new Game(stage)
     game.start()

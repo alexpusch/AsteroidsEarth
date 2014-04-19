@@ -10,7 +10,8 @@ define ['entity_factory',
          'planet', 
          'astroid_spwaner', 
          'score', 
-         'score_renderer'], (
+         'score_renderer',
+         'start_screen'], (
           EntityFactory, 
           World, 
           SceneRenderer,
@@ -23,19 +24,19 @@ define ['entity_factory',
           Planet, 
           AstroidSpwaner, 
           Score, 
-          ScoreRenderer) ->
+          ScoreRenderer,
+          StartScreen) ->
 
   class Game
-    constructor: (@container) ->
-      @viewportWidth = container.width()
-      @viewportHeight = container.height()
+    constructor: (@stage) ->
+      @gameState = "startScreen"
+      @viewportWidth = @stage.getWidth()
+      @viewportHeight = @stage.getHeight()
       
       @pixleToUnitRatio = 8
-      @zoom = @pixleToUnitRatio/2
+      @zoom = @pixleToUnitRatio
       @worldWidth = @viewportWidth/@pixleToUnitRatio
       @worldHeight = @viewportWidth/@pixleToUnitRatio
-
-      @gameOver = false
 
       @world = new World
         size:
@@ -63,28 +64,30 @@ define ['entity_factory',
       @createHUD()
       @registerRenderers()
 
+      @startScreen = new StartScreen @stage
+      @startScreen.events.on "gameStartClicked", =>
+        @startScreen.remove()
+        delete @startScreen
+        @startGame()
+
     createPlanet: ->
       @planet = window.EntityFactory.createPlanet()
       @planet.setPosition(new B2D.Vec2(@worldWidth/2, @worldHeight/2))
 
     createAstroidSpawner: ->
-      astroidSpwaner = new AstroidSpwaner
+      @astroidSpwaner = new AstroidSpwaner
         width: @worldWidth
         height: @worldHeight
         planet: @planet
-
-      astroidSpwaner.startSpwaning()
 
     createRenderer: ->
       camera = new Camera()
       camera.zoom(@zoom)
       window.camera = camera
       @renderer = new SceneRenderer
+        stage: @stage
         camera: camera
       
-      @renderer.setupRenderer
-        container: @container
-
     createHUD: ->
       @score = new Score
         upInterval: 10
@@ -97,16 +100,22 @@ define ['entity_factory',
       @renderer.registerRenderer('score', ScoreRenderer)
 
     start: ->
-      @score.start()
-
+      @startScreen.show()
       @mainLoop()
 
-    mainLoop: ->
-      unless @gameOver
-        @world.update()
-        @renderer.render(@world, @score)
+    startGame: ->
+      @gameState = "gameOn"
+      @score.start()
+      @astroidSpwaner.startSpwaning()
 
-        requestAnimFrame => @mainLoop()
+    mainLoop: ->
+      switch @gameState
+        when "gameOn" 
+          @world.update()
+          @renderer.render(@world, @score)
+
+      @stage.getRenderer().render(@stage.getStage())
+      requestAnimFrame => @mainLoop()
 
     endGame: ->
-      @gameOver = true
+      @gameState = "gameOver"

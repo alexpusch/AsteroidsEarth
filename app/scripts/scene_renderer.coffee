@@ -1,24 +1,15 @@
-define ['world_renderer', 'hud_renderer'], (WorldRenderer, HudRenderer) ->
+define ['world_renderer'], (WorldRenderer) ->
   class SceneRenderer
     constructor: (options) ->
       @renderersTypes = {}
       @renderers = {}
       @camera = options.camera
-
-    setupRenderer: (options) ->
-      @stage = new PIXI.Stage(0xFFFFFF, true) 
-      @stage.setInteractive(false)
-
-      width = options.container.width()
-      height = options.container.height()
-
-      @pixiRenderer = PIXI.autoDetectRenderer(width, height, null, false, true)
-      options.container.append(@pixiRenderer.view)
+      @stage = options.stage
 
     render: (world, score) ->
       @renderEntities(world.getEntities())
       @renderHud([score])
-      @pixiRenderer?.render(@stage)
+      @stage.getRenderer()?.render(@stage.getStage())
 
     renderHud: (entities) ->
       _.each entities, (entity) =>
@@ -34,13 +25,13 @@ define ['world_renderer', 'hud_renderer'], (WorldRenderer, HudRenderer) ->
 
     getRenderer: (entity) ->
       unless @renderers[entity.toString()]?
-        @renderers[entity.toString()] = new (@getRendererType(entity.type))(@stage, @camera, entity)
+        @renderers[entity.toString()] = new (@getRendererType(entity.type))(@stage.getStage(), @camera, entity)
 
       @renderers[entity.toString()]
     
     getHudRenderer: (entity) ->
       unless @renderers[entity.toString()]?
-        @renderers[entity.toString()] = new (@getRendererType(entity.type))(@stage, entity)
+        @renderers[entity.toString()] = new (@getRendererType(entity.type))(@stage.getStage(), entity)
 
       @renderers[entity.toString()]
 
