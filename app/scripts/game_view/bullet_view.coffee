@@ -15,7 +15,6 @@ define ['conversions', 'view'], (Conversions, View)  ->
       graphics
 
     updateGraphics: ->
-      debugger
       vec2Position = @camera.project(@bullet.getPosition())
       pixiPosition = Conversions.B2DtoPIXI.toPoint vec2Position
       @graphics.position = pixiPosition

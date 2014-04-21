@@ -41,16 +41,29 @@ define ['entity_factory',
       @worldHeight = @viewportWidth/@pixleToUnitRatio
 
     start: ->
+      @createGameObjects()
+      @mainLoop()
+
+    reset: ->
+      @world.destroy()
+      @player.destroy()
+      @spaceship.destroy()
+      @astroidSpwaner.destroy()
+      @stage.clear()
+
+      delete @world
+
+    createGameObjects: ->
       @world = @createWorld()
 
       window.EntityFactory = new EntityFactory @world
 
       # world.setupDebugRenderer $('canvas')[0]
 
-      spaceship = window.EntityFactory.createSpaceship()
+      @spaceship = window.EntityFactory.createSpaceship()
 
-      player = new Player()
-      player.control spaceship
+      @player = new Player()
+      @player.control @spaceship
 
       @planet = @createPlanet()
       @astroidSpwaner = @createAstroidSpawner()
@@ -61,7 +74,6 @@ define ['entity_factory',
 
       @startScreen = @createStartScreen()
       @gameOverScreen = @createGameOverScreen()
-      @mainLoop()
 
     createWorld: ->
       world = new World
@@ -112,6 +124,11 @@ define ['entity_factory',
     createGameOverScreen: ->
       gameOverScreen = new GameOverView @stage
 
+      gameOverScreen.events.on "gameStartClicked", =>
+        @createGameObjects()
+        @startGame()
+        gameOverScreen.destroy()
+
       gameOverScreen
 
     registerRenderers: ->
@@ -131,7 +148,8 @@ define ['entity_factory',
         when "startScreen" then @startScreen.render()
         when "gameOn" 
           @world.update()
-          @sceneRenderer.render(@world, @score)
+          unless @gameState == "gameOver"
+            @sceneRenderer.render(@world, @score)
         when "gameOver"
           @gameOverScreen.render()
 
@@ -139,4 +157,5 @@ define ['entity_factory',
       requestAnimFrame => @mainLoop()
 
     endGame: ->
+      @reset()
       @gameState = "gameOver"

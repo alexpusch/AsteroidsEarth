@@ -11,11 +11,14 @@ define ['planet', 'wave'], (Planet, Wave) ->
       wavePlan = @generageWavePlan(waveIndex)
       console.log "wave plan #{waveIndex}"
       console.log #{wavePlan}
-      wave = new Wave wavePlan
-      wave.on 'waveDestroyed', =>
+      @currentWave = new Wave wavePlan
+
+      @waveDestroyedCallback = =>
         @startNextWave(waveIndex + 1)
 
-      wave.start()
+      @currentWave.events.on 'waveDestroyed', @waveDestroyedCallback
+
+      @currentWave.start()
 
     generageWavePlan: (waveIndex)->
       @currentWaveCount = Math.floor(Math.pow((waveIndex + 1), 1.2))
@@ -25,6 +28,10 @@ define ['planet', 'wave'], (Planet, Wave) ->
 
       wavePlan 
 
+    destroy: ->
+      @currentWave.events.off "waveDestroyed", @waveDestroyedCallback
+      @currentWave.destroy()
+      
     _generageRandomAstroidPlan: ->
       radius = _.random 3,5
       position = @_getRandomPosition radius

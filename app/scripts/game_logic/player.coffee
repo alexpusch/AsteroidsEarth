@@ -8,11 +8,15 @@ define ->
         32: @fireCannon # space
 
     control: (@spaceship) ->
-      $(document).keydown (e) =>
+      @keyDownCallback = (e) =>
         @mapping[e.keyCode]?.apply(this, ['on'])
-
-      $(document).keyup (e) =>
+      
+      @keyUpCallback = (e) =>
         @mapping[e.keyCode]?.apply(this, ['off'])
+
+      $(document).keydown @keyDownCallback
+
+      $(document).keyup @keyUpCallback
 
     setLeftThrusters: (state) ->
       if state == 'on'
@@ -37,3 +41,7 @@ define ->
         @spaceship.fireCannon()
       else 
         @spaceship.turnCannonOff()
+
+    destroy: ->
+      $(document).off "keydown", @keyDownCallback
+      $(document).off "keyup", @keyUpCallback

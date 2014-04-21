@@ -97,6 +97,12 @@ define ['box2d', 'events'], (B2D, Events) ->
       @world.Step(@_getFrameTime(), 10, 10);
       @world.ClearForces();
 
+    destroy: ->
+      body = @world.GetBodyList()
+      while body
+        @world.DestroyBody body
+        body = body.GetNext()
+
     setupDebugRenderer: (canvas) ->
       debugDraw = new B2D.DebugDraw
       debugDraw.SetSprite(canvas.getContext("2d"))

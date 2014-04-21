@@ -80,6 +80,7 @@ define ['box2d', 'entity', 'vector_helpers'], (B2D, Entity, VectorHelpers) ->
       bullet.setPosition transformCannonOffest
       bullet.setSpeed(bulletSpeed)
       window.bullet = bullet
+
     update: ->
       if @_thrustersOn 'main'
         @_mainThrustersAction()
@@ -91,6 +92,9 @@ define ['box2d', 'entity', 'vector_helpers'], (B2D, Entity, VectorHelpers) ->
     getVertices: ->
       @body.GetFixtureList().GetShape().GetVertices()
 
+    destroy: ->
+      @turnCannonOff()
+      
     _thrustersOn: (type)->
       @thrusters[type] == 'on'
 

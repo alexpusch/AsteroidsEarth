@@ -13,14 +13,14 @@ define ['events'], (Events)->
 
       astroidPlan = @wavePlan[waveIndex]
 
-      setTimeout =>
+      @waveTimeoutHandler = setTimeout =>
         @_spwanAstroid astroidPlan
         @continueWave(waveIndex + 1)
       , astroidPlan.offset
 
-    on: (eventName, callback)->
-      @events.on eventName, callback
-
+    destroy: ->
+      clearTimeout @waveTimeoutHandler
+      
     _spwanAstroid: (astroidPlan)->
       console.log "spwaning astroid"
       options = 
