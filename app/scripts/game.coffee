@@ -11,7 +11,8 @@ define ['entity_factory',
          'astroid_spwaner', 
          'score', 
          'score_view',
-         'start_screen_view'], (
+         'start_screen_view'
+         'game_over_view'], (
           EntityFactory, 
           World, 
           SceneRenderer,
@@ -25,7 +26,8 @@ define ['entity_factory',
           AstroidSpwaner, 
           Score, 
           ScoreView,
-          StartScreenView) ->
+          StartScreenView, 
+          GameOverView) ->
 
   class Game
     constructor: (@stage) ->
@@ -58,7 +60,7 @@ define ['entity_factory',
       @registerRenderers()
 
       @startScreen = @createStartScreen()
-
+      @gameOverScreen = @createGameOverScreen()
       @mainLoop()
 
     createWorld: ->
@@ -107,6 +109,11 @@ define ['entity_factory',
 
       startScreen
 
+    createGameOverScreen: ->
+      gameOverScreen = new GameOverView @stage
+
+      gameOverScreen
+
     registerRenderers: ->
       @sceneRenderer.registerRenderer('spaceship', SpaceshipView)
       @sceneRenderer.registerRenderer('bullet', BulletView)
@@ -125,6 +132,8 @@ define ['entity_factory',
         when "gameOn" 
           @world.update()
           @sceneRenderer.render(@world, @score)
+        when "gameOver"
+          @gameOverScreen.render()
 
       @stage.render()
       requestAnimFrame => @mainLoop()
