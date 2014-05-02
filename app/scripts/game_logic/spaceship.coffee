@@ -10,10 +10,15 @@ define ['box2d', 'entity', 'vector_helpers'], (B2D, Entity, VectorHelpers) ->
       @bulletSpeed = 30
       @cannonOffset = new B2D.Vec2(@length)
       @cannonRate = 200
+      @cannonHeatRate = options.cannonHeatRate
+      @cannonCooldownRate = options.cannonCooldownRate
       @thrusters =
         main: 'off'
         left: 'off'
         right: 'off'
+
+      @cannonTemperature = 0
+      @cannonJammed = false;
 
     getEntityDef: ->
       bodyDef = new B2D.BodyDef
@@ -58,6 +63,7 @@ define ['box2d', 'entity', 'vector_helpers'], (B2D, Entity, VectorHelpers) ->
         @cannonIntervalHandler = setInterval(
           => 
            @fireBullet()
+           console.log "cannon temp: #{@cannonTemperature}"
         , @cannonRate)
 
     turnCannonOff: ->
@@ -65,23 +71,15 @@ define ['box2d', 'entity', 'vector_helpers'], (B2D, Entity, VectorHelpers) ->
       @cannonIntervalHandler = null
 
     fireBullet: ->
-      angle = @getAngle()
-      position = @getPosition()
-      transformCannonOffest = @cannonOffset.Copy()
-      transformCannonOffest = VectorHelpers.rotate transformCannonOffest, angle
-      transformCannonOffest.Add(position)
-      spaceshipSpeed = @body.GetLinearVelocity()
+      unless @cannonJammed
+        @_createBullet()
+        @cannonTemperature += @cannonHeatRate
+        @cannonTemperature = Math.min(@cannonTemperature, 1)
 
-      bulletSpeed = @_getDirectionVector()
-      bulletSpeed.Multiply(@bulletSpeed)
-      bulletSpeed.Add(spaceshipSpeed)
-      bullet = EntityFactory.createBullet()
-      bullet.setAngle angle
-      bullet.setPosition transformCannonOffest
-      bullet.setSpeed(bulletSpeed)
-      window.bullet = bullet
+        if @cannonTemperature == 1
+          @cannonJammed = true
 
-    update: ->
+    update: (dt) ->
       if @_thrustersOn 'main'
         @_mainThrustersAction()
       if @_thrustersOn 'left'
@@ -89,8 +87,26 @@ define ['box2d', 'entity', 'vector_helpers'], (B2D, Entity, VectorHelpers) ->
       if @_thrustersOn 'right'
         @_rightThrustersACtion()
 
+      if @cannonTemperature > 0
+        @cannonTemperature -= @cannonCooldownRate*dt
+
+      if @cannonJammed and @cannonTemperature <= 0
+        @cannonJammed = false
+        @cannonTemperature = 0
+
+      window.dt = dt
+
     getVertices: ->
       @body.GetFixtureList().GetShape().GetVertices()
+
+    isCannonOn: ->
+      @cannonIntervalHandler?
+
+    isCannonJammed: ->
+      @cannonJammed
+
+    getCannonTemperature: ->
+      @cannonTemperature
 
     destroy: ->
       @turnCannonOff()
@@ -114,3 +130,19 @@ define ['box2d', 'entity', 'vector_helpers'], (B2D, Entity, VectorHelpers) ->
       direction = VectorHelpers.createDirectionVector angle
 
       direction
+
+    _createBullet: ->
+      angle = @getAngle()
+      position = @getPosition()
+      transformCannonOffest = @cannonOffset.Copy()
+      transformCannonOffest = VectorHelpers.rotate transformCannonOffest, angle
+      transformCannonOffest.Add(position)
+      spaceshipSpeed = @body.GetLinearVelocity()
+
+      bulletSpeed = @_getDirectionVector()
+      bulletSpeed.Multiply(@bulletSpeed)
+      bulletSpeed.Add(spaceshipSpeed)
+      bullet = EntityFactory.createBullet()
+      bullet.setAngle angle
+      bullet.setPosition transformCannonOffest
+      bullet.setSpeed(bulletSpeed)

@@ -87,14 +87,15 @@ define ['box2d', 'events'], (B2D, Events) ->
       @entities
 
     update: ->
+      dt = @_getFrameTime()
       _.each @entities, (e) =>
         unless e.exists()
           @world.DestroyBody e.body
           @entities = _(@entities).without e
        
-        e.update?()
+        e.update? dt
 
-      @world.Step(@_getFrameTime(), 10, 10);
+      @world.Step(dt, 10, 10);
       @world.ClearForces();
 
     destroy: ->

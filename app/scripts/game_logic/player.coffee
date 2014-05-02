@@ -44,4 +44,4 @@ define ->
 
     destroy: ->
       $(document).off "keydown", @keyDownCallback
-      $(document).off "keyup", @keyUpCallback
+      $(document).off "keyup", @keyUp4Callback

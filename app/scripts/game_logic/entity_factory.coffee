@@ -8,6 +8,8 @@ define ['world', 'spaceship', 'bullet', 'astroid', 'planet'], (World, Spaceship,
         angularSpeed: 50
         width: 2
         length: 3
+        cannonHeatRate: 0.1
+        cannonCooldownRate: 0.2
 
     createBullet: ->
       @_createEntity Bullet, 
