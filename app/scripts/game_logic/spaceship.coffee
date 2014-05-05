@@ -10,6 +10,7 @@ define ['box2d', 'entity', 'vector_helpers'], (B2D, Entity, VectorHelpers) ->
       @bulletSpeed = 30
       @cannonOffset = new B2D.Vec2(@length)
       @cannonRate = 200
+      
       @cannonHeatRate = options.cannonHeatRate
       @cannonCooldownRate = options.cannonCooldownRate
       @thrusters =
@@ -19,6 +20,7 @@ define ['box2d', 'entity', 'vector_helpers'], (B2D, Entity, VectorHelpers) ->
 
       @cannonTemperature = 0
       @cannonJammed = false;
+      @outOfWorld = false;
 
     getEntityDef: ->
       bodyDef = new B2D.BodyDef
@@ -32,9 +34,9 @@ define ['box2d', 'entity', 'vector_helpers'], (B2D, Entity, VectorHelpers) ->
       fixtureDef.friction = 0
       fixtureDef.shape = new B2D.PolygonShape
       fixtureDef.shape.SetAsArray [ 
-          new B2D.Vec2(0, -@width/2),
-          new B2D.Vec2(@length, 0),
-          new B2D.Vec2(0, @width/2)], 3
+          new B2D.Vec2(-@length/2, -@width/2),
+          new B2D.Vec2(@length/2, 0),
+          new B2D.Vec2(-@length/2, @width/2)], 3
 
       # fixtureDef.shape.SetAsBox(1, 1)
       bodyDef: bodyDef
@@ -110,7 +112,16 @@ define ['box2d', 'entity', 'vector_helpers'], (B2D, Entity, VectorHelpers) ->
 
     destroy: ->
       @turnCannonOff()
-      
+    
+    handleExitWorld: ->
+      @outOfWorld = true
+
+    handleEnterWorld: ->
+      @outOfWorld = false
+
+    isOutOfWOrld: ->
+      @outOfWorld
+
     _thrustersOn: (type)->
       @thrusters[type] == 'on'
 

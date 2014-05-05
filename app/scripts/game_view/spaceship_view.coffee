@@ -18,18 +18,17 @@ define ['conversions', 'view'], (Conversions, View) ->
 
       @spaceshipGraphics = @_createSpaceshipGraphics()
       @cannonTemperatureGraphics = @_createCannonTemperatureGraphics()
+      @distanceMeterGraphics = @_createOutOfWorldIndicatorGraphics()
       graphics.addChild @spaceshipGraphics
       graphics.addChild @cannonTemperatureGraphics
+      graphics.addChild @distanceMeterGraphics
       graphics
 
     updateGraphics: ->
-      vec2Position = @camera.project(@spaceship.getPosition())
-      pixiPosition = Conversions.B2DtoPIXI.toPoint vec2Position
-      @spaceshipGraphics.position = pixiPosition
-      @spaceshipGraphics.scale = new PIXI.Point @camera.getZoom() ,@camera.getZoom()
-      @spaceshipGraphics.rotation = @spaceship.getAngle()
-
-      temperature = @spaceship.getCannonTemperature()
+      if @spaceship.isOutOfWOrld()
+        @_updateOutOfWorldGraphics()
+      else
+        @_updateInWorldGraphics()
 
       @_updateCannonTemperatureGraphics()
 
@@ -120,3 +119,88 @@ define ['conversions', 'view'], (Conversions, View) ->
 
       color = blue + shiftedGreen + shiftedRed      
       color
+
+    _createOutOfWorldIndicatorGraphics: ->
+      graphics = new PIXI.Text "0",
+        font: '10pt Helvetica'
+        fill: '0xCCCCCC'
+        align: 'center'
+
+      graphics.anchor = new PIXI.Point 0.5,0.5
+      graphics.alpha = 0.5
+      graphics
+
+    _updateInWorldGraphics: ->
+      vec2Position = @camera.project(@spaceship.getPosition())
+      pixiPosition = Conversions.B2DtoPIXI.toPoint vec2Position
+
+      @distanceMeterGraphics.visible = false
+      @spaceshipGraphics.position = pixiPosition
+      @spaceshipGraphics.scale = new PIXI.Point @camera.getZoom() ,@camera.getZoom()
+      @spaceshipGraphics.rotation = @spaceship.getAngle()
+
+    _updateOutOfWorldGraphics: ->
+      vec2Position = @camera.project(@spaceship.getPosition())
+      pixiPosition = Conversions.B2DtoPIXI.toPoint vec2Position
+
+      distance = @_getDistanceFromEdge pixiPosition
+      spaceshipIndicatorPosition = @_calculateIndicatorPosition pixiPosition
+
+      indicatorScale = 2
+
+      @spaceshipGraphics.position = spaceshipIndicatorPosition
+      @spaceshipGraphics.scale = new PIXI.Point @camera.getZoom()/indicatorScale ,@camera.getZoom()/indicatorScale
+      @spaceshipGraphics.rotation = @spaceship.getAngle()
+
+      distanceMeterPosition = @_calculateDistanceMeterPosition pixiPosition, spaceshipIndicatorPosition
+      
+      @distanceMeterGraphics.visible = true
+      @distanceMeterGraphics.setText(distance)
+      @distanceMeterGraphics.position = distanceMeterPosition
+
+    _getDistanceFromEdge: (position) ->
+      distance = 0
+
+      if position.y < 0
+        distance = -position.y
+      else if position.y > @stage.getHeight()
+        distance = position.y - @stage.getHeight()
+      if position.x < 0
+        distance = -position.x
+      else if position.x > @stage.getWidth()
+        distance = position.x - @stage.getWidth()
+
+      Math.ceil distance
+
+    _calculateIndicatorPosition: (position) ->
+      indicatorPosition = position.clone()
+
+      if position.y < 0
+        indicatorPosition.y = 10
+      else if position.y > @stage.getHeight()
+        indicatorPosition.y = @stage.getHeight() - 10
+      if position.x < 0
+        indicatorPosition.x = 10
+      else if position.x > @stage.getWidth()
+        indicatorPosition.x = @stage.getWidth() - 10
+
+      indicatorPosition
+
+    _calculateDistanceMeterPosition: (pixiPosition, spaceshipIndicatorPosition) ->
+      spaceshipBounds = @spaceshipGraphics.getLocalBounds()
+      spaceshipGraphicsWidth = spaceshipBounds.width/ @spaceshipGraphics.scale.x
+      distanceMeterOffset = 0
+
+      if pixiPosition.y < 0
+        distanceMeterOffset = spaceshipBounds.width + 5
+      else if pixiPosition.y > @stage.getHeight()
+        distanceMeterOffset = spaceshipBounds.width + 5
+      if pixiPosition.x < 0
+        distanceMeterOffset = spaceshipGraphicsWidth + 5 + @distanceMeterGraphics.width/2
+      else if pixiPosition.x > @stage.getWidth()
+        distanceMeterOffset = -(spaceshipGraphicsWidth + 5 + @distanceMeterGraphics.width/2)
+
+      distanceMeterPosition = spaceshipIndicatorPosition.clone()
+      distanceMeterPosition.x += distanceMeterOffset
+
+      distanceMeterPosition
