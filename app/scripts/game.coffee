@@ -12,7 +12,8 @@ define ['entity_factory',
          'score', 
          'score_view',
          'start_screen_view'
-         'game_over_view'], (
+         'game_over_view', 
+         'wave_view'], (
           EntityFactory, 
           World, 
           SceneRenderer,
@@ -27,7 +28,8 @@ define ['entity_factory',
           Score, 
           ScoreView,
           StartScreenView, 
-          GameOverView) ->
+          GameOverView,
+          WaveView) ->
 
   class Game
     constructor: (@stage) ->
@@ -137,6 +139,7 @@ define ['entity_factory',
       @sceneRenderer.registerRenderer('astroid', AstroidView)
       @sceneRenderer.registerRenderer('planet', BulletView)
       @sceneRenderer.registerRenderer('score', ScoreView)
+      @sceneRenderer.registerRenderer('astroidSpwaner', WaveView)
 
     startGame: ->
       @gameState = "gameOn"
@@ -149,7 +152,7 @@ define ['entity_factory',
         when "gameOn" 
           @world.update()
           unless @gameState == "gameOver"
-            @sceneRenderer.render(@world, @score)
+            @sceneRenderer.render(@world, @score, @astroidSpwaner)
         when "gameOver"
           @gameOverScreen.render()
 
