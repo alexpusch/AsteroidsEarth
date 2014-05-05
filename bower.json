@@ -2,7 +2,14 @@
   "name": "spacewars",
   "version": "0.0.0",
   "dependencies": {
-    "jquery": "~1.10.2"
+    "jquery": "~1.10.2",
+    "async": "~0.8.0",
+    "box2dweb": "latest",
+    "pixi": "~1.5.3",
+    
+    "underscore": "~1.5.2"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "requirejs": "~2.1.9"
+  }
 }
