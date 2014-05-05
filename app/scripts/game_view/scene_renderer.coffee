@@ -6,9 +6,9 @@ define ->
       @camera = options.camera
       @stage = options.stage
 
-    render: (world, score) ->
+    render: (world, score, astroidSpwaner) ->
       @renderEntities(world.getEntities())
-      @renderHud([score])
+      @renderHud([score, astroidSpwaner])
       @stage.getPixiRenderer()?.render(@stage.getPixiStage())
 
     renderHud: (entities) ->
@@ -21,7 +21,7 @@ define ->
           @getRenderer(entity).render(entity)
         else
           @getRenderer(entity).destroy()
-          delete @renderers[entity.toString()]   
+          delete @renderers[entity.toString()]
 
     getRenderer: (entity) ->
       unless @renderers[entity.toString()]?

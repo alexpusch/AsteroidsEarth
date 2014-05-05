@@ -1,8 +1,11 @@
-define ['planet', 'wave'], (Planet, Wave) ->
-  class AstroidSpwaner
+define ['typed_object', 'planet', 'wave', 'events'], (TypedObject, Planet, Wave, Events) ->
+  class AstroidSpwaner extends TypedObject
     constructor: (options) ->
+      super "astroidSpwaner"
       @width = options.width
       @height = options.height
+      @waveIndex = 0
+      @events = new Events()
 
     startSpwaning: ->
       @startNextWave(0)
@@ -11,10 +14,13 @@ define ['planet', 'wave'], (Planet, Wave) ->
       wavePlan = @generageWavePlan(waveIndex)
       console.log "wave plan #{waveIndex}"
       console.log #{wavePlan}
+      @events.trigger "newWave", waveIndex
       @currentWave = new Wave wavePlan
 
       @waveDestroyedCallback = =>
-        @startNextWave(waveIndex + 1)
+        @waveIndex++
+
+        @startNextWave(@waveIndex)
 
       @currentWave.events.on 'waveDestroyed', @waveDestroyedCallback
 
@@ -27,6 +33,9 @@ define ['planet', 'wave'], (Planet, Wave) ->
         wavePlan.push @_generageRandomAstroidPlan() 
 
       wavePlan 
+
+    getWaveNumber: ->
+      @waveIndex
 
     destroy: ->
       @currentWave.events.off "waveDestroyed", @waveDestroyedCallback
