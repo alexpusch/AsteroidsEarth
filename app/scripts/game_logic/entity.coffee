@@ -2,7 +2,6 @@ define ['typed_object', 'box2d', 'events'], (TypedObject, B2D, Events)->
   class Entity extends TypedObject
     constructor: (type) ->
       super type
-      @id = "#{@type}_#{Math.random()}"
       @_exists = true
       @events = new Events()
 
