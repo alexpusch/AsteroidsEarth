@@ -13,6 +13,9 @@ define ['box2d', 'entity', 'vector_helpers'], (B2D, Entity, VectorHelpers) ->
       
       @cannonHeatRate = options.cannonHeatRate
       @cannonCooldownRate = options.cannonCooldownRate
+      @angularDamping = options.angularDamping
+      @linearDamping = options.linearDamping
+
       @thrusters =
         main: 'off'
         left: 'off'
@@ -26,8 +29,8 @@ define ['box2d', 'entity', 'vector_helpers'], (B2D, Entity, VectorHelpers) ->
       bodyDef = new B2D.BodyDef
       bodyDef.type = B2D.Body.b2_dynamicBody
       bodyDef.position = new B2D.Vec2 10,10
-      bodyDef.angularDamping = 5
-      bodyDef.linearDamping = 1
+      bodyDef.angularDamping = @angularDamping
+      bodyDef.linearDamping = @linearDamping
       fixtureDef = new B2D.FixtureDef
       fixtureDef.mass = 1
       fixtureDef.density = 1

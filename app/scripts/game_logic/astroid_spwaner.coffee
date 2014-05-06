@@ -7,6 +7,14 @@ define ['typed_object', 'planet', 'wave', 'events'], (TypedObject, Planet, Wave,
       @waveIndex = 0
       @events = new Events()
 
+      @options = 
+        sizeRange:
+          min: 4
+          max: 6
+        timeOffsetRange:
+          min: 600
+          max: 2000
+
     startSpwaning: ->
       @startNextWave(0)
 
@@ -42,7 +50,7 @@ define ['typed_object', 'planet', 'wave', 'events'], (TypedObject, Planet, Wave,
       @currentWave.destroy()
       
     _generageRandomAstroidPlan: ->
-      radius = _.random 3,5
+      radius = _.random @options.sizeRange.min, @options.sizeRange.max
       position = @_getRandomPosition radius
       offset = _.random 1000, 3000
       

@@ -4,17 +4,19 @@ define ['world', 'spaceship', 'bullet', 'astroid', 'planet'], (World, Spaceship,
 
     createSpaceship: () ->
       @_createEntity Spaceship,
-        speed: 40
+        speed: 150
         angularSpeed: 50
         width: 2
         length: 3
-        cannonHeatRate: 0.1
-        cannonCooldownRate: 0.2
+        cannonHeatRate: 0.13
+        cannonCooldownRate: 0.3
+        angularDamping: 5
+        linearDamping: 1.3
 
     createBullet: ->
       @_createEntity Bullet, 
-        radius: 0.2
-        density: 5000
+        radius: 0.3
+        density: 7
 
     createAstroid: (options = {}) ->
       options.planet = @planet

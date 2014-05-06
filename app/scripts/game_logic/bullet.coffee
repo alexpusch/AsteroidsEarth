@@ -3,6 +3,7 @@ define ['entity'], (Entity) ->
     constructor: (options) ->
       super 'bullet'
       @radius = options.radius
+      @density = options.density
 
     getEntityDef: ->
       bodyDef = new B2D.BodyDef
@@ -11,7 +12,7 @@ define ['entity'], (Entity) ->
       bodyDef.bullet = true
       
       fixtureDef = new B2D.FixtureDef
-      fixtureDef.density = 100
+      fixtureDef.density = @density
       fixtureDef.friction = 0
       fixtureDef.shape = new B2D.CircleShape @radius
 
