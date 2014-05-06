@@ -33,8 +33,13 @@ define ['conversions', 'view'], (Conversions, View) ->
       @_updateCannonTemperatureGraphics()
 
     _createSpaceshipGraphics: ->
-      vertices = @spaceship.getVertices()
       graphics = new PIXI.Graphics()
+      @_drawSpaceshipGraphics graphics      
+
+      graphics
+
+    _drawSpaceshipGraphics: (graphics) ->
+      vertices = @spaceship.getVertices()
       graphics.beginFill(0xFF3300)
       graphics.lineStyle(0, 0xffd900, 1)
 
@@ -45,7 +50,51 @@ define ['conversions', 'view'], (Conversions, View) ->
 
       graphics.endFill()
 
-      graphics
+      color = @_getSpeedIndicatorColor()
+      graphics.beginFill(color)
+      graphics.lineStyle(0, 0xffd900, 1)
+
+      t = 0.9
+
+      vertice01 = @_getAveragePoint vertices[0], vertices[1], t
+      vertice21 = @_getAveragePoint vertices[2], vertices[1], t
+
+      graphics.moveTo(vertices[0].x,vertices[0].y)
+      graphics.lineTo(vertice01.x, vertice01.y)
+      graphics.lineTo(vertice21.x, vertice21.y)
+      graphics.lineTo(vertices[2].x,vertices[2].y)
+      graphics.lineTo(vertices[0].x,vertices[0].y)
+
+      graphics.endFill()
+    
+    _getSpeedIndicatorColor: ->
+      slowColor = 
+        red: 255
+        green: 51
+        blue: 0
+
+      fastColor = 
+        red: 255
+        green: 235
+        blue: 235
+
+      speed = @spaceship.getSpeed()
+
+      maxSpeed = 35
+      r = 1 - speed/maxSpeed
+
+      engineColor = 
+        red: @_linearAverage slowColor.red, fastColor.red, r
+        green: @_linearAverage slowColor.green, fastColor.green, r
+        blue: @_linearAverage slowColor.blue, fastColor.blue, r
+
+      color = @_getRgb(engineColor.red, engineColor.green, engineColor.blue)
+
+    _getAveragePoint: (vertice1, vertice2, t) ->
+      new PIXI.Point(@_linearAverage(vertice1.x, vertice2.x, t), @_linearAverage(vertice1.y, vertice2.y, t))
+
+    _linearAverage: (num1, num2, t) ->
+      num1 * t + num2 * (1 - t)
 
     _createCannonTemperatureGraphics: ->
       graphics = new PIXI.Graphics()
@@ -123,7 +172,7 @@ define ['conversions', 'view'], (Conversions, View) ->
     _createOutOfWorldIndicatorGraphics: ->
       graphics = new PIXI.Text "0",
         font: '10pt Helvetica'
-        fill: '0xCCCCCC'
+        fill: "555555"
         align: 'center'
 
       graphics.anchor = new PIXI.Point 0.5,0.5
@@ -133,6 +182,8 @@ define ['conversions', 'view'], (Conversions, View) ->
     _updateInWorldGraphics: ->
       vec2Position = @camera.project(@spaceship.getPosition())
       pixiPosition = Conversions.B2DtoPIXI.toPoint vec2Position
+      @spaceshipGraphics.clear()
+      @_drawSpaceshipGraphics @spaceshipGraphics
 
       @distanceMeterGraphics.visible = false
       @spaceshipGraphics.position = pixiPosition

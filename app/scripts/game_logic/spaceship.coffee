@@ -21,7 +21,7 @@ define ['box2d', 'entity', 'vector_helpers'], (B2D, Entity, VectorHelpers) ->
         left: 'off'
         right: 'off'
 
-      @cannonTemperature = 0
+      @cannonTemperature = 0  
       @cannonJammed = false;
       @outOfWorld = false;
 
@@ -124,6 +124,10 @@ define ['box2d', 'entity', 'vector_helpers'], (B2D, Entity, VectorHelpers) ->
 
     isOutOfWOrld: ->
       @outOfWorld
+
+    getSpeed: ->
+      speedVector = @body.GetLinearVelocity()
+      speedVector.Length()
 
     _thrustersOn: (type)->
       @thrusters[type] == 'on'
