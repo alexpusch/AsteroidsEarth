@@ -18,6 +18,6 @@ define ['view'], (View) ->
       new PIXI.Point x,y
 
     _drawStar: (graphics, position) ->
-      graphics.beginFill "000066"
+      graphics.beginFill 0xFFFFFF
       graphics.drawCircle position.x, position.y, 2
       graphics.endFill()

@@ -1,7 +1,7 @@
 define ->
   class Stage
     constructor: (container)->
-      @stage = new PIXI.Stage(0xFFFFFF, true) 
+      @stage = new PIXI.Stage("1b6dab", true) 
       @stage.setInteractive(true)
 
       @width = container.width()

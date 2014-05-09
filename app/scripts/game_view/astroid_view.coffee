@@ -6,8 +6,8 @@ define ['conversions', 'view'], (Conversions, View)  ->
     createGraphics: ->
       graphics = new PIXI.Graphics()
 
-      graphics.beginFill(0xAA1100)
-      graphics.lineStyle(0, 0xffd900, 1)
+      graphics.beginFill(0xed8c00)
+      # graphics.lineStyle(0, 0xffd900, 1)
 
       graphics.drawCircle(0,0, @astroid.getRadius())
       graphics.endFill()

@@ -40,8 +40,7 @@ define ['conversions', 'view'], (Conversions, View) ->
 
     _drawSpaceshipGraphics: (graphics) ->
       vertices = @spaceship.getVertices()
-      graphics.beginFill(0xFF3300)
-      graphics.lineStyle(0, 0xffd900, 1)
+      graphics.beginFill(0xe3f2ff)
 
       graphics.moveTo(vertices[0].x,vertices[0].y)
       graphics.lineTo(vertices[1].x,vertices[1].y)
@@ -69,14 +68,14 @@ define ['conversions', 'view'], (Conversions, View) ->
     
     _getSpeedIndicatorColor: ->
       slowColor = 
-        red: 255
-        green: 51
-        blue: 0
+        red: 227
+        green: 242
+        blue: 255
 
       fastColor = 
-        red: 255
-        green: 235
-        blue: 235
+        red: 244
+        green: 184
+        blue: 0
 
       speed = @spaceship.getSpeed()
 
@@ -144,7 +143,7 @@ define ['conversions', 'view'], (Conversions, View) ->
       tickFillHeight = height - borderWidth*2
 
       @ticksContainer.beginFill(color, 0.5)
-      @ticksContainer.lineStyle @temperatureGraphicsOptions.ticksPadding, 0xffffff, 1
+      @ticksContainer.lineStyle @temperatureGraphicsOptions.ticksPadding, 0xAAAAAA, 0.5
       @ticksContainer.drawRect(borderWidth + i*width, borderWidth, width, tickFillHeight)
       @ticksContainer.endFill()
 
