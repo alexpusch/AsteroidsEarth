@@ -170,12 +170,12 @@ define ['conversions', 'view'], (Conversions, View) ->
 
     _createOutOfWorldIndicatorGraphics: ->
       graphics = new PIXI.Text "0",
-        font: '10pt Helvetica'
-        fill: "555555"
-        align: 'center'
+        font: "10pt Helvetica"
+        fill: "EEEEEE"
+        align: "center"
 
       graphics.anchor = new PIXI.Point 0.5,0.5
-      graphics.alpha = 0.5
+      graphics.alpha = 0.8
       graphics
 
     _updateInWorldGraphics: ->
