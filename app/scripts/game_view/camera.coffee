@@ -1,6 +1,6 @@
 define -> 
   class Camera
-    constructor: ->
+    constructor:  (@viewportWidth, @viewportHeight) ->
       @zoomMultiplier = 1
       @translation = 
         x: 0
@@ -9,16 +9,17 @@ define ->
     zoom: (multiplier) ->
       @zoomMultiplier = multiplier
 
-    move: (deltaX, deltaY) ->
+    lookAt: (deltaX, deltaY) ->
       @translation = 
         x: deltaX
         y: deltaY
 
     project: (point)->
       clone = point.Copy()
-      clone.Add(new B2D.Vec2(@translation.x, @translation.y))
       clone.Multiply @zoomMultiplier
+      clone.Add(new B2D.Vec2(@translation.x  * @zoomMultiplier, @translation.y * @zoomMultiplier))
 
+      clone.Add(new B2D.Vec2(@viewportWidth/2, @viewportHeight/2))
       clone
 
     getZoom: ->

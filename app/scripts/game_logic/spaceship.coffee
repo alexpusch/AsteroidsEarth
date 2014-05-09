@@ -28,7 +28,6 @@ define ['box2d', 'entity', 'vector_helpers'], (B2D, Entity, VectorHelpers) ->
     getEntityDef: ->
       bodyDef = new B2D.BodyDef
       bodyDef.type = B2D.Body.b2_dynamicBody
-      bodyDef.position = new B2D.Vec2 10,10
       bodyDef.angularDamping = @angularDamping
       bodyDef.linearDamping = @linearDamping
       fixtureDef = new B2D.FixtureDef

@@ -13,7 +13,8 @@ define ['entity_factory',
          'score_view',
          'start_screen_view'
          'game_over_view', 
-         'wave_view'], (
+         'wave_view', 
+         'background_view'], (
           EntityFactory, 
           World, 
           SceneRenderer,
@@ -29,18 +30,20 @@ define ['entity_factory',
           ScoreView,
           StartScreenView, 
           GameOverView,
-          WaveView) ->
+          WaveView,
+          BackgroundView) ->
 
   class Game
     constructor: (@stage) ->
       @gameState = "startScreen"
       @viewportWidth = @stage.getWidth()
       @viewportHeight = @stage.getHeight()
-      
+
       @pixleToUnitRatio = 8
       @zoom = @pixleToUnitRatio
-      @worldWidth = @viewportWidth/@pixleToUnitRatio
-      @worldHeight = @viewportWidth/@pixleToUnitRatio
+      @cameraShiftDivider = 10
+
+      [@worldWidth, @worldHeight] = @_calculateWorldDimenstion()
 
     start: ->
       @createGameObjects()
@@ -60,9 +63,8 @@ define ['entity_factory',
 
       window.EntityFactory = new EntityFactory @world
 
-      # world.setupDebugRenderer $('canvas')[0]
-
       @spaceship = window.EntityFactory.createSpaceship()
+      @spaceship.setPosition new B2D.Vec2(-20, -20)
 
       @player = new Player()
       @player.control @spaceship
@@ -76,13 +78,14 @@ define ['entity_factory',
 
       @startScreen = @createStartScreen()
       @gameOverScreen = @createGameOverScreen()
+      @backgroundView = @createBackgroundView()
 
     createWorld: ->
       world = new World
         size:
           width: @worldWidth
           height: @worldHeight
-      
+          
       world.events.on "astroidWorldCollistion", =>
         @endGame()
         console.log "game over"
@@ -91,7 +94,7 @@ define ['entity_factory',
 
     createPlanet: ->
       planet = window.EntityFactory.createPlanet()
-      planet.setPosition(new B2D.Vec2(@worldWidth/2, @worldHeight/2))
+      planet.setPosition(new B2D.Vec2(0, 0))
 
       planet
 
@@ -102,13 +105,12 @@ define ['entity_factory',
         planet: @planet
 
     createSceneRenderer: ->
-      camera = new Camera()
-      camera.zoom(@zoom)
-      window.camera = camera
+      @camera = new Camera @stage.getWidth(), @stage.getHeight()
+      @camera.zoom(@zoom)
       
       new SceneRenderer
         stage: @stage
-        camera: camera
+        camera: @camera
       
     createScore: ->
       @score = new Score
@@ -150,8 +152,12 @@ define ['entity_factory',
       switch @gameState
         when "startScreen" then @startScreen.render()
         when "gameOn" 
+          spaceshipPosition = @spaceship.getPosition()
+          @camera.lookAt((-spaceshipPosition.x/@cameraShiftDivider), (-spaceshipPosition.y/@cameraShiftDivider))
           @world.update()
+          # stage might change in the world.update function
           unless @gameState == "gameOver"
+            @backgroundView.render()
             @sceneRenderer.render(@world, @score, @astroidSpwaner)
         when "gameOver"
           @gameOverScreen.render()
@@ -162,3 +168,23 @@ define ['entity_factory',
     endGame: ->
       @reset()
       @gameState = "gameOver"
+
+    createBackgroundView: ->
+      new BackgroundView @stage, @camera
+
+    _calculateWorldDimenstion: ->
+      worldWidth = @viewportWidth/@pixleToUnitRatio
+      worldHeight = @viewportHeight/@pixleToUnitRatio
+
+      originalWidth = worldWidth
+      originalHeight = worldHeight
+
+      # when camera shifts it adds some more space for the ship to get into
+      # We need to add this new space to world width/height
+      for i in [0..5]
+        paralexX = worldWidth/@cameraShiftDivider
+        paralexY = worldHeight/@cameraShiftDivider
+        worldWidth = originalWidth + paralexX
+        worldHeight = originalHeight + paralexY
+
+      [worldWidth, worldHeight]

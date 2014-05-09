@@ -116,7 +116,7 @@ define ['box2d', 'events'], (B2D, Events) ->
     _createWorldBody: ->
       bodyDef = new B2D.BodyDef
       bodyDef.type = B2D.Body.b2_staticBody
-      bodyDef.position = new B2D.Vec2 @size.width/2,@size.height/2
+      bodyDef.position = new B2D.Vec2 0, 0
       fixtureDef = new B2D.FixtureDef
       fixtureDef.mass = 1
       fixtureDef.density = 1
