@@ -1,7 +1,7 @@
-define ['view'], (View) ->
+define ['view', 'box2d', 'conversions'], (View, B2D, Conversions) ->
   class WaveView extends View
-    constructor: (stage, @astroidSpwaner) ->
-      super stage
+    constructor: (stage, camera, @astroidSpwaner) ->
+      super stage, camera
       @animationDirection = 0
 
       @options =
@@ -30,6 +30,11 @@ define ['view'], (View) ->
       @animate()
 
       @graphics
+
+    updateGraphics: ->
+      vec2Position = @camera.project(new B2D.Vec2 0,0)
+      pixiPosition = Conversions.B2DtoPIXI.toPoint vec2Position
+      @graphics.position = pixiPosition
 
     animate: ->
       showDelta = 1/(@options.showDuration/@options.frameRate)

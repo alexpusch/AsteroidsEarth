@@ -8,12 +8,12 @@ define ->
 
     render: (world, score, astroidSpwaner) ->
       @renderEntities(world.getEntities())
-      @renderHud([score, astroidSpwaner])
+      @renderHud([astroidSpwaner])
       @stage.getPixiRenderer()?.render(@stage.getPixiStage())
 
     renderHud: (entities) ->
       _.each entities, (entity) =>
-        @getHudRenderer(entity).render(entity)
+        @getRenderer(entity).render(entity)
 
     renderEntities: (entities) ->
       _.each entities, (entity) =>
@@ -29,9 +29,9 @@ define ->
 
       @renderers[entity.toString()]
     
-    getHudRenderer: (entity) ->
-      unless @renderers[entity.toString()]?
-        @renderers[entity.toString()] = new (@getRendererType(entity.type))(@stage, entity)
+    # getHudRenderer: (entity) ->
+    #   unless @renderers[entity.toString()]?
+    #     @renderers[entity.toString()] = new (@getRendererType(entity.type))(@stage, entity)
 
       @renderers[entity.toString()]
 
