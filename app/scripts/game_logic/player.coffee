@@ -3,8 +3,11 @@ define ->
     constructor: ->
       @mapping =
         65: @setLeftThrusters # A
+        37: @setLeftThrusters # arrow left
         87: @setMainThrusters # W
+        38: @setMainThrusters # arrow up
         68: @setRightThrusters # D
+        39: @setRightThrusters # arrow right
         32: @fireCannon # space
 
     control: (@spaceship) ->
@@ -41,6 +44,8 @@ define ->
         @spaceship.fireCannon()
       else 
         @spaceship.turnCannonOff()
+
+      false
 
     destroy: ->
       $(document).off "keydown", @keyDownCallback
