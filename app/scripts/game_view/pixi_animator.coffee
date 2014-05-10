@@ -4,29 +4,29 @@ define ->
       @frameRate = 60
       @frameTimeout = 1000/@frameRate
 
-    fadeIn: (done, duration) ->
-      showDelta = 1/(duration/@frameRate)
-
-      @graphics.alpha += showDelta
+    fadeIn: (done, start, duration) ->
+      now = new Date()
+      alpha = (now - start)/duration
+      @graphics.alpha = alpha
       if @graphics.alpha < 1
-        setTimeout => 
-          @fadeIn(done, duration)
-        , @frameTimeout
+        requestAnimFrame => 
+          @fadeIn(done, start, duration)
       else
+        console.log "fade in end"
         done()
 
-    stay: (done, duration) ->
+    stay: (done, start, duration) ->
       setTimeout ->
         done()
       , duration
 
-    fadeOut: (done, duration) ->
-      hideDelta = 1/(duration/@frameRate)
-      @graphics.alpha -= hideDelta
+    fadeOut: (done, start, duration) ->
+      now = new Date()
+      alpha = 1 - (now - start)/duration
+      @graphics.alpha = alpha
       if @graphics.alpha > 0
-        setTimeout => 
-          @fadeOut(done, duration)
-        , @frameTimeout
+        requestAnimFrame => 
+          @fadeOut(done, start, duration)
       else
         @graphics.alpha = 0
         done()
@@ -38,7 +38,8 @@ define ->
           currentAnimation = @[animation.type]
           currentDuration = animation.duration
           (done) => 
-            currentAnimation.call(@, done, currentDuration)
+            animationStart = new Date()
+            currentAnimation.call(@, done, animationStart, currentDuration)
 
         animationFunctions.push func
         
