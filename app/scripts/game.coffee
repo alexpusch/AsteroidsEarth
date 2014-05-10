@@ -120,8 +120,8 @@ define ['entity_factory',
     createStartScreen: ->
       startScreen = new StartScreenView @stage
       startScreen.events.on "gameStartClicked", =>
-        @startScreen.destroy()
-        delete @startScreen
+        @startScreen.fadeOut().done =>
+          @startScreen.destroy()
         @startGame()
 
       startScreen

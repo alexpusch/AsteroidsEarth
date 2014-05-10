@@ -1,4 +1,4 @@
-define ['events', 'view', 'math_helpers'], (Events, View, MathHelpers) ->
+define ['events', 'view', 'math_helpers', 'pixi_animator'], (Events, View, MathHelpers, Animator) ->
   class StartScreen extends View
     constructor: (stage) ->
       super stage
@@ -27,6 +27,12 @@ define ['events', 'view', 'math_helpers'], (Events, View, MathHelpers) ->
       graphics.addChild tutorialGraphics
 
       graphics
+
+    fadeOut: ->
+      new Animator(@graphics).animate [
+        type: "fadeOut"
+        duration: 1000
+      ]
 
     _createTutorialGraphics: ->
       graphics = new PIXI.Graphics()

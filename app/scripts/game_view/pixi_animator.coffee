@@ -42,5 +42,9 @@ define ->
             currentAnimation.call(@, done, animationStart, currentDuration)
 
         animationFunctions.push func
-        
-      async.series animationFunctions
+      
+      deferred = $.Deferred()
+      async.series animationFunctions, ->
+        deferred.resolve()
+
+      deferred.promise()
