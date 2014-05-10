@@ -48,6 +48,7 @@ define ['entity_factory',
       [@worldWidth, @worldHeight] = @_calculateWorldDimenstion()
 
     start: ->
+
       @createGameObjects()
       @mainLoop()
 
@@ -157,14 +158,14 @@ define ['entity_factory',
       if @gameState == "gameOn"
         @world.update()
         # stage might change in the world.update function
-        unless @gameState == "gameOver"
-          
+        
 
       if @gameState == "gameOver"
         @gameOverScreen.render()
 
       @backgroundView.render()
-      @sceneRenderer.render(@world, @score, @astroidSpwaner)
+      unless @gameState == "gameOver"
+        @sceneRenderer.render(@world, @score, @astroidSpwaner)
       spaceshipPosition = @spaceship.getPosition()
       @camera.lookAt((-spaceshipPosition.x/@cameraShiftDivider), (-spaceshipPosition.y/@cameraShiftDivider))
 
