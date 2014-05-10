@@ -1,4 +1,4 @@
-define ['view', 'box2d', 'conversions'], (View, B2D, Conversions) ->
+define ['view', 'box2d', 'conversions', 'pixi_animator'], (View, B2D, Conversions, Animator) ->
   class WaveView extends View
     constructor: (stage, camera, @astroidSpwaner) ->
       super stage, camera
@@ -7,8 +7,7 @@ define ['view', 'box2d', 'conversions'], (View, B2D, Conversions) ->
       @options =
         showDuration: 1000
         hideDuration: 1000
-        stayTime: 1000
-        frameRate: 30
+        stayDuration: 2000
 
       @astroidSpwaner.events.on "newWave", (waveIndex) =>
         @graphics.setText("Wave #{waveIndex + 1}")
@@ -35,34 +34,15 @@ define ['view', 'box2d', 'conversions'], (View, B2D, Conversions) ->
       @graphics.position = pixiPosition
 
     animate: ->
-      showDelta = 1/(@options.showDuration/@options.frameRate)
-      hideDelta = 1/(@options.hideDuration/@options.frameRate)
-      stayTime = @options.stayTime
-      frameTimeout = 1000/@options.frameRate
+      new Animator(@graphics).animate [
+          type: "fadeIn"
+          duration: @options.showDuration
+        ,
+          type: "stay"
+          duration: @options.stayDuration
+        ,
+          type: "fadeOut"
+          duration: @options.hideDuration
+      ]
 
-      show = (done) =>
-        @graphics.alpha += showDelta
-        if @graphics.alpha < 1
-          setTimeout => 
-            show(done)
-          , frameTimeout
-        else
-          done()
-
-      stay = (done) =>
-        setTimeout ->
-          done()
-        , stayTime
-
-      hide = (done) =>
-        @graphics.alpha -= hideDelta
-        if @graphics.alpha > 0
-          setTimeout => 
-            hide(done)
-          , frameTimeout
-        else
-          @graphics.alpha = 0
-          done()
-
-      async.series [show, stay, hide]
 
