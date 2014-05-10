@@ -27,8 +27,6 @@ define ['view', 'box2d', 'conversions'], (View, B2D, Conversions) ->
       @graphics.x = @stage.getWidth()/2
       @graphics.y = @stage.getHeight()/2
 
-      @animate()
-
       @graphics
 
     updateGraphics: ->
