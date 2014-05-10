@@ -66,10 +66,9 @@ define ['entity_factory',
       window.EntityFactory = new EntityFactory @world
 
       @spaceship = window.EntityFactory.createSpaceship()
-      @spaceship.setPosition new B2D.Vec2(-20, -20)
+      @spaceship.setPosition new B2D.Vec2 0, -20
 
       @player = new Player()
-      @player.control @spaceship
 
       @planet = @createPlanet()
       @astroidSpwaner = @createAstroidSpawner()
@@ -148,12 +147,17 @@ define ['entity_factory',
     startGame: ->
       @gameState = "gameOn"
       @score.start()
+      @player.control @spaceship
       @astroidSpwaner.startSpwaning()
 
     mainLoop: ->
       switch @gameState
-        when "startScreen" then @startScreen.render()
-        when "gameOn" 
+        when "startScreen"
+          @startScreen.render()
+          @backgroundView.render()
+          @sceneRenderer.render(@world, @score, @astroidSpwaner)  
+        # when "gameOn" 
+        when "gameOn"
           spaceshipPosition = @spaceship.getPosition()
           @camera.lookAt((-spaceshipPosition.x/@cameraShiftDivider), (-spaceshipPosition.y/@cameraShiftDivider))
           @world.update()
