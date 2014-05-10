@@ -151,22 +151,22 @@ define ['entity_factory',
       @astroidSpwaner.startSpwaning()
 
     mainLoop: ->
-      switch @gameState
-        when "startScreen"
-          @startScreen.render()
-          @backgroundView.render()
-          @sceneRenderer.render(@world, @score, @astroidSpwaner)  
-        # when "gameOn" 
-        when "gameOn"
-          spaceshipPosition = @spaceship.getPosition()
-          @camera.lookAt((-spaceshipPosition.x/@cameraShiftDivider), (-spaceshipPosition.y/@cameraShiftDivider))
-          @world.update()
-          # stage might change in the world.update function
-          unless @gameState == "gameOver"
-            @backgroundView.render()
-            @sceneRenderer.render(@world, @score, @astroidSpwaner)
-        when "gameOver"
-          @gameOverScreen.render()
+      if @gameState == "startScreen"
+        @startScreen.render()
+
+      if @gameState == "gameOn"
+        @world.update()
+        # stage might change in the world.update function
+        unless @gameState == "gameOver"
+          
+
+      if @gameState == "gameOver"
+        @gameOverScreen.render()
+
+      @backgroundView.render()
+      @sceneRenderer.render(@world, @score, @astroidSpwaner)
+      spaceshipPosition = @spaceship.getPosition()
+      @camera.lookAt((-spaceshipPosition.x/@cameraShiftDivider), (-spaceshipPosition.y/@cameraShiftDivider))
 
       @stage.render()
       requestAnimFrame => @mainLoop()

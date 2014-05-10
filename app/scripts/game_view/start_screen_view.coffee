@@ -19,7 +19,8 @@ define ['events', 'view', 'math_helpers', 'pixi_animator'], (Events, View, MathH
       startButton.interactive = true
       
       startButton.click = =>
-        @events.trigger "gameStartClicked"
+        @events.trigger "gameStartClicked" unless @buttonClicked
+        @buttonClicked = true
 
       graphics.addChild startButton
 
