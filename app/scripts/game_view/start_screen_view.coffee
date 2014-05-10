@@ -7,17 +7,18 @@ define ['events', 'view', 'math_helpers', 'pixi_animator'], (Events, View, MathH
     createGraphics: ->
       graphics = new PIXI.Graphics()
 
-      startButton = new PIXI.Text "Start Game",
+
+      startButton = new PIXI.Text "START",
         fill: "EEEEEE"
-        font: "bold 18pt Helvetica"
+        font: "30pt 'Droid Sans'"
         align: "center"
 
-      startButton.position.x = @stage.width/2
-      startButton.position.y = @stage.height/2 +  @stage.height/5
+      startButton.position.x = @stage.width/2 
+      startButton.position.y = @stage.height - @stage.height/5
       startButton.anchor = new PIXI.Point 0.5, 0.5
       startButton.buttonMode = true
       startButton.interactive = true
-      
+     
       startButton.click = =>
         @events.trigger "gameStartClicked" unless @buttonClicked
         @buttonClicked = true
