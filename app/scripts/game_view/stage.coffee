@@ -8,8 +8,8 @@ define ->
       @width = container.width
       @height = container.height
 
-      @pixiRenderer = PIXI.autoDetectRenderer(@width, @height)
-      container.append(@pixiRenderer.view)
+      # @pixiRenderer = PIXI.autoDetectRenderer(@width, @height, container)
+      @pixiRenderer = new PIXI.CanvasRenderer(@width, @height, container)
 
     getPixiStage: ->
       @stage

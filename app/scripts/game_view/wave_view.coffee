@@ -17,7 +17,7 @@ define ['view', 'box2d', 'conversions', 'pixi_animator'], (View, B2D, Conversion
           
     createGraphics: ->
       @graphics = new PIXI.Text "WAVE 1",
-        font: 'bold 30pt DroidSans'
+        font: '30pt DroidSans'
         fill: "white"
         align: "center"
       @graphics.alpha = 0
