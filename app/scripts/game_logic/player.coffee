@@ -17,9 +17,9 @@ define ->
       @keyUpCallback = (e) =>
         @mapping[e.keyCode]?.apply(this, ['off'])
 
-      $(document).keydown @keyDownCallback
 
-      $(document).keyup @keyUpCallback
+      @addEvent document,'keydown', @keyDownCallback
+      @addEvent document, 'keyup', @keyUpCallback
 
     setLeftThrusters: (state) ->
       if state == 'on'
@@ -48,5 +48,22 @@ define ->
       false
 
     destroy: ->
-      $(document).off "keydown", @keyDownCallback
-      $(document).off "keyup", @keyUp4Callback
+      @removeEvent document, "keydown", @keyDownCallback
+      @removeEvent document, "keyup", @keyUpCallback
+
+    addEvent: ( obj, type, fn ) ->
+      if obj.attachEvent
+        obj['e'+type+fn] = fn;
+        obj[type+fn] = ->
+          obj['e'+type+fn]( window.event )
+        obj.attachEvent( 'on'+type, obj[type+fn] );
+      else
+        obj.addEventListener( type, fn, false );
+  
+    removeEvent: ( obj, type, fn ) ->
+      if obj.detachEvent
+        obj.detachEvent( 'on'+type, obj[type+fn] );
+        obj[type+fn] = null;
+      else
+        obj.removeEventListener( type, fn, false );
+    

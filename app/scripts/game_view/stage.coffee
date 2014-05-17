@@ -4,8 +4,9 @@ define ->
       @stage = new PIXI.Stage("1b6dab", true) 
       @stage.setInteractive(true)
 
-      @width = container.width()
-      @height = container.height()
+      
+      @width = container.width
+      @height = container.height
 
       @pixiRenderer = PIXI.autoDetectRenderer(@width, @height)
       container.append(@pixiRenderer.view)

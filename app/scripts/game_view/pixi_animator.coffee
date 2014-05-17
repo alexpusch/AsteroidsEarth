@@ -43,8 +43,8 @@ define ->
 
         animationFunctions.push func
       
-      deferred = $.Deferred()
-      async.series animationFunctions, ->
-        deferred.resolve()
+      promise = new Promise (resolve, reject) ->
+        async.series animationFunctions, ->
+          resolve()
 
-      deferred.promise()
+      promise

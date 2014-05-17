@@ -29,22 +29,25 @@
         <!--[if lt IE 10]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
-        <div id='container'>
+        
+        <!-- <div id='container'>
             <div id='header'>
                 <h1> SpaceWars </h1>
             </div>
             <div id='main'>
-                <div id='game-container'></div>
+                <div id='game-container'>
+                    <canvas id = 'gameCanvas'></canvas>
+                </div>
             </div>
             <div id='footer'>
                 <ul>
                     <li>Made by me</li>
                 </ul>
             </div>
-        </div>
+        </div> -->
         <!-- build:js scripts/vendor.js -->
-        <!-- bower:js -->
-        <script src="bower_components/jquery/jquery.js"></script>
+        <!-- bower:js -->      
+        <script src="bower_components/es6-promise/promise.js"></script>
         <script src="bower_components/underscore/underscore.js"></script>
         <script src="bower_components/pixi/bin/pixi.dev.js"></script>
         <script src="bower_components/async/lib/async.js"></script>

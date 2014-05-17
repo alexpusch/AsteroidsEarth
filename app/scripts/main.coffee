@@ -1,8 +1,19 @@
-define  ['stage', 'game'], (Stage, Game) ->
+requirejs.config
+  baseUrl: 'scripts'
+  paths: {}
 
-  container = $("#game-container")
 
-  if container.length > 0
-    stage = new Stage container
-    game = new Game(stage)
-    game.start()
+require  ['stage', 'game'], (Stage, Game) ->
+  canvas = document.createElement "canvas"
+  
+  # canvas.width = window.innerWidth * window.devicePixelRatio;
+  # canvas.height = window.innerHeight * window.devicePixelRatio;  
+
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+
+  document.body.appendChild canvas
+
+  stage = new Stage canvas
+  game = new Game(stage)
+  game.start()
