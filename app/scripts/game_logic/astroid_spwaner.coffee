@@ -60,10 +60,10 @@ define ['typed_object', 'planet', 'wave', 'events'], (TypedObject, Planet, Wave,
         offset: offset
 
     _getRandomPosition: (astroidRadius) ->
-      side = _.random 1, 4
+      side = _.random 3, 4
       
-      randomX = _.random -@height/2, @height/2
-      randomY = _.random -@width/2, @width/2
+      randomY = _.random -@height/2, @height/2
+      randomX = _.random -@width/2, @width/2
 
       offset = 0.1
       switch side
@@ -82,4 +82,5 @@ define ['typed_object', 'planet', 'wave', 'events'], (TypedObject, Planet, Wave,
         # right
         when 4 
           x: @width/2 + astroidRadius - offset
-          y: randomX
+          y: randomY
+
