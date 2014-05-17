@@ -6,7 +6,7 @@ define ['box2d', 'world', 'entity'], (B2D, World, Entity) ->
           width: 100
           height: 100
 
-      @entity = new Entity
+      @entity = new Entity("testEntity")
 
     describe "registerEntity", ->
       it "added the entity to the worlds bodies", ->     
@@ -79,7 +79,7 @@ define ['box2d', 'world', 'entity'], (B2D, World, Entity) ->
 
         spyOn @entity, "handleExitWorld"
         @entity.setPosition(new B2D.Vec2 60, 0)
-        @world.update()       
+        @world.update()
 
         expect(@entity.handleExitWorld).not.toHaveBeenCalled()
 
@@ -91,3 +91,25 @@ define ['box2d', 'world', 'entity'], (B2D, World, Entity) ->
         @world.update()       
 
         expect(@entity.handleExitWorld).not.toHaveBeenCalled()
+
+    describe "hit check", ->
+      beforeEach ->
+        @world.registerEntity @entity
+        @entity.setPosition(new B2D.Vec2(1, 1))
+        
+      it "returns true if there is an entity in the world of the recieved type in the recieved point", ->
+        testPoint = new B2D.Vec2(1,1)
+        expect(@world.hitCheck("testEntity", testPoint)).toBeTruthy()
+
+      it "returns false if there is no entity in to point recieved", ->
+        testPoint = new B2D.Vec2(10,10)
+        expect(@world.hitCheck("testEntity", testPoint)).toBeFalsy()
+
+      it "return false if there is an entity of a different type in the recieved point", ->
+        otherEntity = new Entity("otherType")
+
+        @world.registerEntity otherEntity
+        otherEntity.setPosition new B2D.Vec2(10, 10)
+        
+        testPoint = new B2D.Vec2(10,10)
+        expect(@world.hitCheck("testEntity", testPoint)).toBeFalsy()        

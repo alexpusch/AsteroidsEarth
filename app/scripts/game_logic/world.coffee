@@ -98,6 +98,20 @@ define ['box2d', 'events'], (B2D, Events) ->
       @world.Step(dt, 10, 10);
       @world.ClearForces();
 
+    hitCheck: (type, point) ->
+      body = @world.GetBodyList()
+      while body?
+        if body.GetUserData()?.type == type
+          fixture = body.GetFixtureList()
+          while fixture?
+            if fixture.TestPoint point
+              return true
+            fixture = fixture.GetNext()
+
+        body = body.GetNext()
+
+      false
+
     destroy: ->
       body = @world.GetBodyList()
       while body
