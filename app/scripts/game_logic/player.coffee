@@ -1,6 +1,6 @@
-define ->
+define ['box2d'], (B2D)->
   class Player
-    constructor: ->
+    constructor: (@camera, @world) ->
       @mapping =
         65: @setLeftThrusters # A
         37: @setLeftThrusters # arrow left
@@ -17,9 +17,18 @@ define ->
       @keyUpCallback = (e) =>
         @mapping[e.keyCode]?.apply(this, ['off'])
 
+      @touchstartCallback = (e) =>
+        @handleTouch e
 
-      @addEvent document,'keydown', @keyDownCallback
-      @addEvent document, 'keyup', @keyUpCallback
+      @touchEndCallback = (e) =>
+        @handleTouchEnd e  
+
+      @_addEvent document,'keydown', @keyDownCallback
+      @_addEvent document, 'keyup', @keyUpCallback
+
+      @_addEvent document, "touchstart", @touchstartCallback
+      @_addEvent document, "touchmove", @touchstartCallback
+      @_addEvent document, "touchend" , @touchEndCallback
 
     setLeftThrusters: (state) ->
       if state == 'on'
@@ -47,11 +56,26 @@ define ->
 
       false
 
+    handleTouch: (event) ->
+      touch = event.touches[0]
+      viewPoint = new B2D.Vec2(touch.pageX, touch.pageY)
+      worldPoint = @camera.backProject viewPoint
+
+      if @world.hitCheck "astroid", worldPoint
+        @spaceship.fireCannon()
+      else
+        @spaceship.turnCannonOff()        
+      @spaceship.setAutoPilotTarget worldPoint
+
+    handleTouchEnd: (event) ->
+      @spaceship.stopAutoPilot()
+      @spaceship.turnCannonOff()
+
     destroy: ->
       @removeEvent document, "keydown", @keyDownCallback
       @removeEvent document, "keyup", @keyUpCallback
 
-    addEvent: ( obj, type, fn ) ->
+    _addEvent: ( obj, type, fn ) ->
       if obj.attachEvent
         obj['e'+type+fn] = fn;
         obj[type+fn] = ->

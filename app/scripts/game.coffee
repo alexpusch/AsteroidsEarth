@@ -69,18 +69,17 @@ define ['entity_factory',
       @spaceship = window.EntityFactory.createSpaceship()
       @spaceship.setPosition new B2D.Vec2 0, -20
 
-      @player = new Player()
-
       @planet = @createPlanet()
       @astroidSpwaner = @createAstroidSpawner()
       @sceneRenderer = @createSceneRenderer()
+      @player = new Player @camera, @world
       @score = @createScore()
 
       @registerRenderers()
 
-      @startScreen = @createStartScreen()
-      @gameOverScreen = @createGameOverScreen()
       @backgroundView = @createBackgroundView()
+      @gameOverScreen = @createGameOverScreen()
+      @startScreen = @createStartScreen()
 
     createWorld: ->
       world = new World
@@ -121,7 +120,7 @@ define ['entity_factory',
     createStartScreen: ->
       startScreen = new StartScreenView @stage
       startScreen.events.on "gameStartClicked", =>
-        @startScreen.fadeOut().done =>
+        @startScreen.fadeOut().then =>
           @startScreen.destroy()
         @startGame()
 
