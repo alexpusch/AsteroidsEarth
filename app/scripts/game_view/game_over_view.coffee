@@ -13,7 +13,7 @@ define ['events', 'view'], (Events, View) ->
       startButton.buttonMode = true
       startButton.interactive = true
       
-      startButton.click = =>
+      startButton.click = startButton.touchstart = =>
         @events.trigger "gameStartClicked"
 
       graphics.addChild startButton

@@ -7,26 +7,26 @@ define ['events', 'view', 'math_helpers', 'pixi_animator'], (Events, View, MathH
     createGraphics: ->
       graphics = new PIXI.Graphics()
 
-
       startButton = new PIXI.Text "START",
-        fill: "EEEEEE"
-        font: "30pt 'Droid Sans'"
+        fill: "white"
+        # font: "30pt 'Droid Sans'"
+        font: "80pt DroidSans"
         align: "center"
 
       startButton.position.x = @stage.width/2 
-      startButton.position.y = @stage.height - @stage.height/5
+      startButton.position.y = @stage.height/2
       startButton.anchor = new PIXI.Point 0.5, 0.5
       startButton.buttonMode = true
       startButton.interactive = true
      
-      startButton.click = =>
+      startButton.click = startButton.touchstart = =>
         @events.trigger "gameStartClicked" unless @buttonClicked
         @buttonClicked = true
 
       graphics.addChild startButton
 
-      tutorialGraphics = @_createTutorialGraphics()
-      graphics.addChild tutorialGraphics
+      # tutorialGraphics = @_createTutorialGraphics()
+      # graphics.addChild tutorialGraphics
 
       graphics
 
@@ -99,8 +99,8 @@ define ['events', 'view', 'math_helpers', 'pixi_animator'], (Events, View, MathH
       graphics.endFill()
 
       text = new PIXI.Text text, 
-        font: "12pt Helvetica"
-        fill: "EEEEEE"
+        font: "12pt DroidSans"
+        fill: "white"
         align: "center"
 
       text.position = new PIXI.Point(x + width / 2, y + height / 2)

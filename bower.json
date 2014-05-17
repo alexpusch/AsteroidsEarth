@@ -4,7 +4,7 @@
   "dependencies": {
     "async": "~0.8.0",
     "box2dweb": "latest",
-    "pixi": "~1.5.3",
+    "pixi" : "git@github.com:videlais/pixi.js.git#dev",
     "underscore": "~1.5.2",
     "es6-promise": "latest"
   },
