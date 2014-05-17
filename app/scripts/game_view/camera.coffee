@@ -22,6 +22,14 @@ define ->
       clone.Add(new B2D.Vec2(@viewportWidth/2, @viewportHeight/2))
       clone
 
+    backProject: (point) ->
+      clone = point.Copy()
+      clone.Add(new B2D.Vec2(- @viewportWidth/2, - @viewportHeight/2))
+      clone.Add(new B2D.Vec2(- @translation.x  * @zoomMultiplier, - @translation.y * @zoomMultiplier))
+      clone.Multiply 1/@zoomMultiplier
+
+      clone
+
     getZoom: ->
       @zoomMultiplier
 
