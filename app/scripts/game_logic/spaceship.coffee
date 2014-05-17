@@ -1,4 +1,4 @@
-define ['box2d', 'entity', 'vector_helpers'], (B2D, Entity, VectorHelpers) ->
+define ['box2d', 'entity', 'vector_helpers', 'math_helpers'], (B2D, Entity, VectorHelpers, MathHelpers) ->
   
   class Spaceship extends Entity
     constructor: (options) ->
@@ -62,6 +62,16 @@ define ['box2d', 'entity', 'vector_helpers'], (B2D, Entity, VectorHelpers) ->
     turnRightThrustersOff: ->
       @thrusters.right = 'off'
 
+    setAutoPilotTarget: (point) ->
+      @autoPilotTarget = point
+
+    stopAutoPilot: ->
+      @turnLeftThrustersOff()
+      @turnRightThrustersOff()
+      @turnMainThrustersOff()
+
+      delete @autoPilotTarget
+
     fireCannon: ->
       unless @cannonIntervalHandler?
         @cannonIntervalHandler = setInterval(
@@ -84,6 +94,9 @@ define ['box2d', 'entity', 'vector_helpers'], (B2D, Entity, VectorHelpers) ->
           @cannonJammed = true
 
     update: (dt) ->
+      if @autoPilotTarget?
+        @_autoPilot()
+
       if @_thrustersOn 'main'
         @_mainThrustersAction()
       if @_thrustersOn 'left'
@@ -127,6 +140,35 @@ define ['box2d', 'entity', 'vector_helpers'], (B2D, Entity, VectorHelpers) ->
     getSpeed: ->
       speedVector = @body.GetLinearVelocity()
       speedVector.Length()
+
+    _autoPilot: ->
+      angle = @_calculateAngleTwardsTarget()
+      
+      if Math.abs(angle) < 5
+        @fireMainThrusters()
+        @turnLeftThrustersOff()
+        @turnRightThrustersOff()
+      else if angle < 0
+        @fireRightThrusters()
+        @turnLeftThrustersOff()
+        @turnMainThrustersOff()
+      else
+        @fireLeftThrusters()
+        @turnRightThrustersOff()
+        @turnMainThrustersOff()
+
+    _calculateAngleTwardsTarget: ->
+      position = @body.GetPosition()
+      pointDirection = new B2D.Vec2(@autoPilotTarget.x - position.x, @autoPilotTarget.y - position.y)
+      pointDirection.Normalize()
+      
+      direction = @_getDirectionVector()
+
+      angle = Math.atan2(pointDirection.x, pointDirection.y) - Math.atan2(direction.x, direction.y)
+      angle = MathHelpers.r2d angle        
+      angle = MathHelpers.adjustAngle angle
+
+      angle
 
     _thrustersOn: (type)->
       @thrusters[type] == 'on'
