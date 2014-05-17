@@ -10,15 +10,15 @@ define ['view', 'box2d', 'conversions', 'pixi_animator'], (View, B2D, Conversion
         stayDuration: 2000
 
       @astroidSpwaner.events.on "newWave", (waveIndex) =>
-        @graphics.setText("Wave #{waveIndex + 1}")
+        @graphics.setText("WAVE #{waveIndex + 1}")
         @graphics.alpha = 0
 
         @animate()
           
     createGraphics: ->
-      @graphics = new PIXI.Text "Wave 1",
-        font: 'bold 20pt Helvetica'
-        fill: "ffffff"
+      @graphics = new PIXI.Text "WAVE 1",
+        font: 'bold 30pt DroidSans'
+        fill: "white"
         align: "center"
       @graphics.alpha = 0
 
