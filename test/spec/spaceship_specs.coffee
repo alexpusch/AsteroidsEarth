@@ -24,9 +24,9 @@ define ['box2d', 'spaceship', 'math_helpers'], (B2D, Spaceship, MathHelpers)->
     describe "getVertices", ->
       it "returns the vertices of the spaceship", ->
         vertices = @spaceship.getVertices()
-        expect(vertices[0]).toBeVector new B2D.Vec2(0, -10)
-        expect(vertices[1]).toBeVector new B2D.Vec2(30, 0)
-        expect(vertices[2]).toBeVector new B2D.Vec2(0, 10)
+        expect(vertices[0]).toBeVector new B2D.Vec2(-15, -10)
+        expect(vertices[1]).toBeVector new B2D.Vec2(15, 0)
+        expect(vertices[2]).toBeVector new B2D.Vec2(-15, 10)
 
     describe "fire main thrusters", ->
       it "turns on main thrusters", ->
@@ -118,6 +118,7 @@ define ['box2d', 'spaceship', 'math_helpers'], (B2D, Spaceship, MathHelpers)->
         it "does not raise temperature", ->
           @spaceship.fireBullet()
           expect(@spaceship.getCannonTemperature()).toEqual 1
+
 
     describe "update", ->
       describe "main thrusters are on", ->

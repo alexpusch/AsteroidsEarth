@@ -50,7 +50,7 @@ define ['wave', 'entity'], (Wave, Entity) ->
     describe 'wave end', ->
       it 'triggers the wave end event when all the astroids are destroied', ->
         waveEndCallback = jasmine.createSpy('waveEndCallback')
-        @wave.on 'waveDestroyed', waveEndCallback
+        @wave.events.on 'waveDestroyed', waveEndCallback
         @wave.start()
         jasmine.Clock.tick(1000)
         @astroid.destroy()

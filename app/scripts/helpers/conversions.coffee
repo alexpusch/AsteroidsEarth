@@ -1,4 +1,4 @@
-define ['box2d'], (B2D) ->
+define ['box2d', 'pixi'], (B2D, PIXI) ->
   Conversions =
     B2DtoPIXI:
       toPoint: (vec2) ->

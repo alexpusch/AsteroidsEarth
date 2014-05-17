@@ -1,4 +1,4 @@
-define ['conversions', 'box2d'], (Conversions, B2D)->
+define ['conversions', 'box2d', 'pixi'], (Conversions, B2D, PIXI)->
   describe 'Conversions', ->
     describe 'Box2D to PIXI', ->
       it 'converts Vec2 to Point', ->

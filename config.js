@@ -1,4 +1,12 @@
 requirejs.config({
     baseUrl: '.tmp/scripts',
-    paths: {}
+    paths: {
+      'pixi': '../../app/bower_components/pixi/bin/pixi.dev'
+    },
+    shim: { 
+      'pixi': { 
+         deps: [],
+         exports: 'PIXI'
+       }
+    }
 });

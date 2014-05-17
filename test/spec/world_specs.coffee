@@ -38,22 +38,22 @@ define ['box2d', 'world', 'entity'], (B2D, World, Entity) ->
         spyOn @entity, "handleEnterWorld"
 
         @world.registerEntity @entity
-        @entity.setPosition(new B2D.Vec2 103, 0)
+        @entity.setPosition(new B2D.Vec2 55, 0)
         @world.update()
-        @entity.setPosition(new B2D.Vec2 97, 0)
+        @entity.setPosition(new B2D.Vec2 45, 0)
         @world.update()
 
         expect(@entity.handleEnterWorld).toHaveBeenCalled()
 
       it "calles the handleEnterWorld callback only once", ->
         @world.registerEntity @entity
-        @entity.setPosition(new B2D.Vec2 103, 0)
+        @entity.setPosition(new B2D.Vec2 55, 0)
         @world.update()
-        @entity.setPosition(new B2D.Vec2 97, 0)
+        @entity.setPosition(new B2D.Vec2 50, 0)
         @world.update()
 
         spyOn @entity, "handleEnterWorld"
-        @entity.setPosition(new B2D.Vec2 95, 0)
+        @entity.setPosition(new B2D.Vec2 45, 0)
         @world.update()       
 
         expect(@entity.handleEnterWorld).not.toHaveBeenCalled()
@@ -63,22 +63,22 @@ define ['box2d', 'world', 'entity'], (B2D, World, Entity) ->
         spyOn @entity, "handleExitWorld"
 
         @world.registerEntity @entity
-        @entity.setPosition(new B2D.Vec2 97, 0)
+        @entity.setPosition(new B2D.Vec2 50, 0)
         @world.update()
-        @entity.setPosition(new B2D.Vec2 103, 0)
+        @entity.setPosition(new B2D.Vec2 55, 0)
         @world.update()
 
         expect(@entity.handleExitWorld).toHaveBeenCalled()
 
       it "calles the handleExitWorld callback only once", ->
         @world.registerEntity @entity
-        @entity.setPosition(new B2D.Vec2 97, 0)
+        @entity.setPosition(new B2D.Vec2 50, 0)
         @world.update()
-        @entity.setPosition(new B2D.Vec2 103, 0)
+        @entity.setPosition(new B2D.Vec2 55, 0)
         @world.update()
 
         spyOn @entity, "handleExitWorld"
-        @entity.setPosition(new B2D.Vec2 105, 0)
+        @entity.setPosition(new B2D.Vec2 60, 0)
         @world.update()       
 
         expect(@entity.handleExitWorld).not.toHaveBeenCalled()
