@@ -48,6 +48,7 @@
         <script src="bower_components/underscore/underscore.js"></script>
         <script src="bower_components/pixi/bin/pixi.dev.js"></script>
         <script src="bower_components/async/lib/async.js"></script>
+        <script src='bower_components/box2dweb/Box2dWeb-2.1.a.3.js'> </script>
         <!-- endbower -->
         <!-- endbuild -->
 
@@ -61,10 +62,14 @@
             ga('create','UA-XXXXX-X');ga('send','pageview');
         </script>
          -->
-         
-        <!-- build:js scripts/main.js -->
-        <script src='bower_components/box2dweb/Box2dWeb-2.1.a.3.js'> </script>
+          <!-- build:js scripts/plugins.js -->
+        <script src="bower_components/requirejs/require.js"></script>
         <!-- endbuild -->
-        <script data-main="scripts/main" src="bower_components/requirejs/require.js"></script>
+
+        <!-- build:js({app,.tmp}) scripts/main.js -->
+        <script src="scripts/main.js"></script>
+        <!-- endbuild -->
+
+        
 </body>
 </html>

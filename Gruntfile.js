@@ -18,6 +18,7 @@ module.exports = function (grunt) {
     require('time-grunt')(grunt);
     // load all grunt tasks
     require('load-grunt-tasks')(grunt);
+    grunt.loadNpmTasks('grunt-requirejs');
 
     grunt.initConfig({
         // configurable paths
@@ -64,9 +65,9 @@ module.exports = function (grunt) {
         connect: {
             options: {
                 port: 9002,
-                livereload: 35729,
+                livereload: 32165,
                 // change this to '0.0.0.0' to access the server from outside
-                hostname: 'localhost'
+                hostname: '0.0.0.0'
             },
             livereload: {
                 options: {
@@ -325,6 +326,16 @@ module.exports = function (grunt) {
                 'svgmin',
                 'htmlmin'
             ]
+        },
+        requirejs: {
+            dist: {
+                options: {
+                    baseUrl        : '.tmp/scripts',
+                    name           : 'main',
+                    mainConfigFile : '.tmp/scripts/main.js',
+                    out            : 'dist/scripts/main.js'
+                }
+            }
         }
     });
     
@@ -363,6 +374,7 @@ module.exports = function (grunt) {
         'concurrent:dist',
         'autoprefixer',
         'concat',
+        'requirejs:dist',
         'cssmin',
         'uglify',
         'copy:dist',

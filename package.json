@@ -1,7 +1,10 @@
 {
   "name": "spacewars",
   "version": "0.0.0",
-  "dependencies": {},
+  "dependencies": {
+    "grunt-requirejs": "~0.4.2",
+    "grunt-template-jasmine-requirejs": "~0.1.10"
+  },
   "devDependencies": {
     "grunt": "~0.4.1",
     "grunt-contrib-copy": "~0.4.1",
@@ -26,7 +29,7 @@
     "time-grunt": "~0.1.1",
     "bower": "~1.2.7",
     "grunt-bower-requirejs": "~0.7.1",
-    "grunt-contrib-jasmine" : "~0.5.3",
+    "grunt-contrib-jasmine": "~0.5.3",
     "grunt-template-jasmine-requirejs": "~0.1.7"
   },
   "engines": {
