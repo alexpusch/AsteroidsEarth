@@ -144,18 +144,18 @@ define ['box2d', 'entity', 'vector_helpers', 'math_helpers'], (B2D, Entity, Vect
     _autoPilot: ->
       angle = @_calculateAngleTwardsTarget()
       
-      if Math.abs(angle) < 5
-        @fireMainThrusters()
+      if Math.abs(angle) < 5 
+        @fireMainThrusters() unless @isCannonOn()
         @turnLeftThrustersOff()
         @turnRightThrustersOff()
       else if angle < 0
         @fireRightThrusters()
         @turnLeftThrustersOff()
-        @turnMainThrustersOff()
+        @fireMainThrusters() unless @isCannonOn()
       else
         @fireLeftThrusters()
         @turnRightThrustersOff()
-        @turnMainThrustersOff()
+        @fireMainThrusters() unless @isCannonOn()
 
     _calculateAngleTwardsTarget: ->
       position = @body.GetPosition()
