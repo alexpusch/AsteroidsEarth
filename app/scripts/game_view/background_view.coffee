@@ -2,12 +2,21 @@ define ['view'], (View) ->
   class Background extends View
     constructor: (stage) ->
       super stage
+      @options = 
+        numberOfStarts: 50
+        starRadiusRange:
+          min: 3
+          max: 5
+        # http://en.wikipedia.org/wiki/Star_polygon
+        starP: 7
+        starQ: 3
 
     createGraphics: ->
       graphics = new PIXI.Graphics()
-      for i in [0..30]
+      numberOfStart = 50
+      for i in [0...numberOfStart]
         randomPosition = @_getRandomPosition()
-        @_drawStar graphics, randomPosition
+        @_drawRandomStar graphics, randomPosition
 
       graphics
 
@@ -17,7 +26,27 @@ define ['view'], (View) ->
 
       new PIXI.Point x,y
 
-    _drawStar: (graphics, position) ->
+    _drawRandomStar: (graphics, position) ->
+      angle0 = Math.PI * Math.random()
+      radius = _.random(@options.starRadiusRange.min,@options.starRadiusRange.max)
+
+      @_drawStar(graphics, position, angle0, radius)
+
+    _drawStar: (graphics, position, angle0, radius) ->
       graphics.beginFill 0xFFFFFF
-      graphics.drawCircle position.x, position.y, 2
+      graphics.moveTo position.x, (position.y + radius)
+    
+      skipAngle = 2 * Math.PI / @options.starP
+      for i in [0..@options.starP]
+        currentAngle = skipAngle * @options.starQ * i + angle0
+        point = @_getPointInAngle currentAngle, radius, position
+        
+        graphics.lineTo point.x, point.y
+
       graphics.endFill()
+
+    _getPointInAngle: (angle, radius, center) ->
+      x = radius * Math.cos(angle) + center.x
+      y = radius * Math.sin(angle) + center.y
+
+      new PIXI.Point x, y
