@@ -11,3 +11,4 @@ define ->
     CircleShape : Box2D.Collision.Shapes.b2CircleShape
     DebugDraw : Box2D.Dynamics.b2DebugDraw
     Mat22: Box2D.Common.Math.b2Mat22
+    WorldManifold: Box2D.Collision.b2WorldManifold

@@ -88,9 +88,9 @@ define ['entity_factory',
           width: @worldWidth
           height: @worldHeight
           
-      world.events.on "astroidWorldCollistion", =>
+      world.events.on "astroidWorldCollistion", (contactPoint) =>
         unless @gameState == "gameOver"
-          @world.startShockWave new B2D.Vec2(0,0)
+          @world.startShockWave contactPoint
           @endGame()
           console.log "game over"
 
@@ -136,7 +136,6 @@ define ['entity_factory',
         @reset()
         @createGameObjects()
         @startGame()
-        gameOverScreen.destroy()
 
       gameOverScreen
 

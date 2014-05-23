@@ -11,7 +11,7 @@ define ['box2d', 'events'], (B2D, Events) ->
       if( otherBody = @_findWorldBody(bodyA, bodyB))
         @events.trigger "entityEnter", otherBody.GetUserData()
       else
-        @_handleEntitiesCollision bodyA, bodyB
+        @_handleEntitiesCollision bodyA, bodyB, contact
 
     EndContact: (contact) ->
       bodyA = contact.GetFixtureA().GetBody()
@@ -37,14 +37,17 @@ define ['box2d', 'events'], (B2D, Events) ->
 
       otherBody
 
-    _handleEntitiesCollision: (bodyA, bodyB) ->
+    _handleEntitiesCollision: (bodyA, bodyB, contact) ->
       entityA = bodyA.GetUserData()
       entityB = bodyB.GetUserData()
 
+      worldManifold = new B2D.WorldManifold()
+      manifold = contact.GetWorldManifold worldManifold
+      contactPoint = worldManifold.m_points[0]
+
       if (entityA.type == "planet" and entityB.type == "astroid") or
          (entityA.type == "astroid" and entityB.type == "planet")
-
-        @events.trigger "astroidWorldCollistion"
+        @events.trigger "astroidWorldCollistion", contactPoint
 
   class World
     constructor: (options)->
@@ -59,10 +62,12 @@ define ['box2d', 'events'], (B2D, Events) ->
 
       worldContactListener = new WorldContactListener @worldBody
 
-      worldContactListener.events.on "astroidWorldCollistion", =>
-        @events.trigger "astroidWorldCollistion"
+      worldContactListener.events.on "astroidWorldCollistion", (contact) =>
+        @events.trigger "astroidWorldCollistion", contact
+
       worldContactListener.events.on "entityEnter", (entity) ->
         entity.handleEnterWorld()
+        
       worldContactListener.events.on "entityExit", (entity) ->
         entity.handleExitWorld()
 
