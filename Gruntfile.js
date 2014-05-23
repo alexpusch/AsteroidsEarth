@@ -19,7 +19,8 @@ module.exports = function (grunt) {
     // load all grunt tasks
     require('load-grunt-tasks')(grunt);
     grunt.loadNpmTasks('grunt-requirejs');
-
+    grunt.loadNpmTasks('grunt-notify');
+    
     grunt.initConfig({
         // configurable paths
         yeoman: {
