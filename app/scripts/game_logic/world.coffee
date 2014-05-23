@@ -86,10 +86,23 @@ define ['box2d', 'events'], (B2D, Events) ->
     getEntities: ->
       @entities
 
+    startShockWave: (position) ->
+      @shockWavePosition = position
+      shokwaveMagnitude = 500
+
+      for entity in @entities
+        entityPosition = entity.getPosition()
+        forceVector = entityPosition.Copy()
+        forceVector.Add position.GetNegative()
+        forceVector.Normalize()
+        forceVector.Multiply shokwaveMagnitude
+
+        entity.body.ApplyImpulse forceVector, new B2D.Vec2(0,0)
+
     update: ->
       dt = @_getFrameTime()
       _.each @entities, (e) =>
-        unless e.exists()
+        if not e.exists()
           @world.DestroyBody e.body
           @entities = _(@entities).without e
        

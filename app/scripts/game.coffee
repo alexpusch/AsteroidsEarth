@@ -15,7 +15,8 @@ define ['entity_factory',
          'start_screen_view'
          'game_over_view', 
          'wave_view', 
-         'background_view'], (
+         'background_view',
+         'box2d'], (
           EntityFactory, 
           World, 
           SceneRenderer,
@@ -33,7 +34,8 @@ define ['entity_factory',
           StartScreenView, 
           GameOverView,
           WaveView,
-          BackgroundView) ->
+          BackgroundView,
+          B2D) ->
 
   class Game
     constructor: (@stage) ->
@@ -48,7 +50,6 @@ define ['entity_factory',
       [@worldWidth, @worldHeight] = @_calculateWorldDimenstion()
 
     start: ->
-
       @createGameObjects()
       @mainLoop()
 
@@ -89,6 +90,7 @@ define ['entity_factory',
           
       world.events.on "astroidWorldCollistion", =>
         unless @gameState == "gameOver"
+          @world.startShockWave new B2D.Vec2(0,0)
           @endGame()
           console.log "game over"
 
