@@ -88,8 +88,9 @@ define ['entity_factory',
           height: @worldHeight
           
       world.events.on "astroidWorldCollistion", =>
-        @endGame()
-        console.log "game over"
+        unless @gameState == "gameOver"
+          @endGame()
+          console.log "game over"
 
       world
 
@@ -130,6 +131,7 @@ define ['entity_factory',
       gameOverScreen = new GameOverView @stage
 
       gameOverScreen.events.on "gameStartClicked", =>
+        @reset()
         @createGameObjects()
         @startGame()
         gameOverScreen.destroy()
@@ -151,29 +153,26 @@ define ['entity_factory',
       @astroidSpwaner.startSpwaning()
 
     mainLoop: ->
-      if @gameState == "gameOn"
-        @world.update()
-        # stage might change in the world.update function
+      @world.update()
 
       @backgroundView.render()
 
-      unless @gameState == "gameOver"
-        @sceneRenderer.render(@world, @score, @astroidSpwaner)
-        
-      if @gameState == "startScreen"
-        @startScreen.render()    
-        
-      if @gameState == "gameOver"
-        @gameOverScreen.render()
+      @sceneRenderer.render(@world, @score, @astroidSpwaner)
 
       spaceshipPosition = @spaceship.getPosition()
       @camera.lookAt((-spaceshipPosition.x/@cameraShiftDivider), (-spaceshipPosition.y/@cameraShiftDivider))
 
+      if @gameState == "startScreen"
+        @startScreen.render()
+      @gameOverScreen.render() 
+
       @stage.render()
+
       requestAnimFrame => @mainLoop()
 
     endGame: ->
-      @reset()
+      @player.stopControling()
+      @gameOverScreen.fadeIn()
       @gameState = "gameOver"
 
     createBackgroundView: ->
