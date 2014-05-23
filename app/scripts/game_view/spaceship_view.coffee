@@ -40,54 +40,46 @@ define ['conversions', 'view'], (Conversions, View) ->
 
     _drawSpaceshipGraphics: (graphics) ->
       vertices = @spaceship.getVertices()
-      graphics.beginFill(0xe3f2ff)
+      graphics.beginFill(0xe3e3e3)
+      
+      engineHight = 0.8
+      engineWidth = 0.75
+
+      vertice01 = @_getAveragePoint vertices[0], vertices[1], engineHight
+      vertice21 = @_getAveragePoint vertices[2], vertices[1], engineHight
+      
+      vertice3 = @_getAveragePoint vertice01, vertice21, engineWidth
+      vertice4 = @_getAveragePoint vertice01, vertice21, (1-engineWidth)
 
       graphics.moveTo(vertices[0].x,vertices[0].y)
       graphics.lineTo(vertices[1].x,vertices[1].y)
       graphics.lineTo(vertices[2].x,vertices[2].y)
+      graphics.lineTo(vertice4.x, vertice4.y)
+      graphics.lineTo(vertice3.x, vertice3.y)
       graphics.lineTo(vertices[0].x,vertices[0].y)
 
       graphics.endFill()
 
-      color = @_getSpeedIndicatorColor()
-      graphics.beginFill(color)
-      graphics.lineStyle(0, 0xffd900, 1)
-
-      t = 0.9
-
-      vertice01 = @_getAveragePoint vertices[0], vertices[1], t
-      vertice21 = @_getAveragePoint vertices[2], vertices[1], t
+      alpha = @_getSpeedIndicatorAlpha()
+      color = 0x6ef8f7
+      graphics.beginFill(color, alpha)
 
       graphics.moveTo(vertices[0].x,vertices[0].y)
-      graphics.lineTo(vertice01.x, vertice01.y)
-      graphics.lineTo(vertice21.x, vertice21.y)
+      graphics.lineTo(vertice3.x, vertice3.y)
+      graphics.lineTo(vertice4.x, vertice4.y)
       graphics.lineTo(vertices[2].x,vertices[2].y)
       graphics.lineTo(vertices[0].x,vertices[0].y)
 
       graphics.endFill()
     
-    _getSpeedIndicatorColor: ->
-      slowColor = 
-        red: 227
-        green: 242
-        blue: 255
-
-      fastColor = 
-        red: 244
-        green: 184
-        blue: 0
-
+    _getSpeedIndicatorAlpha: ->
       speed = @spaceship.getSpeed()
 
       maxSpeed = 35
-      r = 1 - speed/maxSpeed
+      r = speed/maxSpeed
 
-      engineColor = 
-        red: @_linearAverage slowColor.red, fastColor.red, r
-        green: @_linearAverage slowColor.green, fastColor.green, r
-        blue: @_linearAverage slowColor.blue, fastColor.blue, r
+      r
 
-      color = @_getRgb(engineColor.red, engineColor.green, engineColor.blue)
 
     _getAveragePoint: (vertice1, vertice2, t) ->
       new PIXI.Point(@_linearAverage(vertice1.x, vertice2.x, t), @_linearAverage(vertice1.y, vertice2.y, t))
@@ -254,3 +246,4 @@ define ['conversions', 'view'], (Conversions, View) ->
       distanceMeterPosition.x += distanceMeterOffset
 
       distanceMeterPosition
+
