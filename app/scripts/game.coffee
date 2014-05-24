@@ -17,7 +17,8 @@ define ['entity_factory',
          'wave_view', 
          'background_view',
          'box2d',
-         'shockwave_view'], (
+         'shockwave_view',
+         'camera_shaker'], (
           EntityFactory, 
           World, 
           SceneRenderer,
@@ -37,7 +38,8 @@ define ['entity_factory',
           WaveView,
           BackgroundView,
           B2D,
-          ShockwaveView) ->
+          ShockwaveView,
+          CameraShaker) ->
 
   class Game
     constructor: (@stage) ->
@@ -93,6 +95,8 @@ define ['entity_factory',
       world.events.on "astroidWorldCollistion", (contactPoint) =>
         unless @gameState == "gameOver"
           @world.startShockWave contactPoint
+          CameraShaker shaker = new CameraShaker(@camera)
+          shaker.shake()
           @shockwaveView = new ShockwaveView @stage, @camera, contactPoint
           @endGame()
           console.log "game over"
@@ -163,8 +167,9 @@ define ['entity_factory',
 
       @sceneRenderer.render(@world, @score, @astroidSpwaner)
 
-      spaceshipPosition = @spaceship.getPosition()
-      @camera.lookAt((-spaceshipPosition.x/@cameraShiftDivider), (-spaceshipPosition.y/@cameraShiftDivider))
+      unless @gameState == "gameOver"
+        spaceshipPosition = @spaceship.getPosition()
+        @camera.lookAt((-spaceshipPosition.x/@cameraShiftDivider), (-spaceshipPosition.y/@cameraShiftDivider))
 
       if @gameState == "startScreen"
         @startScreen.render()
