@@ -1,4 +1,4 @@
-define ['box2d', 'events'], (B2D, Events) ->
+define ['box2d', 'events', 'fps_keeper'], (B2D, Events, FpsKeeper) ->
   
   class WorldContactListener
     constructor: (@worldBody) ->
@@ -73,6 +73,8 @@ define ['box2d', 'events'], (B2D, Events) ->
 
       @world.SetContactListener worldContactListener
 
+      @fpsKeeper = new FpsKeeper()
+
     registerEntity: (entity) ->
       fixtureDef =  entity.getEntityDef().fixtureDef
       bodyDef = entity.getEntityDef().bodyDef
@@ -93,7 +95,7 @@ define ['box2d', 'events'], (B2D, Events) ->
 
     startShockWave: (position) ->
       @shockWavePosition = position
-      shokwaveMagnitude = 500
+      shokwaveMagnitude = 300
 
       for entity in @entities
         entityPosition = entity.getPosition()
@@ -162,11 +164,4 @@ define ['box2d', 'events'], (B2D, Events) ->
       worldBody
 
     _getFrameTime: ->
-      time = (new Date).getTime()
-      frameTime = if @lastTime? 
-        (time - @lastTime)/1000
-      else
-        1/60
-      @lastTime = time
-
-      frameTime
+      @fpsKeeper.getFrameTime()
