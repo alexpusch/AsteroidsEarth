@@ -16,7 +16,8 @@ define ['entity_factory',
          'game_over_view', 
          'wave_view', 
          'background_view',
-         'box2d'], (
+         'box2d',
+         'shockwave_view'], (
           EntityFactory, 
           World, 
           SceneRenderer,
@@ -35,7 +36,8 @@ define ['entity_factory',
           GameOverView,
           WaveView,
           BackgroundView,
-          B2D) ->
+          B2D,
+          ShockwaveView) ->
 
   class Game
     constructor: (@stage) ->
@@ -91,6 +93,7 @@ define ['entity_factory',
       world.events.on "astroidWorldCollistion", (contactPoint) =>
         unless @gameState == "gameOver"
           @world.startShockWave contactPoint
+          @shockwaveView = new ShockwaveView @stage, @camera, contactPoint
           @endGame()
           console.log "game over"
 
@@ -165,6 +168,10 @@ define ['entity_factory',
 
       if @gameState == "startScreen"
         @startScreen.render()
+
+      if @gameState == "gameOver"
+        @shockwaveView.render()
+
       @gameOverScreen.render() 
 
       @stage.render()
