@@ -5,7 +5,7 @@ define ['world', 'spaceship', 'bullet', 'astroid', 'planet'], (World, Spaceship,
     createSpaceship: () ->
       @_createEntity Spaceship,
         speed: 150
-        angularSpeed: 50
+        angularSpeed: 100
         width: 2
         length: 3
         cannonHeatRate: 0.13

@@ -4,7 +4,7 @@ define ['view'], (View) ->
       super stage, camera
       @radius = 0
       @options = 
-        expensionRate: 2000
+        expensionRate: 1000
 
     createGraphics: ->
       @shockwaveGraphics = new PIXI.Graphics()
