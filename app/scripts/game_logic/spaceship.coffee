@@ -74,10 +74,10 @@ define ['box2d', 'entity', 'vector_helpers', 'math_helpers'], (B2D, Entity, Vect
 
     fireCannon: ->
       unless @cannonIntervalHandler?
+        @fireBullet()
         @cannonIntervalHandler = setInterval(
           => 
            @fireBullet()
-           console.log "cannon temp: #{@cannonTemperature}"
         , @cannonRate)
 
     turnCannonOff: ->
