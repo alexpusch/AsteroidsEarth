@@ -100,8 +100,7 @@ module.exports = function (grunt) {
                 options: {
                     specs: '.tmp/spec/*specs.js',
                     helpers: '.tmp/spec/*helper.js',
-                    vendor: ['app/bower_components/jquery/jquery.js',
-                             'app/bower_components/underscore/underscore.js',
+                    vendor: ['app/bower_components/underscore/underscore.js',
                              'app/bower_components/box2dweb/Box2dWeb-2.1.a.3.js',
                              'app/bower_components/pixi/bin/pixi.dev.js'],
                     template: require('grunt-template-jasmine-requirejs'),
