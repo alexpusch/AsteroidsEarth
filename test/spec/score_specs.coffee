@@ -1,4 +1,4 @@
-define ['score'], (Score)->
+define ['score', 'events'], (Score, Events) ->
   describe 'Score', ->
     beforeEach ->
       @score = new Score
@@ -6,16 +6,13 @@ define ['score'], (Score)->
 
       jasmine.Clock.useMock()
 
-    describe 'start', ->
+    describe 'update', ->
       it 'should raise as time goes by', ->
-        @score.start()
-        jasmine.Clock.tick(100)
-        expect(@score.getScore()).toEqual 10
+        @score.update 1
+        expect(@score.getScore()).toEqual 100
 
-    describe 'stop', ->
-      it 'stops the raising of the score', ->
-        @score.start()
-        jasmine.Clock.tick(100)
-        @score.stop()
-        jasmine.Clock.tick(200)
-        expect(@score.getScore()).toEqual 10
+      it 'should multipy the added score by current multiplier', ->
+        @score.update 1
+        @score.setMultiplier 2
+        @score.update 1
+        expect(@score.getScore()).toEqual 300

@@ -4,14 +4,14 @@ define ["typed_object"], (TypedObject) ->
       super "score"
       @score = 0
       @upInterval = options.upInterval
+      @multiplier = 1
 
-    start: ->
-      @intervalHandler = setInterval =>
-        @score += 1
-      , @upInterval
+    update: (dt) ->
+      milisecondsPassed = dt * 1000
+      @score += (milisecondsPassed/@upInterval) * @multiplier
+
+    setMultiplier: (multiplier) ->
+      @multiplier = multiplier
 
     getScore: ->
-      @score 
-
-    stop: ->
-      clearInterval @intervalHandler
+      Math.ceil @score 

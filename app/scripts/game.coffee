@@ -125,8 +125,13 @@ define ['entity_factory',
         camera: @camera
       
     createScore: ->
-      @score = new Score
+      score = new Score
         upInterval: 10
+
+      @astroidSpwaner.events.on "newWave", (index) ->
+        score.setMultiplier index
+
+      score
 
     createStartScreen: ->
       startScreen = new StartScreenView @stage
@@ -158,13 +163,15 @@ define ['entity_factory',
 
     startGame: ->
       @gameState = "gameOn"
-      @score.start()
       @player.control @spaceship
       @astroidSpwaner.startSpwaning()
 
     mainLoop: ->
       unless @gameState == "gameOver" and @stopwatch.getTimeSinceMark("gameOver") > 3000
         @world.update()
+
+      dt = @stopwatch.getFrameTime()
+      @score.update(dt)
 
       @backgroundView.render()
 
