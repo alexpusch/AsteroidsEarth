@@ -18,7 +18,8 @@ define ['entity_factory',
          'background_view',
          'box2d',
          'shockwave_view',
-         'camera_shaker'], (
+         'camera_shaker',
+         'stopwatch'], (
           EntityFactory, 
           World, 
           SceneRenderer,
@@ -39,7 +40,8 @@ define ['entity_factory',
           BackgroundView,
           B2D,
           ShockwaveView,
-          CameraShaker) ->
+          CameraShaker,
+          Stopwatch) ->
 
   class Game
     constructor: (@stage) ->
@@ -50,7 +52,7 @@ define ['entity_factory',
       @pixleToUnitRatio = 8
       @zoom = @pixleToUnitRatio
       @cameraShiftDivider = 10
-
+      @stopwatch = new Stopwatch()
       [@worldWidth, @worldHeight] = @_calculateWorldDimenstion()
 
     start: ->
@@ -140,6 +142,7 @@ define ['entity_factory',
       gameOverScreen = new GameOverView @stage
 
       gameOverScreen.events.on "gameStartClicked", =>
+        gameOverScreen.destroy()
         @reset()
         @createGameObjects()
         @startGame()
@@ -161,7 +164,8 @@ define ['entity_factory',
       @astroidSpwaner.startSpwaning()
 
     mainLoop: ->
-      @world.update()
+      unless @gameState == "gameOver" and @stopwatch.getTimeSinceMark("gameOver") > 3000
+        @world.update()
 
       @backgroundView.render()
 
@@ -176,8 +180,7 @@ define ['entity_factory',
 
       if @gameState == "gameOver"
         @shockwaveView.render()
-
-      @gameOverScreen.render() 
+        @gameOverScreen.render() 
 
       @stage.render()
 
@@ -185,7 +188,7 @@ define ['entity_factory',
 
     endGame: ->
       @player.stopControling()
-      @gameOverScreen.fadeIn()
+      @stopwatch.setMark("gameOver")
       @gameState = "gameOver"
 
     createBackgroundView: ->
