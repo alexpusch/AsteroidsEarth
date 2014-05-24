@@ -1,8 +1,8 @@
-define ['fps_keeper'], (FpsKeeper) ->
+define ['stopwatch'], (Stopwatch) ->
   class View
     constructor: (@stage, @camera) ->
       @pixiStage = @stage.getPixiStage()
-      @fpsKeeper = new FpsKeeper()
+      @stopwatch = new Stopwatch()
 
     render: ->
       unless @graphics?
@@ -14,4 +14,4 @@ define ['fps_keeper'], (FpsKeeper) ->
       @pixiStage.removeChild @graphics
 
     getFrameTime: ->
-      @fpsKeeper.getFrameTime()
+      @stopwatch.getFrameTime()

@@ -1,4 +1,4 @@
-define ['box2d', 'events', 'fps_keeper'], (B2D, Events, FpsKeeper) ->
+define ['box2d', 'events', 'stopwatch'], (B2D, Events, Stopwatch) ->
   
   class WorldContactListener
     constructor: (@worldBody) ->
@@ -73,7 +73,7 @@ define ['box2d', 'events', 'fps_keeper'], (B2D, Events, FpsKeeper) ->
 
       @world.SetContactListener worldContactListener
 
-      @fpsKeeper = new FpsKeeper()
+      @stopwatch = new Stopwatch()
 
     registerEntity: (entity) ->
       fixtureDef =  entity.getEntityDef().fixtureDef
@@ -164,4 +164,4 @@ define ['box2d', 'events', 'fps_keeper'], (B2D, Events, FpsKeeper) ->
       worldBody
 
     _getFrameTime: ->
-      @fpsKeeper.getFrameTime()
+      @stopwatch.getFrameTime()
