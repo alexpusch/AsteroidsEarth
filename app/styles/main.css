@@ -3,10 +3,6 @@
     src: url('../fonts/DroidSans.ttf');
 }
 
-@font-face{
-    font-family: fontawesome;
-    src: url('../fonts/fontawesome-webfont.ttf');
-}
 
 /*body {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;

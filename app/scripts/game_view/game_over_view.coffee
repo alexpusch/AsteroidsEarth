@@ -1,6 +1,6 @@
 define ['events', 'view', 'pixi_animator'], (Events, View, Animator) ->
   class GameOverScreen extends View
-    constructor: (stage)->
+    constructor: (stage, @score)->
       super stage
       @events = new Events
 
@@ -8,35 +8,57 @@ define ['events', 'view', 'pixi_animator'], (Events, View, Animator) ->
       graphics = new PIXI.Graphics()
       gameOverText = new PIXI.Text "GAME OVER",
         fill: "white"
-        font: "80pt DroidSans"
+        font: "70pt DroidSans"
         align: "center"
 
       gameOverText.anchor = new PIXI.Point 0.5,0.5
 
-      gameOverTextHeight = @stage.height/2 - gameOverText.height/2
+      gameOverTextHeight = @stage.height/3 - gameOverText.height/2
       gameOverText.position.x = @stage.width/2
       gameOverText.position.y = gameOverTextHeight
 
-      restartButton = new PIXI.Text "\uf021",
+
+      scoreText = new PIXI.Text "score: #{@score}",
         fill: "white"
-        font: "50pt fontawesome"
+        font: "40pt DroidSans"
         align: "center"
 
-      restartButton.position.x = @stage.width/2
-      restartButton.position.y = gameOverTextHeight + restartButton.height * 2
-      restartButton.anchor = new PIXI.Point 0.5,0.5
+      scoreText.anchor = new PIXI.Point 0.5,0.5
 
-      restartButton.buttonMode = true
-      restartButton.interactive = true
+      scoreTextHeight = gameOverText.position.y + 10 + scoreText.height
+      scoreText.position.x = @stage.width/2
+      scoreText.position.y = scoreTextHeight
+
+      refreshTexture = PIXI.Texture.fromImage("images/refresh.png");
+      refreshGraphics = new PIXI.Sprite(refreshTexture);
+
+      refreshGraphics.width = 100
+      refreshGraphics.height = 100
+
+      refreshGraphics.position.x = @stage.width/2
+      refreshGraphics.position.y = scoreText.position.y + refreshGraphics.height + 5
+      refreshGraphics.anchor = new PIXI.Point 0.5,0.5
+
+      refreshGraphics.buttonMode = true
+      refreshGraphics.interactive = true
+
       
-      restartButton.click = restartButton.touchstart = =>
+
+      refreshGraphics.click = refreshGraphics.touchstart = =>
         @events.trigger "gameStartClicked"
 
+      graphics.addChild scoreText
       graphics.addChild gameOverText
-      graphics.addChild restartButton
+      graphics.addChild refreshGraphics
 
       graphics.alpha = 0
+
       graphics
+
+    updateGraphics: ->
+      unless @fadedIn
+        @fadeIn()
+        @fadedIn = true
 
     fadeIn: ->
       new Animator(@graphics).animate [

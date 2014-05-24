@@ -85,7 +85,6 @@ define ['entity_factory',
       @registerRenderers()
 
       @backgroundView = @createBackgroundView()
-      @gameOverScreen = @createGameOverScreen()
       @startScreen = @createStartScreen()
 
     createWorld: ->
@@ -139,7 +138,7 @@ define ['entity_factory',
       startScreen
 
     createGameOverScreen: ->
-      gameOverScreen = new GameOverView @stage
+      gameOverScreen = new GameOverView @stage, @score.getScore()
 
       gameOverScreen.events.on "gameStartClicked", =>
         gameOverScreen.destroy()
@@ -187,6 +186,7 @@ define ['entity_factory',
       requestAnimFrame => @mainLoop()
 
     endGame: ->
+      @gameOverScreen = @createGameOverScreen()
       @player.stopControling()
       @stopwatch.setMark("gameOver")
       @gameState = "gameOver"
