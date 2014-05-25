@@ -1,20 +1,67 @@
-define ['events', 'view'], (Events, View) ->
+define ['events', 'view', 'pixi_animator'], (Events, View, Animator) ->
   class GameOverScreen extends View
-    constructor: (stage)->
+    constructor: (stage, @score)->
       super stage
       @events = new Events
 
     createGraphics: ->
       graphics = new PIXI.Graphics()
-      startButton = new PIXI.Text("Start over")
-      startButton.position.x = @stage.width/2
-      startButton.position.y = @stage.height/2 +  @stage.height/5
+      gameOverText = new PIXI.Text "GAME OVER",
+        fill: "white"
+        font: "70pt DroidSans"
+        align: "center"
 
-      startButton.buttonMode = true
-      startButton.interactive = true
+      gameOverText.anchor = new PIXI.Point 0.5,0.5
+
+      gameOverTextHeight = @stage.height/3 - gameOverText.height/2
+      gameOverText.position.x = @stage.width/2
+      gameOverText.position.y = gameOverTextHeight
+
+
+      scoreText = new PIXI.Text "score: #{@score}",
+        fill: "white"
+        font: "40pt DroidSans"
+        align: "center"
+
+      scoreText.anchor = new PIXI.Point 0.5,0.5
+
+      scoreTextHeight = gameOverText.position.y + 10 + scoreText.height
+      scoreText.position.x = @stage.width/2
+      scoreText.position.y = scoreTextHeight
+
+      refreshTexture = PIXI.Texture.fromImage("images/refresh.png");
+      refreshGraphics = new PIXI.Sprite(refreshTexture);
+
+      refreshGraphics.width = 100
+      refreshGraphics.height = 100
+
+      refreshGraphics.position.x = @stage.width/2
+      refreshGraphics.position.y = scoreText.position.y + refreshGraphics.height + 5
+      refreshGraphics.anchor = new PIXI.Point 0.5,0.5
+
+      refreshGraphics.buttonMode = true
+      refreshGraphics.interactive = true
+
       
-      startButton.click = startButton.touchstart = =>
+
+      refreshGraphics.click = refreshGraphics.touchstart = =>
         @events.trigger "gameStartClicked"
 
-      graphics.addChild startButton
+      graphics.addChild scoreText
+      graphics.addChild gameOverText
+      graphics.addChild refreshGraphics
+
+      graphics.alpha = 0
+
       graphics
+
+    updateGraphics: ->
+      unless @fadedIn
+        @fadeIn()
+        @fadedIn = true
+
+    fadeIn: ->
+      new Animator(@graphics).animate [
+        type: "fadeIn", 
+        duration: 1000
+      ]

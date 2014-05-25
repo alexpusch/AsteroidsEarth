@@ -71,9 +71,22 @@ define ['box2d'], (B2D)->
       @spaceship.stopAutoPilot()
       @spaceship.turnCannonOff()
 
+    stopControling: ->
+      @spaceship.turnCannonOff()
+      @spaceship.turnLeftThrustersOff()
+      @spaceship.turnRightThrustersOff()
+      @spaceship.turnMainThrustersOff()
+      @spaceship.stopAutoPilot()
+
+      @_removeEvent document, "keydown", @keyDownCallback
+      @_removeEvent document, "keyup", @keyUpCallback
+
+      @_removeEvent document, "touchstart", @touchstartCallback
+      @_removeEvent document, "touchmove", @touchstartCallback
+      @_removeEvent document, "touchend" , @touchEndCallback
+
     destroy: ->
-      @removeEvent document, "keydown", @keyDownCallback
-      @removeEvent document, "keyup", @keyUpCallback
+      @stopControling()
 
     _addEvent: ( obj, type, fn ) ->
       if obj.attachEvent
@@ -84,7 +97,7 @@ define ['box2d'], (B2D)->
       else
         obj.addEventListener( type, fn, false );
   
-    removeEvent: ( obj, type, fn ) ->
+    _removeEvent: ( obj, type, fn ) ->
       if obj.detachEvent
         obj.detachEvent( 'on'+type, obj[type+fn] );
         obj[type+fn] = null;

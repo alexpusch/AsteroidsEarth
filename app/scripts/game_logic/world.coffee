@@ -1,4 +1,4 @@
-define ['box2d', 'events'], (B2D, Events) ->
+define ['box2d', 'events', 'stopwatch'], (B2D, Events, Stopwatch) ->
   
   class WorldContactListener
     constructor: (@worldBody) ->
@@ -11,7 +11,7 @@ define ['box2d', 'events'], (B2D, Events) ->
       if( otherBody = @_findWorldBody(bodyA, bodyB))
         @events.trigger "entityEnter", otherBody.GetUserData()
       else
-        @_handleEntitiesCollision bodyA, bodyB
+        @_handleEntitiesCollision bodyA, bodyB, contact
 
     EndContact: (contact) ->
       bodyA = contact.GetFixtureA().GetBody()
@@ -37,14 +37,17 @@ define ['box2d', 'events'], (B2D, Events) ->
 
       otherBody
 
-    _handleEntitiesCollision: (bodyA, bodyB) ->
+    _handleEntitiesCollision: (bodyA, bodyB, contact) ->
       entityA = bodyA.GetUserData()
       entityB = bodyB.GetUserData()
 
+      worldManifold = new B2D.WorldManifold()
+      manifold = contact.GetWorldManifold worldManifold
+      contactPoint = worldManifold.m_points[0]
+
       if (entityA.type == "planet" and entityB.type == "astroid") or
          (entityA.type == "astroid" and entityB.type == "planet")
-
-        @events.trigger "astroidWorldCollistion"
+        @events.trigger "astroidWorldCollistion", contactPoint
 
   class World
     constructor: (options)->
@@ -59,14 +62,18 @@ define ['box2d', 'events'], (B2D, Events) ->
 
       worldContactListener = new WorldContactListener @worldBody
 
-      worldContactListener.events.on "astroidWorldCollistion", =>
-        @events.trigger "astroidWorldCollistion"
+      worldContactListener.events.on "astroidWorldCollistion", (contact) =>
+        @events.trigger "astroidWorldCollistion", contact
+
       worldContactListener.events.on "entityEnter", (entity) ->
         entity.handleEnterWorld()
+        
       worldContactListener.events.on "entityExit", (entity) ->
         entity.handleExitWorld()
 
       @world.SetContactListener worldContactListener
+
+      @stopwatch = new Stopwatch()
 
     registerEntity: (entity) ->
       fixtureDef =  entity.getEntityDef().fixtureDef
@@ -86,10 +93,23 @@ define ['box2d', 'events'], (B2D, Events) ->
     getEntities: ->
       @entities
 
+    startShockWave: (position) ->
+      @shockWavePosition = position
+      shokwaveMagnitude = 300
+
+      for entity in @entities
+        entityPosition = entity.getPosition()
+        forceVector = entityPosition.Copy()
+        forceVector.Add position.GetNegative()
+        forceVector.Normalize()
+        forceVector.Multiply shokwaveMagnitude
+
+        entity.body.ApplyImpulse forceVector, new B2D.Vec2(0,0)
+
     update: ->
       dt = @_getFrameTime()
       _.each @entities, (e) =>
-        unless e.exists()
+        if not e.exists()
           @world.DestroyBody e.body
           @entities = _(@entities).without e
        
@@ -144,11 +164,4 @@ define ['box2d', 'events'], (B2D, Events) ->
       worldBody
 
     _getFrameTime: ->
-      time = (new Date).getTime()
-      frameTime = if @lastTime? 
-        (time - @lastTime)/1000
-      else
-        1/60
-      @lastTime = time
-
-      frameTime
+      @stopwatch.getFrameTime()

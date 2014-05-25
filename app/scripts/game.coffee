@@ -15,7 +15,11 @@ define ['entity_factory',
          'start_screen_view'
          'game_over_view', 
          'wave_view', 
-         'background_view'], (
+         'background_view',
+         'box2d',
+         'shockwave_view',
+         'camera_shaker',
+         'stopwatch'], (
           EntityFactory, 
           World, 
           SceneRenderer,
@@ -33,7 +37,11 @@ define ['entity_factory',
           StartScreenView, 
           GameOverView,
           WaveView,
-          BackgroundView) ->
+          BackgroundView,
+          B2D,
+          ShockwaveView,
+          CameraShaker,
+          Stopwatch) ->
 
   class Game
     constructor: (@stage) ->
@@ -44,11 +52,10 @@ define ['entity_factory',
       @pixleToUnitRatio = 8
       @zoom = @pixleToUnitRatio
       @cameraShiftDivider = 10
-
+      @stopwatch = new Stopwatch()
       [@worldWidth, @worldHeight] = @_calculateWorldDimenstion()
 
     start: ->
-
       @createGameObjects()
       @mainLoop()
 
@@ -78,7 +85,6 @@ define ['entity_factory',
       @registerRenderers()
 
       @backgroundView = @createBackgroundView()
-      @gameOverScreen = @createGameOverScreen()
       @startScreen = @createStartScreen()
 
     createWorld: ->
@@ -87,9 +93,14 @@ define ['entity_factory',
           width: @worldWidth
           height: @worldHeight
           
-      world.events.on "astroidWorldCollistion", =>
-        @endGame()
-        console.log "game over"
+      world.events.on "astroidWorldCollistion", (contactPoint) =>
+        unless @gameState == "gameOver"
+          @world.startShockWave contactPoint
+          CameraShaker shaker = new CameraShaker(@camera)
+          shaker.shake()
+          @shockwaveView = new ShockwaveView @stage, @camera, contactPoint
+          @endGame()
+          console.log "game over"
 
       world
 
@@ -127,12 +138,13 @@ define ['entity_factory',
       startScreen
 
     createGameOverScreen: ->
-      gameOverScreen = new GameOverView @stage
+      gameOverScreen = new GameOverView @stage, @score.getScore()
 
       gameOverScreen.events.on "gameStartClicked", =>
+        gameOverScreen.destroy()
+        @reset()
         @createGameObjects()
         @startGame()
-        gameOverScreen.destroy()
 
       gameOverScreen
 
@@ -151,29 +163,32 @@ define ['entity_factory',
       @astroidSpwaner.startSpwaning()
 
     mainLoop: ->
-      if @gameState == "gameOn"
+      unless @gameState == "gameOver" and @stopwatch.getTimeSinceMark("gameOver") > 3000
         @world.update()
-        # stage might change in the world.update function
 
       @backgroundView.render()
 
-      unless @gameState == "gameOver"
-        @sceneRenderer.render(@world, @score, @astroidSpwaner)
-        
-      if @gameState == "startScreen"
-        @startScreen.render()    
-        
-      if @gameState == "gameOver"
-        @gameOverScreen.render()
+      @sceneRenderer.render(@world, @score, @astroidSpwaner)
 
-      spaceshipPosition = @spaceship.getPosition()
-      @camera.lookAt((-spaceshipPosition.x/@cameraShiftDivider), (-spaceshipPosition.y/@cameraShiftDivider))
+      unless @gameState == "gameOver"
+        spaceshipPosition = @spaceship.getPosition()
+        @camera.lookAt((-spaceshipPosition.x/@cameraShiftDivider), (-spaceshipPosition.y/@cameraShiftDivider))
+
+      if @gameState == "startScreen"
+        @startScreen.render()
+
+      if @gameState == "gameOver"
+        @shockwaveView.render()
+        @gameOverScreen.render() 
 
       @stage.render()
+
       requestAnimFrame => @mainLoop()
 
     endGame: ->
-      @reset()
+      @gameOverScreen = @createGameOverScreen()
+      @player.stopControling()
+      @stopwatch.setMark("gameOver")
       @gameState = "gameOver"
 
     createBackgroundView: ->

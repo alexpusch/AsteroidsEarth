@@ -25,8 +25,9 @@ define ['entity'], (Entity) ->
       force.Subtract(@getPosition())
       distance = force.Length()
       force.Normalize()
-      G = 1000
-      force.Multiply( G * ( @body.GetMass())/(distance*distance))
+      G = 500
+      forceMagniture = Math.max(10, G * ( @body.GetMass())/(distance*distance))
+      force?.Multiply(forceMagniture)
 
       @body.ApplyForce force, @body.GetWorldPoint(new B2D.Vec2(0,0))
 

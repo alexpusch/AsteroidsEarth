@@ -12,7 +12,7 @@ define ->
         requestAnimFrame => 
           @fadeIn(done, start, duration)
       else
-        console.log "fade in end"
+        @graphics.alpha = 1
         done()
 
     stay: (done, start, duration) ->
