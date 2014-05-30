@@ -71,3 +71,24 @@ define ['box2d', 'cannon', 'math_helpers'], (B2D, Cannon, MathHelpers)->
           expect(@cannon.getCannonTemperature()).toEqual 1
 
     describe "update", ->
+      it "cools down the cannon temperature", ->
+        @cannon.cannonTemperature = 1
+        @cannon.update 1
+        expect(@cannon.getCannonTemperature()).toEqual(1 - @cannonCooldownRate)
+
+      it "does not cooldown the cannon temperature if it's already 0", ->
+        @cannon.cannonTemperature = 0
+        @cannon.update 0.1
+        expect(@cannon.getCannonTemperature()).toEqual 0
+
+      describe "cannon jammed", ->
+        beforeEach ->
+          @cannon.cannonJammed = true
+          @cannon.cannonTemperature = 1
+
+        it "unjamms the cannon when it cools down completly", ->
+          @cannon.update(1) for i in [0..((1/@cannonCooldownRate)+1)]
+
+          expect(@cannon.isCannonJammed()).toBeFalsy()
+
+        xit "cools the cannon faster", ->
