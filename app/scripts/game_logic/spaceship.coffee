@@ -1,4 +1,4 @@
-define ['box2d', 'entity', 'vector_helpers', 'math_helpers'], (B2D, Entity, VectorHelpers, MathHelpers) ->
+define ['box2d', 'entity', 'vector_helpers', 'math_helpers', 'cannon'], (B2D, Entity, VectorHelpers, MathHelpers, Cannon) ->
   
   class Spaceship extends Entity
     constructor: (options) ->
@@ -7,13 +7,16 @@ define ['box2d', 'entity', 'vector_helpers', 'math_helpers'], (B2D, Entity, Vect
       @angularSpeed = options.angularSpeed
       @length = options.length
       @width = options.width
-      @bulletSpeed = 30
-      @cannonOffset = new B2D.Vec2(@length)
-      @cannonRate = 200
-      
-      @cannonHeatRate = options.cannonHeatRate
-      @cannonCooldownRate = options.cannonCooldownRate
+
+      @cannon = new Cannon
+        bulletSpeed: 30
+        cannonOffset: new B2D.Vec2(@length)
+        cannonRate: 200    
+        cannonHeatRate: options.cannonHeatRate
+        cannonCooldownRate: options.cannonCooldownRate
+
       @angularDamping = options.angularDamping
+
       @linearDamping = options.linearDamping
 
       @thrusters =
@@ -21,8 +24,6 @@ define ['box2d', 'entity', 'vector_helpers', 'math_helpers'], (B2D, Entity, Vect
         left: 'off'
         right: 'off'
 
-      @cannonTemperature = 0  
-      @cannonJammed = false;
       @outOfWorld = false;
 
     getEntityDef: ->
@@ -40,7 +41,6 @@ define ['box2d', 'entity', 'vector_helpers', 'math_helpers'], (B2D, Entity, Vect
           new B2D.Vec2(@length/2, 0),
           new B2D.Vec2(-@length/2, @width/2)], 3
 
-      # fixtureDef.shape.SetAsBox(1, 1)
       bodyDef: bodyDef
       fixtureDef: fixtureDef
 
@@ -73,25 +73,10 @@ define ['box2d', 'entity', 'vector_helpers', 'math_helpers'], (B2D, Entity, Vect
       delete @autoPilotTarget
 
     fireCannon: ->
-      unless @cannonIntervalHandler?
-        @fireBullet()
-        @cannonIntervalHandler = setInterval(
-          => 
-           @fireBullet()
-        , @cannonRate)
+      @cannon.fireCannon()
 
     turnCannonOff: ->
-      clearInterval @cannonIntervalHandler
-      @cannonIntervalHandler = null
-
-    fireBullet: ->
-      unless @cannonJammed
-        @_createBullet()
-        @cannonTemperature += @cannonHeatRate
-        @cannonTemperature = Math.min(@cannonTemperature, 1)
-
-        if @cannonTemperature == 1
-          @cannonJammed = true
+      @cannon.turnCannonOff()
 
     update: (dt) ->
       if @autoPilotTarget?
@@ -104,29 +89,25 @@ define ['box2d', 'entity', 'vector_helpers', 'math_helpers'], (B2D, Entity, Vect
       if @_thrustersOn 'right'
         @_rightThrustersACtion()
 
-      if @cannonTemperature > 0
-        @cannonTemperature -= @cannonCooldownRate*dt
-
-      if @cannonJammed and @cannonTemperature <= 0
-        @cannonJammed = false
-        @cannonTemperature = 0
-
-      window.dt = dt
+      @cannon.setPosition @getPosition()
+      @cannon.setAngle @getAngle()
+      @cannon.setSpeed @body.GetLinearVelocity()
+      @cannon.update dt
 
     getVertices: ->
       @body.GetFixtureList().GetShape().GetVertices()
 
     isCannonOn: ->
-      @cannonIntervalHandler?
+      @cannon.isCannonOn()
 
     isCannonJammed: ->
-      @cannonJammed
+      @cannon.isCannonJammed()
 
     getCannonTemperature: ->
-      @cannonTemperature
+      @cannon.getCannonTemperature()
 
     destroy: ->
-      @turnCannonOff()
+      @cannon.destroy()
     
     handleExitWorld: ->
       @outOfWorld = true
@@ -189,19 +170,3 @@ define ['box2d', 'entity', 'vector_helpers', 'math_helpers'], (B2D, Entity, Vect
       direction = VectorHelpers.createDirectionVector angle
 
       direction
-
-    _createBullet: ->
-      angle = @getAngle()
-      position = @getPosition()
-      transformCannonOffest = @cannonOffset.Copy()
-      transformCannonOffest = VectorHelpers.rotate transformCannonOffest, angle
-      transformCannonOffest.Add(position)
-      spaceshipSpeed = @body.GetLinearVelocity()
-
-      bulletSpeed = @_getDirectionVector()
-      bulletSpeed.Multiply(@bulletSpeed)
-      bulletSpeed.Add(spaceshipSpeed)
-      bullet = EntityFactory.createBullet()
-      bullet.setAngle angle
-      bullet.setPosition transformCannonOffest
-      bullet.setSpeed(bulletSpeed)

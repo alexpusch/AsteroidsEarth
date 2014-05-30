@@ -58,68 +58,6 @@ define ['box2d', 'spaceship', 'math_helpers'], (B2D, Spaceship, MathHelpers)->
         @spaceship.turnRightThrustersOff()
         expect(@spaceship.thrusters.right).toBe 'off'
 
-    describe "fire bullet", ->
-      beforeEach ->
-        @bullet = jasmine.createSpyObj 'bullet', ['setPosition', 'setSpeed', 'setAngle']
-        window.EntityFactory = jasmine.createSpyObj 'EntityFactory', ['createBullet']
-        window.EntityFactory.createBullet.andReturn @bullet
-
-      it "creates a bullet", ->
-        @spaceship.fireBullet()
-        expect(EntityFactory.createBullet).toHaveBeenCalled()
-
-      it "fires the bullet in the current cannon position", ->
-        @spaceship.setAngle MathHelpers.d2r 90
-        @spaceship.setPosition new B2D.Vec2(0,0)
-
-        @spaceship.fireBullet()
-        expect(@bullet.setPosition.mostRecentCall.args[0]).toBeVector new B2D.Vec2(0, 30)
-      
-      it "fires the bullet in the angle of the spaceship", ->
-        @spaceship.setAngle 3
-
-        @spaceship.fireBullet()
-        expect(@bullet.setAngle).toHaveBeenCalledWith 3
-
-      it "fires the bullet with the speed of the speceship plus 30", ->
-        @spaceship.setSpeed new B2D.Vec2 1000, 0
-        @spaceship.fireBullet()
-
-        expect(@bullet.setSpeed).toHaveBeenCalledWith new B2D.Vec2 1030, 0
-
-      it "adds to the cannon temperature", ->
-        @spaceship.fireBullet()
-        expect(@spaceship.getCannonTemperature()).toBe @cannonHeatRate
-
-      it "does not raise temperature over 1", ->
-        @spaceship.cannonTemperature = 1 - @cannonHeatRate/2
-        @spaceship.fireBullet()
-        expect(@spaceship.getCannonTemperature()).toEqual 1
-
-      describe "cannon temperature hit threashost", ->
-        beforeEach ->
-          @spaceship.cannonTemperature = 1 - @cannonHeatRate
-          @spaceship.fireBullet()
-                  
-        it "jams the cannon", ->
-          @spaceship.fireBullet()
-          expect(@spaceship.isCannonJammed()).toBeTruthy()
-
-      describe "cannon jammed", ->
-        beforeEach ->
-          @spaceship.cannonTemperature = 1 - @cannonHeatRate
-          @spaceship.fireBullet()
-          EntityFactory.createBullet.reset()
-
-        it "does not fire", ->
-          @spaceship.fireBullet()
-          expect(EntityFactory.createBullet).not.toHaveBeenCalled()
-
-        it "does not raise temperature", ->
-          @spaceship.fireBullet()
-          expect(@spaceship.getCannonTemperature()).toEqual 1
-
-
     describe "update", ->
       describe "main thrusters are on", ->
         it "a force is applied forwards", ->
@@ -199,16 +137,6 @@ define ['box2d', 'spaceship', 'math_helpers'], (B2D, Spaceship, MathHelpers)->
           @spaceship.update()
 
           expect(@spaceship.thrusters.main).toBe "off"
-
-      it "cools down the cannon temperature", ->
-        @spaceship.cannonTemperature = 1
-        @spaceship.update 1
-        expect(@spaceship.getCannonTemperature()).toEqual(1 - @cannonCooldownRate)
-
-      it "does not cooldown the cannon temperature if it's already 0", ->
-        @spaceship.cannonTemperature = 0
-        @spaceship.update 0.1
-        expect(@spaceship.getCannonTemperature()).toEqual 0
 
       describe "cannon jammed", ->
         beforeEach ->
