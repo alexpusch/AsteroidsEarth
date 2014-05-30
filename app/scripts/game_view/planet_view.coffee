@@ -24,22 +24,10 @@ define ['conversions', 'view', 'earth_graphics_points'], (Conversions, View, ear
     _drawContinents: (graphics)->
       continentsGraphics = new PIXI.Graphics()
 
-      continentsGraphics.beginFill 0x00AA00
-
-      @_drawPoints continentsGraphics, earthGraphicsPoints
-
-      continentsGraphics.endFill()
-
-      continentsGraphics.scale = new PIXI.Point 1/21, 1/21
-      continentsGraphics.position = new PIXI.Point -8,-84
+      continentsTexture = PIXI.Texture.fromImage("images/continents.png");
+      continentsGraphics = new PIXI.Sprite(continentsTexture);
+      continentsGraphics.width = @planet.getRadius() * 2
+      continentsGraphics.height = @planet.getRadius() * 2
+      continentsGraphics.position = new PIXI.Point -@planet.getRadius(),-@planet.getRadius()
+      continentsGraphics
       graphics.addChild continentsGraphics
-
-    _drawPoints: (graphics, points) ->
-      for blob in points
-        first = true
-        for point in blob
-          if first
-            graphics.moveTo point[0], point[1]
-            first = false
-          else
-            graphics.lineTo point[0], point[1]

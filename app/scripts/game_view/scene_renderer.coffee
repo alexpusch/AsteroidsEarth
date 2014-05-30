@@ -9,7 +9,7 @@ define ->
     render: (world, score, astroidSpwaner) ->
       @renderEntities(world.getEntities())
       @renderHud([astroidSpwaner])
-      @stage.getPixiRenderer()?.render(@stage.getPixiStage())
+      # @stage.getPixiRenderer()?.render(@stage.getPixiStage())
 
     renderHud: (entities) ->
       _.each entities, (entity) =>

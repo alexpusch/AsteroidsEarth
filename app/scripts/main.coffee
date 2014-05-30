@@ -10,11 +10,13 @@ requirejs.config
 require  ['stage', 'game'], (Stage, Game) ->
   if document.getElementById("game")?
     canvas = document.createElement "canvas"
-    # canvas.width = window.innerWidth * window.devicePixelRatio;
-    # canvas.height = window.innerHeight * window.devicePixelRatio;  
+    canvas.style.width = window.innerWidth
+    canvas.style.height = window.innerHeight
+    canvas.width = window.innerWidth * window.devicePixelRatio;
+    canvas.height = window.innerHeight * window.devicePixelRatio;  
 
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    # canvas.width = window.innerWidth;
+    # canvas.height = window.innerHeight;
 
     document.body.appendChild canvas
 
