@@ -26,8 +26,8 @@ define ->
       @pixiRenderer.render(@stage)
 
     clear: ->
-      while @stage.children.length > 0
-        @stage.removeChild @stage.children[0]
+      while @container.children.length > 0
+        @container.removeChild @container.children[0]
 
     getWidth: ->
       @width / @pixleRatio
