@@ -74,6 +74,10 @@ define ['entity_factory',
       window.EntityFactory = new EntityFactory @world
 
       @spaceship = window.EntityFactory.createSpaceship()
+
+      if navigator.isCocoonJS
+        @spaceship.setSuperCannon()
+
       @spaceship.setPosition new B2D.Vec2 0, -20
 
       @planet = @createPlanet()

@@ -6,7 +6,9 @@ define ['conversions', 'view', 'box2d', 'cannon_temperature_view'], (Conversions
 
     createGraphics: ->
       graphics = new PIXI.Graphics()
-      graphics.addChild @cannonTemperatureView.createGraphics()
+
+      unless @spaceship.isSuperCannon()
+        graphics.addChild @cannonTemperatureView.createGraphics()
 
       @spaceshipGraphics = @_createSpaceshipGraphics()
       @distanceMeterGraphics = @_createOutOfWorldIndicatorGraphics()
@@ -15,7 +17,8 @@ define ['conversions', 'view', 'box2d', 'cannon_temperature_view'], (Conversions
       graphics
 
     updateGraphics: ->
-      @cannonTemperatureView.updateGraphics()
+      unless @spaceship.isSuperCannon()
+        @cannonTemperatureView.updateGraphics()
 
       if @spaceship.isOutOfWOrld()
         @_updateOutOfWorldGraphics()

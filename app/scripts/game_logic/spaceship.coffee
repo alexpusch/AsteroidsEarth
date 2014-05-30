@@ -122,6 +122,12 @@ define ['box2d', 'entity', 'vector_helpers', 'math_helpers', 'cannon'], (B2D, En
       speedVector = @body.GetLinearVelocity()
       speedVector.Length()
 
+    setSuperCannon: ->
+      @cannon.canJam = false
+
+    isSuperCannon: ->
+      not @cannon.canJam
+
     _autoPilot: ->
       angle = @_calculateAngleTwardsTarget()
       

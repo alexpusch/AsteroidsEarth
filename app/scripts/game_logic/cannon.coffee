@@ -17,6 +17,7 @@ define ['vector_helpers', 'box2d'], (VectorHelpers, B2D) ->
       @speed = new B2D.Vec2 0, 0
       @position = new B2D.Vec2 0, 0
       @angle = 0
+      @canJam = true
 
     setPosition: (position) ->
       @position = position
@@ -42,11 +43,13 @@ define ['vector_helpers', 'box2d'], (VectorHelpers, B2D) ->
     fireBullet: ->
       unless @cannonJammed
         @_createBullet()
-        @cannonTemperature += @cannonHeatRate
-        @cannonTemperature = Math.min(@cannonTemperature, 1)
 
-        if @cannonTemperature == 1
-          @cannonJammed = true
+        if @canJam
+          @cannonTemperature += @cannonHeatRate
+          @cannonTemperature = Math.min(@cannonTemperature, 1)
+
+          if @cannonTemperature == 1
+            @cannonJammed = true
 
     update: (dt) ->
       if @cannonTemperature > 0
