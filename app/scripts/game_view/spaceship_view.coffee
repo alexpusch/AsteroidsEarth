@@ -1,4 +1,4 @@
-define ['conversions', 'view'], (Conversions, View) ->
+define ['conversions', 'view', 'box2d'], (Conversions, View, B2D) ->
   class SpaceshipView extends View
     constructor: (stage, camera, @spaceship) ->
       super stage, camera
@@ -40,7 +40,7 @@ define ['conversions', 'view'], (Conversions, View) ->
 
     _drawSpaceshipGraphics: (graphics) ->
       vertices = @spaceship.getVertices()
-      graphics.beginFill(0xe3e3e3)
+      graphics.beginFill(0xf3f3f3)
       
       engineHight = 0.8
       engineWidth = 0.75
@@ -50,6 +50,12 @@ define ['conversions', 'view'], (Conversions, View) ->
       
       vertice3 = @_getAveragePoint vertice01, vertice21, engineWidth
       vertice4 = @_getAveragePoint vertice01, vertice21, (1-engineWidth)
+
+      n = vertices[0].Copy()
+      n.Add(vertices[2].GetNegative())
+      n.Normalize()
+      vertice5 = @_findMirrorPoint vertice4, n, vertices[0]
+      vertice6 = @_findMirrorPoint vertice3, n, vertices[0]
 
       graphics.moveTo(vertices[0].x,vertices[0].y)
       graphics.lineTo(vertices[1].x,vertices[1].y)
@@ -68,10 +74,34 @@ define ['conversions', 'view'], (Conversions, View) ->
       graphics.lineTo(vertice3.x, vertice3.y)
       graphics.lineTo(vertice4.x, vertice4.y)
       graphics.lineTo(vertices[2].x,vertices[2].y)
+
+      graphics.lineTo(vertice5.x, vertice5.y)
+      graphics.lineTo(vertice6.x, vertice6.y)
+
       graphics.lineTo(vertices[0].x,vertices[0].y)
 
       graphics.endFill()
     
+    _findMirrorPoint: (x1, n, x0) ->
+      # http://mathworld.wolfram.com/Reflection.html
+      z = x1.Copy()
+      z.Add(x0.GetNegative())
+      dot = z.x * n.x + z.y * n.y
+
+      n2dot = n.Copy()
+      n2dot.Multiply(2*dot)
+      
+      x02 = x0.Copy()
+      x02.Multiply(2)
+
+      xr = x02.Copy()
+      xr.Add(n2dot)
+      xr.Multiply(0.75)
+      mirror = x1.Copy().GetNegative()
+      mirror.Add(xr)
+
+      mirror
+
     _getSpeedIndicatorAlpha: ->
       speed = @spaceship.getSpeed()
 
@@ -82,7 +112,7 @@ define ['conversions', 'view'], (Conversions, View) ->
 
 
     _getAveragePoint: (vertice1, vertice2, t) ->
-      new PIXI.Point(@_linearAverage(vertice1.x, vertice2.x, t), @_linearAverage(vertice1.y, vertice2.y, t))
+      new B2D.Vec2(@_linearAverage(vertice1.x, vertice2.x, t), @_linearAverage(vertice1.y, vertice2.y, t))
 
     _linearAverage: (num1, num2, t) ->
       num1 * t + num2 * (1 - t)
