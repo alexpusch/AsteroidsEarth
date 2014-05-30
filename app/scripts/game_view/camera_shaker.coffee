@@ -2,25 +2,26 @@ define ->
   class CameraShaker
     constructor: (@camera, @options = {}) ->
       _.defaults @options,
-        numberOfShakes: 40
-        rest: 30
+        duration: 2000
         intensity: 
           min: -1
           max: 1
 
     shake: () ->
-      @_startShaking 0, @camera.getTranslation()
+      now = new Date()
+      @_startShaking now, @camera.getTranslation()
 
-    _startShaking: (i, originalPosition) ->
-      unless i == @options.numberOfShakes
+    _startShaking: (start, originalPosition) ->
+      now = new Date()
+      unless (now - start) > @options.duration
+        i = (now - start)/@options.duration
         shakeX = @_getRandomShake(i) + originalPosition.x
         shakeY = @_getRandomShake(i) + originalPosition.y
         @camera.lookAt shakeX, shakeY
 
-        setTimeout =>
-          @_startShaking(i + 1, originalPosition)
-        , @options.rest
+        requestAnimFrame =>
+          @_startShaking(start, originalPosition)
 
     _getRandomShake: (i) ->
-      dumpping = 1 - i / @options.numberOfShakes 
+      dumpping = 1 - i
       _.random(@options.intensity.min, @options.intensity.max) * dumpping

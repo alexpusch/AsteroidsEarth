@@ -19,17 +19,17 @@ define ['view'], (View) ->
 
       viewShockWaveOrigin = @camera.project @shockWaveOrigin
 
-      mask = new PIXI.Graphics()
-      mask.beginFill(0x999999)
-      mask.drawCircle(viewShockWaveOrigin.x, viewShockWaveOrigin.y, @radius - 20)
-      mask.endFill()
+      # mask = new PIXI.Graphics()
+      # mask.beginFill(0x999999)
+      # mask.drawCircle(viewShockWaveOrigin.x, viewShockWaveOrigin.y, @radius - 20)
+      # mask.endFill()
 
-      @graphics.mask = mask
+      # @graphics.mask = mask
       @shockwaveGraphics.clear()
       @shockwaveGraphics.beginFill(0xEEEEEE, 0.5)
       @shockwaveGraphics.drawCircle viewShockWaveOrigin.x, viewShockWaveOrigin.y, @radius
       @shockwaveGraphics.endFill()
 
-      mask.beginFill(0x999999)
-      mask.drawCircle(viewShockWaveOrigin.x, viewShockWaveOrigin.y, @radius - 20)
-      mask.endFill()
+      # mask.beginFill(0x999999)
+      # mask.drawCircle(viewShockWaveOrigin.x, viewShockWaveOrigin.y, @radius - 20)
+      # mask.endFill()
