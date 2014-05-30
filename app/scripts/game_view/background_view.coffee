@@ -1,15 +1,14 @@
 define ['view'], (View) ->
   class Background extends View
-    constructor: (stage) ->
-      super stage
+    constructor: (stage, camera) ->
+      super stage, camera
       @options = 
         numberOfStarts: 50
         starRadiusRange:
-          min: 3
-          max: 5
-        # http://en.wikipedia.org/wiki/Star_polygon
-        starP: 7
-        starQ: 3
+          min: (3/8) * camera.getZoom()
+          max: (5/8) * camera.getZoom()
+        startPoints: 5
+        starRatio: 0.4
 
     createGraphics: ->
       graphics = new PIXI.Graphics()
@@ -34,12 +33,15 @@ define ['view'], (View) ->
 
     _drawStar: (graphics, position, angle0, radius) ->
       graphics.beginFill 0xFFFFFF
-      graphics.moveTo position.x, (position.y + radius)
+
+      point = @_getPointInAngle angle0, radius, position
+      graphics.moveTo point.x, point.y
     
-      skipAngle = 2 * Math.PI / @options.starP
-      for i in [0..@options.starP]
-        currentAngle = skipAngle * @options.starQ * i + angle0
-        point = @_getPointInAngle currentAngle, radius, position
+      skipAngle = Math.PI / @options.startPoints
+      for i in [1..(@options.startPoints * 2)]
+        currentAngle = skipAngle * i + angle0
+        currentRadius = if (i % 2 == 0) then radius else (radius * @options.starRatio)
+        point = @_getPointInAngle currentAngle, currentRadius, position
         
         graphics.lineTo point.x, point.y
 
