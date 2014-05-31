@@ -1,8 +1,6 @@
 define ->
   class PIXIAnimator
     constructor: (@graphics)->
-      @frameRate = 60
-      @frameTimeout = 1000/@frameRate
 
     fadeIn: (done, start, duration) ->
       now = new Date()

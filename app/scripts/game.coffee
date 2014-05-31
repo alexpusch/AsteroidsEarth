@@ -19,7 +19,8 @@ define ['entity_factory',
          'box2d',
          'shockwave_view',
          'camera_shaker',
-         'stopwatch'], (
+         'stopwatch',
+         'tutorial_view'], (
           EntityFactory, 
           World, 
           SceneRenderer,
@@ -41,7 +42,8 @@ define ['entity_factory',
           B2D,
           ShockwaveView,
           CameraShaker,
-          Stopwatch) ->
+          Stopwatch,
+          TutorialView) ->
 
   class Game
     constructor: (@stage) ->
@@ -87,7 +89,7 @@ define ['entity_factory',
       @score = @createScore()
 
       @registerRenderers()
-
+      
       @backgroundView = @createBackgroundView()
       @startScreen = @createStartScreen()
 
@@ -157,6 +159,9 @@ define ['entity_factory',
 
       gameOverScreen
 
+    createTutorialView: ->
+      new TutorialView @stage, @camera, @astroidSpwaner
+
     registerRenderers: ->
       @sceneRenderer.registerRenderer('spaceship', SpaceshipView)
       @sceneRenderer.registerRenderer('bullet', BulletView)
@@ -166,6 +171,7 @@ define ['entity_factory',
       @sceneRenderer.registerRenderer('astroidSpwaner', WaveView)
 
     startGame: ->
+      @tutorialView = @createTutorialView()
       @gameState = "gameOn"
       @player.control @spaceship
       @astroidSpwaner.startSpwaning()
@@ -192,6 +198,7 @@ define ['entity_factory',
         @shockwaveView.render()
         @gameOverScreen.render() 
 
+      @tutorialView.render() if @tutorialView?
       @stage.render()
 
       requestAnimFrame => @mainLoop()

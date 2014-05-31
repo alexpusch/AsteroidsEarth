@@ -15,3 +15,7 @@ define ['stopwatch'], (Stopwatch) ->
 
     getFrameTime: ->
       @stopwatch.getFrameTime()
+
+    pushToTop: ->
+      @pixiStage.removeChild(@graphics)
+      @pixiStage.addChild(@graphics)
