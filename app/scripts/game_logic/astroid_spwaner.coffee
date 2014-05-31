@@ -25,6 +25,9 @@ define ['typed_object', 'planet', 'wave', 'events'], (TypedObject, Planet, Wave,
       @events.trigger "newWave", waveIndex
       @currentWave = new Wave wavePlan
 
+      @currentWave.events.on "newAstroid", (astroid) =>
+        @events.trigger "newAstroid", astroid
+
       @waveDestroyedCallback = =>
         @waveIndex++
 

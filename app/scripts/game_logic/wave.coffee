@@ -29,6 +29,8 @@ define ['events'], (Events)->
 
       astroid = window.EntityFactory.createAstroid options
 
+      @events.trigger "newAstroid", astroid
+      
       astroid.on 'destroy', =>
         @activeAstroids--
         if @activeAstroids == 0
