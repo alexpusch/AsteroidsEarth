@@ -7,6 +7,7 @@ requirejs.config
       deps: []
       exports: 'PIXI'
 
+CocoonJS.App.setAntialias true
 require  ['stage', 'game'], (Stage, Game) ->
   if document.getElementById("game")?
     canvas = document.createElement "canvas"
@@ -15,11 +16,12 @@ require  ['stage', 'game'], (Stage, Game) ->
     canvas.width = window.innerWidth * window.devicePixelRatio;
     canvas.height = window.innerHeight * window.devicePixelRatio;  
 
-    # canvas.width = window.innerWidth;
-    # canvas.height = window.innerHeight;
-
     document.body.appendChild canvas
 
-    stage = new Stage canvas
-    game = new Game(stage)
-    game.start()
+    assetLoader = new PIXI.AssetLoader ["images/refresh.png", "images/finger.png"]
+    assetLoader.load()
+
+    assetLoader.addEventListener "onComplete", ->   
+      stage = new Stage canvas
+      game = new Game(stage)
+      game.start()
