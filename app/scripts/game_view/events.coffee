@@ -15,7 +15,7 @@ define ->
         return
 
       callbackList = @directory[eventName]
-      callbackList = _.without callbackList, callback
+      @directory[eventName] = _.without callbackList, callback
 
     trigger: (eventName, args...) ->
       unless @directory[eventName]?
