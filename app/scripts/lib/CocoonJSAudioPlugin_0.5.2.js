@@ -410,7 +410,8 @@ this.createjs = this.createjs || {};
 	p._offset = 0;
 	p._startTime = 0;
 	p._volume =  1;
-	if (createjs.definePropertySupported) {
+	// IE8 has Object.defineProperty, but only for DOM objects, so check if fails to suppress errors
+	try {
 		Object.defineProperty(p, "volume", {
 			get: function() {
 				return this._volume;
@@ -422,7 +423,10 @@ this.createjs = this.createjs || {};
 				this._updateVolume();
 			}
 		});
-	}
+	} catch (e) {
+		// dispatch message or error?
+	};
+	
 	p.pan = 0;
 	p._duration = 0;
 	p._audioSpriteStopTime = null;	// CocoonJSAudioPlugin only
