@@ -30,8 +30,8 @@ require  ['stage', 'game'], (Stage, Game) ->
     assetLoader.addEventListener "onComplete", ->   
       console.log "done loading graphics"
       done()
-      
-  loadAssets = (graphicAssets, audioAssets) ->
+
+  loadAssets = (graphicAssets, audioAssets, done) ->
     loaded = 0
     async.parallel
       loadSounds : (done) ->
@@ -39,11 +39,7 @@ require  ['stage', 'game'], (Stage, Game) ->
       loadGraphics: (done) ->
         loadGraphicAssets graphicAssets, done
       , ->   
-        console.log "done"
-        stage = new Stage canvas
-        game = new Game(stage)
-        
-        game.start()
+        done()
 
   if document.getElementById("game")?
     canvas = document.createElement "canvas"
@@ -57,7 +53,7 @@ require  ['stage', 'game'], (Stage, Game) ->
     createjs.Sound.initializeDefaultPlugins()
     createjs.Sound.registerPlugins([createjs.CocoonJSAudioPlugin]);
     audioAssets = [
-        src: "shoot2.ogg"
+        src: "shoot.ogg"
         id: "sound"
       ,
         src: "explosion.ogg"
@@ -69,4 +65,8 @@ require  ['stage', 'game'], (Stage, Game) ->
 
     graphicAssets = ["images/refresh.png", "images/finger.png"]
 
-  loadAssets graphicAssets, audioAssets
+  loadAssets graphicAssets, audioAssets, ->
+    stage = new Stage canvas
+    game = new Game(stage)
+    
+    game.start()  
