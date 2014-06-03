@@ -8,10 +8,12 @@ define ['stopwatch'], (Stopwatch) ->
       unless @graphics?
         @graphics = @createGraphics()
         @pixiStage.addChild(@graphics)
+        @onAppearance?()
       @updateGraphics?()
 
     destroy: ->
       @pixiStage.removeChild @graphics
+      @onDestroy?()
 
     getFrameTime: ->
       @stopwatch.getFrameTime()

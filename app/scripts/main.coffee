@@ -9,6 +9,42 @@ requirejs.config
 
 CocoonJS.App.setAntialias true
 require  ['stage', 'game'], (Stage, Game) ->
+  loadAudioAssets = (assetes, done) ->
+    console.log "loading sounds"
+    loaded = 0
+    createjs.Sound.alternateExtensions = ["wav"];
+    createjs.Sound.addEventListener "fileload", (e) ->
+      console.log "loaded #{e.src}"
+      loaded += 1
+      if loaded == assetes.length
+        console.log "done loading sounds"
+        done()
+
+    createjs.Sound.registerManifest assetes, "audio/"
+
+  loadGraphicAssets = (assets, done) ->
+    console.log "loading graphcis"
+    assetLoader = new PIXI.AssetLoader assets
+    assetLoader.load()
+
+    assetLoader.addEventListener "onComplete", ->   
+      console.log "done loading graphics"
+      done()
+      
+  loadAssets = (graphicAssets, audioAssets) ->
+    loaded = 0
+    async.parallel
+      loadSounds : (done) ->
+        loadAudioAssets audioAssets, done     
+      loadGraphics: (done) ->
+        loadGraphicAssets graphicAssets, done
+      , ->   
+        console.log "done"
+        stage = new Stage canvas
+        game = new Game(stage)
+        
+        game.start()
+
   if document.getElementById("game")?
     canvas = document.createElement "canvas"
     canvas.style.width = window.innerWidth
@@ -18,10 +54,19 @@ require  ['stage', 'game'], (Stage, Game) ->
 
     document.body.appendChild canvas
 
-    assetLoader = new PIXI.AssetLoader ["images/refresh.png", "images/finger.png"]
-    assetLoader.load()
+    createjs.Sound.initializeDefaultPlugins()
+    createjs.Sound.registerPlugins([createjs.CocoonJSAudioPlugin]);
+    audioAssets = [
+        src: "shoot2.ogg"
+        id: "sound"
+      ,
+        src: "explosion.ogg"
+        id: "explosion"
+      ,
+        src: "background.ogg"
+        id: "background"
+    ]
 
-    assetLoader.addEventListener "onComplete", ->   
-      stage = new Stage canvas
-      game = new Game(stage)
-      game.start()
+    graphicAssets = ["images/refresh.png", "images/finger.png"]
+
+  loadAssets graphicAssets, audioAssets

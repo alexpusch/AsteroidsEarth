@@ -33,3 +33,6 @@ define ['view'], (View) ->
       # mask.beginFill(0x999999)
       # mask.drawCircle(viewShockWaveOrigin.x, viewShockWaveOrigin.y, @radius - 20)
       # mask.endFill()
+
+    onAppearance: ->
+      createjs.Sound.play "explosion"

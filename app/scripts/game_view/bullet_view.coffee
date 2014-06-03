@@ -18,3 +18,6 @@ define ['conversions', 'view'], (Conversions, View)  ->
       pixiPosition = Conversions.B2DtoPIXI.toPoint vec2Position
       @graphics.position = pixiPosition
       @graphics.scale = new PIXI.Point @camera.getZoom() ,@camera.getZoom()
+
+    onAppearance: ->
+      createjs.Sound.play "sound"

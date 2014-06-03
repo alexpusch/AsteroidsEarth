@@ -66,8 +66,8 @@ define ['entity_factory',
       @player.destroy()
       @spaceship.destroy()
       @astroidSpwaner.destroy()
+      @backgroundView.destroy()
       @stage.clear()
-
       delete @world
 
     createGameObjects: ->

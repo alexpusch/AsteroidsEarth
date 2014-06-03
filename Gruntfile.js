@@ -207,7 +207,7 @@ module.exports = function (grunt) {
                     src: [
                         '<%= yeoman.dist %>/scripts/{,*/}*.js',
                         '<%= yeoman.dist %>/styles/{,*/}*.css',
-                        '<%= yeoman.dist %>/images/{,*/}*.{png,jpg,jpeg,gif,webp}',
+                        // '<%= yeoman.dist %>/images/{,*/}*.{png,jpg,jpeg,gif,webp}',
                         '<%= yeoman.dist %>/styles/fonts/{,*/}*.*'
                     ]
                 }
@@ -294,8 +294,9 @@ module.exports = function (grunt) {
                     src: [
                         '*.{ico,png,txt}',
                         '.htaccess',
-                        'images/{,*/}*.{webp,gif}',
-                        'styles/fonts/{,*/}*.*'
+                        'images/{,*/}*.{png, jpeg, jpg, webp,gif}',
+                        'styles/fonts/{,*/}*.*',
+                        'audio/{,*/}*.ogg'
                     ]
                 }]
             },
@@ -322,7 +323,7 @@ module.exports = function (grunt) {
                 'coffee',
                 'compass',
                 'copy:styles',
-                'imagemin',
+                // 'imagemin',
                 'svgmin',
                 'htmlmin'
             ]
@@ -333,7 +334,10 @@ module.exports = function (grunt) {
                     baseUrl        : '.tmp/scripts',
                     name           : 'main',
                     mainConfigFile : '.tmp/scripts/main.js',
-                    out            : 'dist/scripts/main.js'
+                    out            : 'dist/scripts/main.js',
+                    paths: {
+                        'pixi': "../../app/bower_components/pixi/bin/pixi.dev"
+                    }
                 }
             }
         }

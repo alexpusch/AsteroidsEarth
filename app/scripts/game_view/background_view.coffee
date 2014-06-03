@@ -19,6 +19,13 @@ define ['view'], (View) ->
 
       graphics
 
+    onAppearance: ->
+      @sound = createjs.Sound.play "background"
+      window.sound = @sound
+
+    onDestroy: ->
+      @sound.stop()
+
     _getRandomPosition: ->
       x = _.random 0, @stage.getWidth()
       y = _.random 0, @stage.getHeight()
