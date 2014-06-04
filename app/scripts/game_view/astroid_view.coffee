@@ -1,4 +1,4 @@
-define ['conversions', 'view'], (Conversions, View)  ->
+define ['conversions', 'view', 'color_helpers'], (Conversions, View, ColorHelpers) ->
   class AstroidView extends View
     constructor: (container, camera, @astroid) ->
       super container, camera
@@ -6,7 +6,7 @@ define ['conversions', 'view'], (Conversions, View)  ->
     createGraphics: ->
       graphics = new PIXI.Graphics()
 
-      graphics.beginFill(0xed8c00)
+      graphics.beginFill(@getColor())
       # graphics.lineStyle(0, 0xffd900, 1)
 
       graphics.drawCircle(0,0, @astroid.getRadius())
@@ -19,3 +19,16 @@ define ['conversions', 'view'], (Conversions, View)  ->
       pixiPosition = Conversions.B2DtoPIXI.toPoint vec2Position
       @graphics.position = pixiPosition
       @graphics.scale = new PIXI.Point @camera.getZoom() ,@camera.getZoom()
+
+    getColor: ->
+      density = @astroid.getDensity()
+
+      lowDensityColor = 0xed8c00
+      highDensityColor = 0x520000
+
+      min = 0.3
+      max = 1.5
+
+      t = 1 - (density - min)/(max - min)
+
+      ColorHelpers.colorAverage lowDensityColor, highDensityColor, t

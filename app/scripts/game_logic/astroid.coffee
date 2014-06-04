@@ -4,16 +4,16 @@ define ['entity'], (Entity) ->
       super 'astroid'
       @radius = options.radius
       @planet = options.planet
+      @density = options.density
       @forceWasApplied = false
 
     getEntityDef: ->
       bodyDef = new B2D.BodyDef
       bodyDef.type = B2D.Body.b2_dynamicBody
       bodyDef.position = new B2D.Vec2 0,0
-      bodyDef.bullet = true
       
       fixtureDef = new B2D.FixtureDef
-      fixtureDef.density = 0.3
+      fixtureDef.density = @density
       fixtureDef.friction = 0
       fixtureDef.shape = new B2D.CircleShape @radius
 
@@ -36,3 +36,6 @@ define ['entity'], (Entity) ->
 
     handleExitWorld: ->
       @destroy()
+
+    getDensity: ->
+      @body.GetFixtureList().GetDensity()

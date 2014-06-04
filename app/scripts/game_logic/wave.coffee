@@ -26,6 +26,7 @@ define ['events'], (Events)->
       options = 
           radius: astroidPlan.radius
           position: astroidPlan.position
+          density: astroidPlan.density
 
       astroid = window.EntityFactory.createAstroid options
 

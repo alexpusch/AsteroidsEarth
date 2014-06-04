@@ -1,4 +1,4 @@
-define ['typed_object', 'planet', 'wave', 'events'], (TypedObject, Planet, Wave, Events) ->
+define ['typed_object', 'planet', 'wave', 'events', 'math_helpers'], (TypedObject, Planet, Wave, Events, MathHelpers) ->
   class AstroidSpwaner extends TypedObject
     constructor: (options) ->
       super "astroidSpwaner"
@@ -9,11 +9,16 @@ define ['typed_object', 'planet', 'wave', 'events'], (TypedObject, Planet, Wave,
 
       @options = 
         sizeRange:
-          min: 4
-          max: 6
+          min: 3
+          max: 4
         timeOffsetRange:
           min: 600
           max: 2000
+        density:
+          min: 0.3
+          max: 1.5
+          step: 0.05
+          range: 0.1
 
     startSpwaning: ->
       @startNextWave(0)
@@ -41,7 +46,7 @@ define ['typed_object', 'planet', 'wave', 'events'], (TypedObject, Planet, Wave,
       @currentWaveCount = Math.floor(Math.pow((waveIndex + 1), 1.2))
       wavePlan = []
       for i in [0..@currentWaveCount]
-        wavePlan.push @_generageRandomAstroidPlan() 
+        wavePlan.push @_generageRandomAstroidPlan i
 
       wavePlan 
 
@@ -52,15 +57,20 @@ define ['typed_object', 'planet', 'wave', 'events'], (TypedObject, Planet, Wave,
       @currentWave.events.off "waveDestroyed", @waveDestroyedCallback
       @currentWave.destroy()
       
-    _generageRandomAstroidPlan: ->
-      radius = _.random @options.sizeRange.min, @options.sizeRange.max
+    _generageRandomAstroidPlan: (waveIndex) ->
+      radius = MathHelpers.random @options.sizeRange.min, @options.sizeRange.max
       position = @_getRandomPosition radius
-      offset = _.random @options.timeOffsetRange.min, @options.timeOffsetRange.max
-      
+      offset = MathHelpers.random @options.timeOffsetRange.min, @options.timeOffsetRange.max
+
+      densityMin = @options.density.min + @options.density.step * waveIndex
+      densityMax = Math.min(densityMin + @options.density.range, @options.density.max)
+
+      density = MathHelpers.random densityMin, densityMax
       astroidPlan = 
         radius: radius
         position: position
         offset: offset
+        density: density
 
     _getRandomPosition: (astroidRadius) ->
       side = _.random 3, 4
