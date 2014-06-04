@@ -13,3 +13,9 @@ define ->
         angle = angle + 360
 
       angle
+
+    @average: (a, b, t = 0.5) ->
+      a * t + b * (1 - t)
+
+    @random: (from, to) ->
+      Math.random() * (to - from) + from

@@ -1,4 +1,4 @@
-define ['conversions', 'view', 'box2d', 'cannon_temperature_view'], (Conversions, View, B2D, CannonTemperatureView) ->
+define ['conversions', 'view', 'box2d', 'cannon_temperature_view', 'math_helpers'], (Conversions, View, B2D, CannonTemperatureView, MathHelpers) ->
   class SpaceshipView extends View
     constructor: (container, camera, @spaceship) ->
       @cannonTemperatureView = new CannonTemperatureView container, camera, @spaceship
@@ -104,10 +104,7 @@ define ['conversions', 'view', 'box2d', 'cannon_temperature_view'], (Conversions
       r
 
     _getAveragePoint: (vertice1, vertice2, t) ->
-      new B2D.Vec2(@_linearAverage(vertice1.x, vertice2.x, t), @_linearAverage(vertice1.y, vertice2.y, t))
-
-    _linearAverage: (num1, num2, t) ->
-      num1 * t + num2 * (1 - t)
+      new B2D.Vec2(MathHelpers.average(vertice1.x, vertice2.x, t), MathHelpers.average(vertice1.y, vertice2.y, t))
 
     _createOutOfWorldIndicatorGraphics: ->
       graphics = new PIXI.Text "0",
