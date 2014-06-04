@@ -82,6 +82,7 @@ define ['entity_factory',
 
     endGame: ->
       @views.add "gameOverScreen", @createGameOverScreen()
+      @views.get("backgroundView").fadeAudioOut()
       @player.stopControling()
       @stopwatch.setMark("gameOver")
       @gameState = "gameOver"

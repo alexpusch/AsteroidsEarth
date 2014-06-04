@@ -8,9 +8,10 @@ define ['view'], (View) ->
           max: (5/8) * camera.getZoom()
         startPoints: 5
         starRatio: 0.4
+        musicFadeOutDuration: 1000
 
       super container, camera
-      
+
     createGraphics: ->
       graphics = new PIXI.Graphics()
       numberOfStart = 50
@@ -21,8 +22,27 @@ define ['view'], (View) ->
       graphics
 
     onAppearance: ->
-      @sound = createjs.Sound.play "background"
-      window.sound = @sound
+      if @sound
+        @sound.setVolume 1
+      else
+        @sound = createjs.Sound.play "background"
+
+    fadeAudioOut: ->
+      @stopwatch.setMark "startFadingAudioOut"
+      duration = @options.musicFadeOutDuration
+      fadeOutStep = =>
+        now = new Date()
+        ratio = @stopwatch.getTimeSinceMark("startFadingAudioOut") / duration
+
+        if ratio > 1
+          ratio = 1
+
+        @sound.setVolume(1 - ratio)
+
+        unless ratio == 1
+          requestAnimFrame fadeOutStep
+
+      fadeOutStep()
 
     onDestroy: ->
       @sound.stop()
