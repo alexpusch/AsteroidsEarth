@@ -1,7 +1,6 @@
 define ['view'], (View) ->
   class Background extends View
-    constructor: (stage, camera) ->
-      super stage, camera
+    constructor: (container, camera) ->
       @options = 
         numberOfStarts: 50
         starRadiusRange:
@@ -10,6 +9,8 @@ define ['view'], (View) ->
         startPoints: 5
         starRatio: 0.4
 
+      super container, camera
+      
     createGraphics: ->
       graphics = new PIXI.Graphics()
       numberOfStart = 50
@@ -27,8 +28,8 @@ define ['view'], (View) ->
       @sound.stop()
 
     _getRandomPosition: ->
-      x = _.random 0, @stage.getWidth()
-      y = _.random 0, @stage.getHeight()
+      x = _.random 0, @container.width
+      y = _.random 0, @container.height
 
       new PIXI.Point x,y
 

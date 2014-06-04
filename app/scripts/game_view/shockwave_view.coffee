@@ -1,7 +1,7 @@
 define ['view'], (View) ->
   class ShockwaveView extends View
-    constructor: (stage, camera, @shockWaveOrigin) ->
-      super stage, camera
+    constructor: (container, camera, @shockWaveOrigin) ->
+      super container, camera
       @radius = 0
       @options = 
         expensionRate: 1000

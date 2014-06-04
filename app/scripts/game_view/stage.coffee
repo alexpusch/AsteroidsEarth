@@ -12,11 +12,13 @@ define ->
 
       @pixleRatio = window.devicePixelRatio
       @container = new PIXI.DisplayObjectContainer()
+      @container.width = @width/@pixleRatio
+      @container.height = @height/@pixleRatio
       @container.pivot = new PIXI.Point 0.5, 0.5
       @container.scale = new PIXI.Point @pixleRatio, @pixleRatio
       @stage.addChild @container
 
-    getPixiStage: ->
+    getContainer: ->
       @container
 
     getPixiRenderer: ->
@@ -30,7 +32,7 @@ define ->
         @container.removeChild @container.children[0]
 
     getWidth: ->
-      @width / @pixleRatio
+      @container.width
 
     getHeight: ->
-      @height / @pixleRatio
+      @container.height

@@ -1,7 +1,7 @@
 define ['conversions', 'view'], (Conversions, View)  ->
   class AstroidView extends View
-    constructor: (stage, camera, @astroid) ->
-      super stage, camera
+    constructor: (container, camera, @astroid) ->
+      super container, camera
 
     createGraphics: ->
       graphics = new PIXI.Graphics()

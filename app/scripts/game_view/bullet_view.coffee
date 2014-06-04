@@ -1,7 +1,7 @@
 define ['conversions', 'view'], (Conversions, View)  ->
   class BulletView extends View
-    constructor: (stage, camera, @bullet) ->
-      super stage, camera
+    constructor: (container, camera, @bullet) ->
+      super container, camera
 
     createGraphics: ->
       graphics = new PIXI.Graphics()

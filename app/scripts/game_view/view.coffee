@@ -1,23 +1,26 @@
 define ['stopwatch'], (Stopwatch) ->
   class View
-    constructor: (@stage, @camera) ->
-      @pixiStage = @stage.getPixiStage()
+    constructor: (@container, @camera) ->
+      @container = @container
       @stopwatch = new Stopwatch()
+      @graphics = @createGraphics()
+
+      @addedToContainer = false
 
     render: ->
-      unless @graphics?
-        @graphics = @createGraphics()
-        @pixiStage.addChild(@graphics)
+      unless @addedToContainer
+        @addedToContainer = true
+        @container.addChild(@graphics)
         @onAppearance?()
       @updateGraphics?()
 
     destroy: ->
-      @pixiStage.removeChild @graphics
       @onDestroy?()
+      @container.removeChild @graphics
 
     getFrameTime: ->
       @stopwatch.getFrameTime()
 
     pushToTop: ->
-      @pixiStage.removeChild(@graphics)
-      @pixiStage.addChild(@graphics)
+      @container.removeChild(@graphics)
+      @container.addChild(@graphics)

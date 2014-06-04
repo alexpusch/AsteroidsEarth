@@ -1,8 +1,8 @@
 define ['conversions', 'view', 'box2d', 'cannon_temperature_view'], (Conversions, View, B2D, CannonTemperatureView) ->
   class SpaceshipView extends View
-    constructor: (stage, camera, @spaceship) ->
-      super stage, camera
-      @cannonTemperatureView = new CannonTemperatureView stage, camera, @spaceship
+    constructor: (container, camera, @spaceship) ->
+      @cannonTemperatureView = new CannonTemperatureView container, camera, @spaceship
+      super container, camera
 
     createGraphics: ->
       graphics = new PIXI.Graphics()
@@ -154,12 +154,12 @@ define ['conversions', 'view', 'box2d', 'cannon_temperature_view'], (Conversions
 
       if position.y < 0
         distance = -position.y
-      else if position.y > @stage.getHeight()
-        distance = position.y - @stage.getHeight()
+      else if position.y > @container.height
+        distance = position.y - @container.height
       if position.x < 0
         distance = -position.x
-      else if position.x > @stage.getWidth()
-        distance = position.x - @stage.getWidth()
+      else if position.x > @container.width
+        distance = position.x - @container.width
 
       Math.ceil distance
 
@@ -168,12 +168,12 @@ define ['conversions', 'view', 'box2d', 'cannon_temperature_view'], (Conversions
 
       if position.y < 0
         indicatorPosition.y = 10
-      else if position.y > @stage.getHeight()
-        indicatorPosition.y = @stage.getHeight() - 10
+      else if position.y > @container.height
+        indicatorPosition.y = @container.height - 10
       if position.x < 0
         indicatorPosition.x = 10
-      else if position.x > @stage.getWidth()
-        indicatorPosition.x = @stage.getWidth() - 10
+      else if position.x > @container.width
+        indicatorPosition.x = @container.width - 10
 
       indicatorPosition
 
@@ -184,11 +184,11 @@ define ['conversions', 'view', 'box2d', 'cannon_temperature_view'], (Conversions
 
       if pixiPosition.y < 0
         distanceMeterOffset = spaceshipBounds.width + 5
-      else if pixiPosition.y > @stage.getHeight()
+      else if pixiPosition.y > @container.height
         distanceMeterOffset = spaceshipBounds.width + 5
       if pixiPosition.x < 0
         distanceMeterOffset = spaceshipGraphicsWidth + 5 + @distanceMeterGraphics.width/2
-      else if pixiPosition.x > @stage.getWidth()
+      else if pixiPosition.x > @container.width
         distanceMeterOffset = -(spaceshipGraphicsWidth + 5 + @distanceMeterGraphics.width/2)
 
       distanceMeterPosition = spaceshipIndicatorPosition.clone()

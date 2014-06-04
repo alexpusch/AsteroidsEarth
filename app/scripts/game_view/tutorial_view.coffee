@@ -1,7 +1,7 @@
 define ['view', 'pixi_animator'], (View, Animator) ->
   class TutorialView extends View
-    constructor: (stage, camera, astroidSpwaner) ->
-      super stage, camera
+    constructor: (container, camera, astroidSpwaner) ->
+      super container, camera
 
       firstAstroidCallback = (astroid) =>
         astroidSpwaner.events.off "newAstroid", firstAstroidCallback  
@@ -42,15 +42,15 @@ define ['view', 'pixi_animator'], (View, Animator) ->
 
 
     updateGraphics: ->
-      @pushToTop()
+      # @pushToTop()
 
       if @astroidToFollow?
         astroidPoint = @camera.project @astroidToFollow.getPosition()
         @fireTutorialGraphics.position = astroidPoint
 
     _showMoveTutorial: ->     
-      x = @stage.getWidth() * 0.8
-      y = @stage.getHeight() * 0.2
+      x = @container.width * 0.8
+      y = @container.height * 0.2
       @moveTutorialGraphics.position.x = x
       @moveTutorialGraphics.position.y = y
 

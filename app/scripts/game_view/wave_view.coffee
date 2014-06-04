@@ -1,7 +1,7 @@
 define ['view', 'box2d', 'conversions', 'pixi_animator'], (View, B2D, Conversions, Animator) ->
   class WaveView extends View
-    constructor: (stage, camera, @astroidSpwaner) ->
-      super stage, camera
+    constructor: (container, camera, @astroidSpwaner) ->
+      super container, camera
       @animationDirection = 0
 
       @options =
@@ -9,11 +9,13 @@ define ['view', 'box2d', 'conversions', 'pixi_animator'], (View, B2D, Conversion
         hideDuration: 1000
         stayDuration: 2000
 
-      @astroidSpwaner.events.on "newWave", (waveIndex) =>
+      @newWaveHandler = (waveIndex) =>
         @graphics.setText("WAVE #{waveIndex + 1}")
         @graphics.alpha = 0
 
         @animate()
+
+      @astroidSpwaner.events.on "newWave", @newWaveHandler
           
     createGraphics: ->
       @graphics = new PIXI.Text "WAVE 1",
@@ -23,8 +25,8 @@ define ['view', 'box2d', 'conversions', 'pixi_animator'], (View, B2D, Conversion
       @graphics.alpha = 0
 
       @graphics.anchor = new PIXI.Point 0.5, 0.5
-      @graphics.x = @stage.getWidth()/2
-      @graphics.y = @stage.getHeight()/2
+      @graphics.x = @container.width/2
+      @graphics.y = @container.height/2
 
       @graphics
 
@@ -46,3 +48,5 @@ define ['view', 'box2d', 'conversions', 'pixi_animator'], (View, B2D, Conversion
       ]
 
 
+    onDestroy: ->
+      @astroidSpwaner.events.off "newWave", @newWaveHandler

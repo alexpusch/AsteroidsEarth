@@ -1,7 +1,7 @@
 define ['events', 'view', 'pixi_animator'], (Events, View, Animator) ->
   class GameOverScreen extends View
-    constructor: (stage, @score)->
-      super stage
+    constructor: (container, @score)->
+      super container
       @events = new Events
 
     createGraphics: ->
@@ -13,8 +13,8 @@ define ['events', 'view', 'pixi_animator'], (Events, View, Animator) ->
 
       gameOverText.anchor = new PIXI.Point 0.5,0.5
 
-      gameOverTextHeight = @stage.getHeight()/3 - gameOverText.height/2
-      gameOverText.position.x = @stage.getWidth()/2
+      gameOverTextHeight = @container.height/3 - gameOverText.height/2
+      gameOverText.position.x = @container.width/2
       gameOverText.position.y = gameOverTextHeight
 
 
@@ -26,7 +26,7 @@ define ['events', 'view', 'pixi_animator'], (Events, View, Animator) ->
       scoreText.anchor = new PIXI.Point 0.5,0.5
 
       scoreTextHeight = gameOverText.position.y + 10 + scoreText.height
-      scoreText.position.x = @stage.getWidth()/2
+      scoreText.position.x = @container.width/2
       scoreText.position.y = scoreTextHeight
 
       refreshTexture = PIXI.Texture.fromImage("images/refresh.png");
@@ -35,7 +35,7 @@ define ['events', 'view', 'pixi_animator'], (Events, View, Animator) ->
       refreshGraphics.width = 100
       refreshGraphics.height = 100
 
-      refreshGraphics.position.x = @stage.getWidth()/2
+      refreshGraphics.position.x = @container.width/2
       refreshGraphics.position.y = scoreText.position.y + refreshGraphics.height + 5
       refreshGraphics.anchor = new PIXI.Point 0.5,0.5
 

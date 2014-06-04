@@ -1,9 +1,7 @@
 define ['view'], (View) ->
   class CannonTemperatureView extends View
-    constructor: (stage, camera, @spaceship) ->
-      super stage, camera
-
-      @temperatureGraphicsOptions =
+    constructor: (container, camera, @spaceship) ->
+      @options =
         numberOfTicks : 40
         height : 20
         width : 200
@@ -12,6 +10,8 @@ define ['view'], (View) ->
         borderColor:
           nominal: 0xAAAAAA
           jammaed: 0xEE0000
+
+      super container, camera
 
     createGraphics: ->
       graphics = new PIXI.Graphics()
@@ -37,51 +37,51 @@ define ['view'], (View) ->
       @ticksContainer = new PIXI.Graphics()
       graphics.addChild @ticksContainer
 
-      graphics.position.x = @stage.getWidth()/2 - @temperatureGraphicsOptions.width/2
-      graphics.position.y = @stage.getHeight() - @temperatureGraphicsOptions.height - 30
+      graphics.position.x = @container.width/2 - @options.width/2
+      graphics.position.y = @container.height - @options.height - 30
       graphics
 
     _createBoderGraphics: ->
       graphics = new PIXI.Graphics()
-      @_drawBorderGraphics graphics, @temperatureGraphicsOptions.borderColor.nominal
+      @_drawBorderGraphics graphics, @options.borderColor.nominal
       graphics
 
     _drawBorderGraphics: (graphics, color) ->
-      graphics.lineStyle @temperatureGraphicsOptions.borderWidth, color, 0.5
-      graphics.drawRect 0,0, @temperatureGraphicsOptions.width, @temperatureGraphicsOptions.height
+      graphics.lineStyle @options.borderWidth, color, 0.5
+      graphics.drawRect 0,0, @options.width, @options.height
 
     _getBorderColor: ->
       if @spaceship.isCannonJammed()
-        @temperatureGraphicsOptions.borderColor.jammaed
+        @options.borderColor.jammaed
       else
-        @temperatureGraphicsOptions.borderColor.nominal
+        @options.borderColor.nominal
 
     _drawTicks: ->
       temperature = @spaceship.getCannonTemperature()
-      for i in [0..(@temperatureGraphicsOptions.numberOfTicks - 1)]
+      for i in [0..(@options.numberOfTicks - 1)]
         color = @_calculateTickColor i, temperature
-        tickWidth = (@temperatureGraphicsOptions.width - @temperatureGraphicsOptions.borderWidth*2)/@temperatureGraphicsOptions.numberOfTicks
-        @_drawTick i, color, tickWidth, @temperatureGraphicsOptions.height
+        tickWidth = (@options.width - @options.borderWidth*2)/@options.numberOfTicks
+        @_drawTick i, color, tickWidth, @options.height
 
     _drawTick: (i, color, width, height) ->
-      borderWidth = @temperatureGraphicsOptions.borderWidth
-      ticksPadding = @temperatureGraphicsOptions.ticksPadding
+      borderWidth = @options.borderWidth
+      ticksPadding = @options.ticksPadding
       tickFillHeight = height - borderWidth*2
 
       @ticksContainer.beginFill(color, 0.5)
-      @ticksContainer.lineStyle @temperatureGraphicsOptions.ticksPadding, 0xAAAAAA, 0.5
+      @ticksContainer.lineStyle @options.ticksPadding, 0xAAAAAA, 0.5
       @ticksContainer.drawRect(borderWidth + i*width, borderWidth, width, tickFillHeight)
       @ticksContainer.endFill()
 
     _calculateTickColor: (tickIndex, temperature) ->
-      tickTempDiff = 1/@temperatureGraphicsOptions.numberOfTicks
+      tickTempDiff = 1/@options.numberOfTicks
       
       if tickIndex * tickTempDiff > temperature
         return 0xffffff
 
       blue = 0
 
-      t = (tickIndex/@temperatureGraphicsOptions.numberOfTicks)
+      t = (tickIndex/@options.numberOfTicks)
       red = 255 * t
       green = 255 * (1 - t)
 

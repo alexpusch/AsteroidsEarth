@@ -1,7 +1,7 @@
 define ['events', 'view', 'math_helpers', 'pixi_animator'], (Events, View, MathHelpers, Animator) ->
   class StartScreen extends View
-    constructor: (stage) ->
-      super stage
+    constructor: (container) ->
+      super container
       @events = new Events()
     
     createGraphics: ->
@@ -13,8 +13,8 @@ define ['events', 'view', 'math_helpers', 'pixi_animator'], (Events, View, MathH
         font: "80pt DroidSans"
         align: "center"
 
-      startButton.position.x = @stage.getWidth()/2 
-      startButton.position.y = @stage.getHeight()/2
+      startButton.position.x = @container.width/2 
+      startButton.position.y = @container.height/2
       startButton.anchor = new PIXI.Point 0.5, 0.5
       startButton.buttonMode = true
       startButton.interactive = true
@@ -44,7 +44,7 @@ define ['events', 'view', 'math_helpers', 'pixi_animator'], (Events, View, MathH
       gridUnit = cellSize + padding
 
       x = gridUnit
-      y = @stage.getHeight()/2 - gridUnit * 3
+      y = @container.height/2 - gridUnit * 3
       
       @_drawMovmentTutorial graphics, x, y, cellSize, padding
       @_drawCannonTutorial graphics, x, y, cellSize, padding

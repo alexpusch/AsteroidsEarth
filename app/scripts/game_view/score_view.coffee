@@ -1,7 +1,7 @@
 define ['view'], (View) ->
   class ScoreView extends View
-    constructor: (stage, @score) ->
-      super stage
+    constructor: (container, @score) ->
+      super container
 
     createGraphics: ->
       scoreText = new PIXI.Text(@score.getScore())

@@ -1,7 +1,7 @@
 define ['conversions', 'view', 'earth_graphics_points'], (Conversions, View, earthGraphicsPoints)  ->
   class PlanetView extends View
-    constructor: (stage, camera, @planet) ->
-      super stage, camera
+    constructor: (container, camera, @planet) ->
+      super container, camera
 
     createGraphics: ->
       graphics = new PIXI.Graphics()
