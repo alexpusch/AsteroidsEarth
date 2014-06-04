@@ -67,7 +67,6 @@ define ['entity_factory',
       @mainLoop()
 
     startGame: ->
-      @views.add "tutorialView", @createTutorialView(), 1
       @gameState = "gameOn"
       @player.control @spaceship
       @astroidSpwaner.startSpwaning()
@@ -162,6 +161,7 @@ define ['entity_factory',
     createStartScreen: ->
       startScreen = new StartScreenView @stage.getContainer()
       startScreen.events.on "gameStartClicked", =>
+        @views.add "tutorialView", @createTutorialView(), 1
         @views.get("startScreen").fadeOut().then =>
           @views.remove "startScreen"
         @startGame()
