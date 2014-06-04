@@ -48,7 +48,7 @@ define ['entity_factory',
           ViewsCollection) ->
 
   class Game
-    constructor: (@stage) ->
+   constructor: (@stage) ->
       @gameState = "startScreen"
       @viewportWidth = @stage.getWidth()
       @viewportHeight = @stage.getHeight()
@@ -59,12 +59,18 @@ define ['entity_factory',
       @zoom = @pixleToUnitRatio
       @cameraShiftDivider = 10
       @stopwatch = new Stopwatch()
-      [@worldWidth, @worldHeight] = @_calculateWorldDimenstion()
+      [@worldWidth, @worldHeight] = @calculateWorldDimenstion()
 
     start: ->
       @views.add "startScreen", @createStartScreen(), 1
       @createGameObjects()
       @mainLoop()
+
+    startGame: ->
+      @views.add "tutorialView", @createTutorialView(), 1
+      @gameState = "gameOn"
+      @player.control @spaceship
+      @astroidSpwaner.startSpwaning()
 
     reset: ->
       @world.destroy()
@@ -74,6 +80,12 @@ define ['entity_factory',
 
       @stage.clear()
       delete @world
+
+    endGame: ->
+      @views.add "gameOverScreen", @createGameOverScreen()
+      @player.stopControling()
+      @stopwatch.setMark("gameOver")
+      @gameState = "gameOver"
 
     createGameObjects: ->
       @world = @createWorld()
@@ -144,6 +156,9 @@ define ['entity_factory',
 
       score
 
+    createWaveView: ->
+      new WaveView @stage.getContainer(), @camera, @astroidSpwaner
+
     createStartScreen: ->
       startScreen = new StartScreenView @stage.getContainer()
       startScreen.events.on "gameStartClicked", =>
@@ -166,6 +181,9 @@ define ['entity_factory',
 
       gameOverScreen
 
+    createBackgroundView: ->
+      new BackgroundView @stage.getContainer(), @camera
+
     createTutorialView: ->
       new TutorialView @stage.getContainer(), @camera, @astroidSpwaner
 
@@ -176,11 +194,28 @@ define ['entity_factory',
       worldView.registerView('planet', PlanetView)
       worldView.registerView('score', ScoreView)
 
-    startGame: ->
-      @views.add "tutorialView", @createTutorialView(), 1
-      @gameState = "gameOn"
-      @player.control @spaceship
-      @astroidSpwaner.startSpwaning()
+    showGameOverEffect: (contactPoint) ->
+      @world.startShockWave contactPoint
+      CameraShaker shaker = new CameraShaker(@camera)
+      shaker.shake()
+      @views.add "shockwaveView", new ShockwaveView @stage.getContainer(), @camera, contactPoint     
+
+    calculateWorldDimenstion: ->
+      worldWidth = @viewportWidth/@pixleToUnitRatio
+      worldHeight = @viewportHeight/@pixleToUnitRatio
+
+      originalWidth = worldWidth
+      originalHeight = worldHeight
+
+      # when camera shifts it adds some more space for the ship to get into
+      # We need to add this new space to world width/height
+      for i in [0..5]
+        paralexX = worldWidth/@cameraShiftDivider
+        paralexY = worldHeight/@cameraShiftDivider
+        worldWidth = originalWidth + paralexX
+        worldHeight = originalHeight + paralexY
+
+      [worldWidth, worldHeight]
 
     mainLoop: ->
       if @gameState != "gameOver" or (@gameState == "gameOver" and @stopwatch.getTimeSinceMark("gameOver") < 3000)
@@ -202,38 +237,5 @@ define ['entity_factory',
       spaceshipPosition = @spaceship.getPosition()
       @camera.lookAt((-spaceshipPosition.x/@cameraShiftDivider), (-spaceshipPosition.y/@cameraShiftDivider))
 
-    endGame: ->
-      @views.add "gameOverScreen", @createGameOverScreen()
-      @player.stopControling()
-      @stopwatch.setMark("gameOver")
-      @gameState = "gameOver"
 
-    showGameOverEffect: (contactPoint) ->
-      @world.startShockWave contactPoint
-      CameraShaker shaker = new CameraShaker(@camera)
-      shaker.shake()
-      @views.add "shockwaveView", new ShockwaveView @stage.getContainer(), @camera, contactPoint    
-
-    createBackgroundView: ->
-      new BackgroundView @stage.getContainer(), @camera
-
-    createWaveView: ->
-      new WaveView @stage.getContainer(), @camera, @astroidSpwaner
-
-    _calculateWorldDimenstion: ->
-      worldWidth = @viewportWidth/@pixleToUnitRatio
-      worldHeight = @viewportHeight/@pixleToUnitRatio
-
-      originalWidth = worldWidth
-      originalHeight = worldHeight
-
-      # when camera shifts it adds some more space for the ship to get into
-      # We need to add this new space to world width/height
-      for i in [0..5]
-        paralexX = worldWidth/@cameraShiftDivider
-        paralexY = worldHeight/@cameraShiftDivider
-        worldWidth = originalWidth + paralexX
-        worldHeight = originalHeight + paralexY
-
-      [worldWidth, worldHeight]
 
