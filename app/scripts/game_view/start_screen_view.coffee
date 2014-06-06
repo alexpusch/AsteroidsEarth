@@ -2,7 +2,6 @@ define ['events', 'view', 'math_helpers', 'pixi_animator'], (Events, View, MathH
   class StartScreen extends View
     constructor: (container) ->
       super container
-      @events = new Events()
     
     createGraphics: ->
       graphics = new PIXI.Graphics()

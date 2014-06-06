@@ -2,7 +2,6 @@ define ['events', 'view', 'pixi_animator'], (Events, View, Animator) ->
   class GameOverScreen extends View
     constructor: (container, @score)->
       super container
-      @events = new Events
 
     createGraphics: ->
       graphics = new PIXI.Graphics()

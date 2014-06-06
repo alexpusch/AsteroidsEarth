@@ -1,4 +1,4 @@
-define ['stopwatch'], (Stopwatch) ->
+define ['stopwatch', 'events'], (Stopwatch, Events) ->
   class View
     constructor: (@container, @camera) ->
       @container = @container
@@ -6,6 +6,7 @@ define ['stopwatch'], (Stopwatch) ->
       @graphics = @createGraphics()
 
       @addedToContainer = false
+      @events = new Events
 
     render: ->
       unless @addedToContainer

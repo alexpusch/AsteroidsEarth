@@ -22,7 +22,7 @@ define ['events'], (Events) ->
         @events.off 'name', @callback
         @events.trigger 'name'
 
-        expect(@callback).toHaveBeenCalled()
+        expect(@callback).not.toHaveBeenCalled()
 
       it 'works fine if no callback was registerd', ->
         test = =>
