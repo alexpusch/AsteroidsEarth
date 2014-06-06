@@ -1,4 +1,4 @@
-define ['box2d', 'events', 'stopwatch'], (B2D, Events, Stopwatch) ->
+define ['box2d', 'events', 'stopwatch', 'astroid', 'planet', 'spaceship', 'powerup'], (B2D, Events, Stopwatch, Astroid, Planet, Spaceship, Powerup) ->
   
   class WorldContactListener
     constructor: (@worldBody) ->
@@ -45,9 +45,7 @@ define ['box2d', 'events', 'stopwatch'], (B2D, Events, Stopwatch) ->
       manifold = contact.GetWorldManifold worldManifold
       contactPoint = worldManifold.m_points[0]
 
-      if (entityA.type == "planet" and entityB.type == "astroid") or
-         (entityA.type == "astroid" and entityB.type == "planet")
-        @events.trigger "astroidWorldCollistion", contactPoint
+      @events.trigger "collision", entityA, entityB, contactPoint
 
   class World
     constructor: (options)->
@@ -60,10 +58,11 @@ define ['box2d', 'events', 'stopwatch'], (B2D, Events, Stopwatch) ->
 
       @worldBody = @_createWorldBody()
 
-      worldContactListener = new WorldContactListener @worldBody
+      worldContactListener = new WorldContactListener @worldBody    
 
-      worldContactListener.events.on "astroidWorldCollistion", (contact) =>
-        @events.trigger "astroidWorldCollistion", contact
+      worldContactListener.events.on "collision", (entityA, entityB, contactPoint) =>
+        entityA.handleCollision? entityB, contactPoint
+        entityB.handleCollision? entityA, contactPoint
 
       worldContactListener.events.on "entityEnter", (entity) ->
         entity.handleEnterWorld()

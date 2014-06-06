@@ -1,4 +1,4 @@
-define ['entity'], (Entity) ->
+define ['entity', 'astroid'], (Entity, Astroid) ->
   class Planet extends Entity
     constructor: (options) ->
       super 'planet'
@@ -19,3 +19,7 @@ define ['entity'], (Entity) ->
 
     getRadius: ->
       @radius
+
+    handleCollision: (collidingEnity, contactPoint) ->
+      if collidingEnity instanceof Astroid
+        @events.trigger "worldDistruction", contactPoint

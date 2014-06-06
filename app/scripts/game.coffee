@@ -115,17 +115,16 @@ define ['entity_factory',
           width: @worldWidth
           height: @worldHeight
           
-      world.events.on "astroidWorldCollistion", (contactPoint) =>
-        unless @gameState == "gameOver"
-          @showGameOverEffect contactPoint
-          @endGame()
-          console.log "game over"
-
       world
 
     createPlanet: ->
       planet = window.EntityFactory.createPlanet()
       planet.setPosition(new B2D.Vec2(0, 0))
+      planet.events.on "worldDistruction",  (contactPoint) =>
+        unless @gameState == "gameOver"
+          @showGameOverEffect contactPoint
+          @endGame()
+          console.log "game over"
 
       planet
 
