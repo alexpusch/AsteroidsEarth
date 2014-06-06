@@ -94,7 +94,7 @@ define ['box2d', 'events', 'stopwatch', 'astroid', 'planet', 'spaceship', 'power
 
     startShockWave: (position) ->
       @shockWavePosition = position
-      shokwaveMagnitude = 300
+      shokwaveMagnitude = 600
 
       for entity in @entities
         entityPosition = entity.getPosition()
