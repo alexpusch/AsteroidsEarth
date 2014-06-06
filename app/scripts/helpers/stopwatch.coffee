@@ -1,5 +1,5 @@
 define ->
-  class FpsKeeper
+  class Stopwatch
     constructor: ->
       @marks = {}
 

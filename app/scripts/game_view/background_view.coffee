@@ -22,10 +22,12 @@ define ['view'], (View) ->
       graphics
 
     onAppearance: ->
-      if @sound
+      if @sound?
         @sound.setVolume 1
       else
-        @sound = createjs.Sound.play "background"
+        @sound = createjs.Sound.play "background",
+          loop: -1
+          volume: 1
 
     fadeAudioOut: ->
       @stopwatch.setMark "startFadingAudioOut"

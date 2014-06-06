@@ -20,4 +20,5 @@ define ['conversions', 'view'], (Conversions, View)  ->
       @graphics.scale = new PIXI.Point @camera.getZoom() ,@camera.getZoom()
 
     onAppearance: ->
-      createjs.Sound.play "sound"
+      createjs.Sound.play "shoot",
+        volume: 0.1

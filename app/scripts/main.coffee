@@ -54,7 +54,7 @@ require  ['stage', 'game'], (Stage, Game) ->
     createjs.Sound.registerPlugins([createjs.CocoonJSAudioPlugin]);
     audioAssets = [
         src: "shoot.ogg"
-        id: "sound"
+        id: "shoot"
       ,
         src: "explosion.ogg"
         id: "explosion"

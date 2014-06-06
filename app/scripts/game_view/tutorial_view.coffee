@@ -87,7 +87,6 @@ define ['view', 'pixi_animator'], (View, Animator) ->
       tapAnimation = ->
         async.series
           tap: (done)->
-            console.log "tap"
             fingerGraphics.position.x = x - 5
             fingerGraphics.position.y = y - 5
             fingerGraphics.scale.x = 0.1
@@ -96,7 +95,6 @@ define ['view', 'pixi_animator'], (View, Animator) ->
               done()
             , tapSequance[taps]
           hover: (done) ->
-            console.log "hover"
             fingerGraphics.position.x = x
             fingerGraphics.position.y = y
             fingerGraphics.scale.x = 0.11

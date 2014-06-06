@@ -9,8 +9,9 @@ define ['view'], (View) ->
         z: z
 
     remove: (name) ->
-      @views[name].view.destroy()
-      delete @views[name]
+      if @views[name]?
+        @views[name].view.destroy()
+        delete @views[name]
 
     get: (name) ->
       @views[name].view

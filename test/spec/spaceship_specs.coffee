@@ -138,14 +138,3 @@ define ['box2d', 'spaceship', 'math_helpers'], (B2D, Spaceship, MathHelpers)->
 
           expect(@spaceship.thrusters.main).toBe "off"
 
-      describe "cannon jammed", ->
-        beforeEach ->
-          @spaceship.cannonJammed = true
-          @spaceship.cannonTemperature = 1
-
-        it "unjamms the cannon when it cools down completly", ->
-          @spaceship.update(1) for i in [0..((1/@cannonCooldownRate)+1)]
-
-          expect(@spaceship.isCannonJammed()).toBeFalsy()
-
-        xit "cools the cannon faster", ->
