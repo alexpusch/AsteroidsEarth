@@ -11,9 +11,11 @@ define ['typed_object', 'planet', 'wave', 'events', 'math_helpers'], (TypedObjec
         sizeRange:
           min: 3
           max: 4
-        timeOffsetRange:
-          min: 600
-          max: 2000
+        timeOffset:
+          min: 800
+          max: 3000
+          range: 1000
+          step: 200
         density:
           min: 0.3
           max: 1.5
@@ -43,7 +45,7 @@ define ['typed_object', 'planet', 'wave', 'events', 'math_helpers'], (TypedObjec
       @currentWave.start()
 
     generageWavePlan: (waveIndex)->
-      @currentWaveCount = Math.floor(Math.pow((waveIndex + 1), 1.2))
+      @currentWaveCount = 3 + Math.floor(Math.pow((waveIndex + 1), 1.2))
       wavePlan = []
       for i in [0..@currentWaveCount]
         wavePlan.push @_generageRandomAstroidPlan i
@@ -60,12 +62,15 @@ define ['typed_object', 'planet', 'wave', 'events', 'math_helpers'], (TypedObjec
     _generageRandomAstroidPlan: (waveIndex) ->
       radius = MathHelpers.random @options.sizeRange.min, @options.sizeRange.max
       position = @_getRandomPosition radius
-      offset = MathHelpers.random @options.timeOffsetRange.min, @options.timeOffsetRange.max
 
       densityMin = @options.density.min + @options.density.step * waveIndex
       densityMax = Math.min(densityMin + @options.density.range, @options.density.max)
-
       density = MathHelpers.random densityMin, densityMax
+
+      offsetMax = @options.timeOffset.max - @options.timeOffset.step * waveIndex
+      offsetMin = Math.max(offsetMax - @options.timeOffset.range, @options.timeOffset.min)
+      offset = MathHelpers.random offsetMin, offsetMax
+
       astroidPlan = 
         radius: radius
         position: position
