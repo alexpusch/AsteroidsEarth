@@ -75,12 +75,11 @@ define ['entity_factory',
       @player.control @spaceship
       @astroidSpwaner.startSpwaning()
       @powerupSpawner.startSpwaning()
+
     reset: ->
       @world.destroy()
       @player.destroy()
       @spaceship.destroy()
-      @astroidSpwaner.destroy()
-      @powerupSpawner.destroy()
       @stage.clear()
       delete @world
 
@@ -89,6 +88,8 @@ define ['entity_factory',
       @views.get("backgroundView").fadeAudioOut()
       @player.stopControling()
       @stopwatch.setMark("gameOver")
+      @powerupSpawner.destroy()
+      @astroidSpwaner.destroy()
       @gameState = "gameOver"
 
     createGameObjects: ->
@@ -203,7 +204,7 @@ define ['entity_factory',
       worldView.registerView('astroid', AstroidView)
       worldView.registerView('planet', PlanetView)
       worldView.registerView('score', ScoreView)
-      worldView.registerView('speedPowerup', SpeedPowerupView)
+      worldView.registerView('speedPowerup', SpeedPowerupView, -1)
 
     showGameOverEffect: (contactPoint) ->
       @world.startShockWave contactPoint
