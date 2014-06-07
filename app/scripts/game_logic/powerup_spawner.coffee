@@ -5,8 +5,8 @@ define ['box2d', 'math_helpers'], (B2D, MathHelpers) ->
 
       @config =
         appearance:
-          min: 10000
-          max: 20000
+          min: 15 * 1000
+          max: 25 * 1000
 
     startSpwaning: ->
       @_spawnNext()
@@ -24,9 +24,12 @@ define ['box2d', 'math_helpers'], (B2D, MathHelpers) ->
 
     _spawnPowerup: ->
       powerup = window.EntityFactory.createSpeedPowerup()
-      powerup.setPosition @_getRandomPosition()
+      powerup.setPosition new B2D.Vec2 0, 0
+      powerup.goToDirection @_getRandomAngle()
 
-
+    _getRandomAngle: ->
+      MathHelpers.random 0, 2 * Math.PI
+      
     _getRandomPosition: ->
       o = 10
       x = MathHelpers.random(-@width/2 + o, @width/2 - o)

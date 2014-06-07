@@ -5,10 +5,16 @@ define ['view', 'conversions', 'pixi_animator'], (View, Conversions, Animator) -
 
     createGraphics: ->
       graphics = new PIXI.Graphics()
-      graphics.beginFill 0x1133ee
-      graphics.drawCircle 0,0, @powerup.getRadius()
-      graphics.endFill()
+      
+      speedTexture = PIXI.Texture.fromImage("images/speed.png");
+      speedGraphics = new PIXI.Sprite(speedTexture);
+      speedGraphics.width = @powerup.getRadius() * 2 
+      speedGraphics.height = @powerup.getRadius() * 2
 
+      speedGraphics.position.x = -@powerup.getRadius()
+      speedGraphics.position.y = -@powerup.getRadius()
+
+      graphics.addChild speedGraphics
       graphics
 
     updateGraphics: ->
@@ -18,7 +24,25 @@ define ['view', 'conversions', 'pixi_animator'], (View, Conversions, Animator) -
       @graphics.scale = new PIXI.Point @camera.getZoom() ,@camera.getZoom()
 
     onDestroy: ->
-      new Animator(@graphics).animate [
+      text = new PIXI.Text "+ SPEED",
+        fill: "white"
+        font: "20pt DroidSans"
+        align: "center"
+      text.anchor = new PIXI.Point 0.5,0.5
+      text.position = @graphics.position
+      @container.addChild text
+
+      promise1 = new Animator(text).animate [
         type: 'fadeOut'
         duration: 500
       ]
+
+      promise1.then =>
+        @container.removeChild text
+
+      promise2 = new Animator(@graphics).animate [
+        type: 'fadeOut'
+        duration: 500
+      ]
+
+      Promise.all [promise1, promise2]

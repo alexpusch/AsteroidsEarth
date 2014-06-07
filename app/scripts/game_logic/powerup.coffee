@@ -1,10 +1,13 @@
-define ['entity', 'spaceship', 'collision_helpers'], (Entity, Spaceship, CollisionHelpers) ->
+define ['entity', 'spaceship','planet', 'collision_helpers', 'vector_helpers'], (Entity, Spaceship, Planet, CollisionHelpers, VectorHelpers) ->
   class Powerup extends Entity
     @categoryBits: CollisionHelpers.getAviliableCategoryBit()
 
     constructor: (powerupType) ->
       super powerupType
       @applied = false
+      
+      @options = 
+        radius: 1
 
     handleCollision: (entity, contactPoint) ->
       unless @applied
@@ -13,4 +16,30 @@ define ['entity', 'spaceship', 'collision_helpers'], (Entity, Spaceship, Collisi
           @destroy()
 
     shouldPassThrough: (entity) ->
-      entity instanceof Spaceship
+      entity instanceof Spaceship or
+      entity instanceof Planet
+
+    handleExitWorld: ->
+      @destroy()
+
+    goToDirection: (direction) ->
+      force = VectorHelpers.createDirectionVector direction
+      force.Multiply 70
+
+      @body.ApplyImpulse force, new B2D.Vec2(0,0)
+
+    getRadius: ->
+      @options.radius
+
+    getEntityDef: ->
+      bodyDef = new B2D.BodyDef
+      bodyDef.type = B2D.Body.b2_dynamicBody
+      bodyDef.position = new B2D.Vec2 0,0
+      
+      fixtureDef = new B2D.FixtureDef
+      fixtureDef.density = 10
+      fixtureDef.friction = 0.5
+      bodyDef.linearDamping = 0.1
+      fixtureDef.shape = new B2D.CircleShape @options.radius
+      bodyDef: bodyDef
+      fixtureDef: fixtureDef
