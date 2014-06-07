@@ -20,8 +20,12 @@ define ['box2d', 'events', 'stopwatch', 'astroid', 'planet', 'spaceship', 'power
       if( otherBody = @_findWorldBody(bodyA, bodyB))
         @events.trigger "entityExit", otherBody.GetUserData()
 
-    PreSolve: ->
-      # console.log "presolve"
+    PreSolve: (contact) ->
+      entityA = contact.GetFixtureA().GetBody().GetUserData()
+      entityB = contact.GetFixtureB().GetBody().GetUserData()
+
+      if (entityA.shouldPassThrough? entityB) or (entityB.shouldPassThrough? entityA)
+        contact.SetEnabled false  
 
     PostSolve: ->
       # console.log "PostSolve"

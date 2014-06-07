@@ -21,7 +21,9 @@ define ['entity_factory',
          'camera_shaker',
          'stopwatch',
          'tutorial_view',
-         'views_collection'], (
+         'views_collection',
+         'speed_powerup_view',
+         'powerup_spawner'], (
           EntityFactory, 
           World, 
           WorldView,
@@ -45,7 +47,9 @@ define ['entity_factory',
           CameraShaker,
           Stopwatch,
           TutorialView,
-          ViewsCollection) ->
+          ViewsCollection,
+          SpeedPowerupView,
+          PowerupSpawner) ->
 
   class Game
    constructor: (@stage) ->
@@ -70,13 +74,13 @@ define ['entity_factory',
       @gameState = "gameOn"
       @player.control @spaceship
       @astroidSpwaner.startSpwaning()
-
+      @powerupSpawner.startSpwaning()
     reset: ->
       @world.destroy()
       @player.destroy()
       @spaceship.destroy()
       @astroidSpwaner.destroy()
-
+      @powerupSpawner.destroy()
       @stage.clear()
       delete @world
 
@@ -105,7 +109,8 @@ define ['entity_factory',
       @views.add "worldView", @createWorldView()
       @player = new Player @camera, @world
       @score = @createScore()
-      
+      @powerupSpawner = @createPowerupSpawner()
+
       @views.add "waveView", @createWaveView(), 1
       @views.add "backgroundView", @createBackgroundView(), -1
 
@@ -133,6 +138,11 @@ define ['entity_factory',
         width: @worldWidth
         height: @worldHeight
         planet: @planet
+
+    createPowerupSpawner: ->
+      new PowerupSpawner
+        width: @worldWidth
+        height: @worldHeight
 
     createCamera: ->
       @camera = new Camera @stage.getWidth(), @stage.getHeight()
@@ -193,6 +203,7 @@ define ['entity_factory',
       worldView.registerView('astroid', AstroidView)
       worldView.registerView('planet', PlanetView)
       worldView.registerView('score', ScoreView)
+      worldView.registerView('speedPowerup', SpeedPowerupView)
 
     showGameOverEffect: (contactPoint) ->
       @world.startShockWave contactPoint

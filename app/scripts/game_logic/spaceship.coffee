@@ -128,6 +128,9 @@ define ['box2d', 'entity', 'vector_helpers', 'math_helpers', 'cannon'], (B2D, En
     isSuperCannon: ->
       not @cannon.canJam
 
+    addSpeed: (amount) ->
+      @speed += amount
+
     _autoPilot: ->
       angle = @_calculateAngleTwardsTarget()
       

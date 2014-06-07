@@ -1,4 +1,4 @@
-define ['world', 'spaceship', 'bullet', 'astroid', 'planet'], (World, Spaceship, Bullet, Astroid, Planet)->
+define ['world', 'spaceship', 'bullet', 'astroid', 'planet', 'speed_powerup'], (World, Spaceship, Bullet, Astroid, Planet, SpeedPowerup)->
   class EntityFactory
     constructor: (@world) ->
 
@@ -29,7 +29,10 @@ define ['world', 'spaceship', 'bullet', 'astroid', 'planet'], (World, Spaceship,
       
       @planet
 
-    _createEntity: (entityType, options) ->
+    createSpeedPowerup: ->
+      @_createEntity SpeedPowerup
+
+    _createEntity: (entityType, options = {}) ->
       entity = new entityType options
       @world.registerEntity entity
 

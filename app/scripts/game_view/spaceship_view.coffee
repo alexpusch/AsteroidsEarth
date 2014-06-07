@@ -25,6 +25,8 @@ define ['conversions', 'view', 'box2d', 'cannon_temperature_view', 'math_helpers
       else
         @_updateInWorldGraphics()
 
+      @pushToTop()
+
     _createSpaceshipGraphics: ->
       graphics = new PIXI.Graphics()
       @_drawSpaceshipGraphics graphics      

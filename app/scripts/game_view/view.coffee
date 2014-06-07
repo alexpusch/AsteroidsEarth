@@ -16,8 +16,12 @@ define ['stopwatch', 'events'], (Stopwatch, Events) ->
       @updateGraphics?()
 
     destroy: ->
-      @onDestroy?()
-      @container.removeChild @graphics
+      maybePromise = @onDestroy?()
+      if maybePromise instanceof Promise
+        maybePromise.then =>
+          @container.removeChild @graphics
+      else
+        @container.removeChild @graphics
 
     getFrameTime: ->
       @stopwatch.getFrameTime()
