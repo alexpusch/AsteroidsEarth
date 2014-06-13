@@ -23,7 +23,8 @@ define ['entity_factory',
          'tutorial_view',
          'views_collection',
          'speed_powerup_view',
-         'powerup_spawner'], (
+         'powerup_spawner',
+         'bullet_mass_powerup_view'], (
           EntityFactory, 
           World, 
           WorldView,
@@ -49,7 +50,8 @@ define ['entity_factory',
           TutorialView,
           ViewsCollection,
           SpeedPowerupView,
-          PowerupSpawner) ->
+          PowerupSpawner,
+          BulletMassPowerupView) ->
 
   class Game
    constructor: (@stage) ->
@@ -205,6 +207,7 @@ define ['entity_factory',
       worldView.registerView('planet', PlanetView)
       worldView.registerView('score', ScoreView)
       worldView.registerView('speedPowerup', SpeedPowerupView, -1)
+      worldView.registerView('bulletMassPowerup', BulletMassPowerupView, -1)
 
     showGameOverEffect: (contactPoint) ->
       @world.startShockWave contactPoint

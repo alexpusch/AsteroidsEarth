@@ -1,10 +1,10 @@
-define ['world', 'spaceship', 'bullet', 'astroid', 'planet', 'speed_powerup'], (World, Spaceship, Bullet, Astroid, Planet, SpeedPowerup)->
+define ['world', 'spaceship', 'bullet', 'astroid', 'planet', 'speed_powerup', 'bullet_mass_powerup'], (World, Spaceship, Bullet, Astroid, Planet, SpeedPowerup, BulletMassPowerup)->
   class EntityFactory
     constructor: (@world) ->
 
     createSpaceship: () ->
       @_createEntity Spaceship,
-        speed: 150
+        speed: 120
         angularSpeed: 100
         width: 2
         length: 3
@@ -13,10 +13,12 @@ define ['world', 'spaceship', 'bullet', 'astroid', 'planet', 'speed_powerup'], (
         angularDamping: 5
         linearDamping: 1.3
 
-    createBullet: ->
-      @_createEntity Bullet, 
+    createBullet: (options = {}) ->
+      _.defaults options, 
         radius: 0.3
         density: 7
+
+      @_createEntity Bullet, options
 
     createAstroid: (options = {}) ->
       options.planet = @planet
@@ -31,6 +33,9 @@ define ['world', 'spaceship', 'bullet', 'astroid', 'planet', 'speed_powerup'], (
 
     createSpeedPowerup: ->
       @_createEntity SpeedPowerup
+
+    createBulletMassPowerup: ->
+      @_createEntity BulletMassPowerup
 
     _createEntity: (entityType, options = {}) ->
       entity = new entityType options

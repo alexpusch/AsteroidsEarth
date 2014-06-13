@@ -13,7 +13,7 @@ define ['vector_helpers', 'box2d'], (VectorHelpers, B2D) ->
       @cannonCooldownRate = options.cannonCooldownRate
       @cannonTemperature = 0  
       @bulletSpeed = options.bulletSpeed
-
+      @bulletDensity = 7
       @speed = new B2D.Vec2 0, 0
       @position = new B2D.Vec2 0, 0
       @angle = 0
@@ -68,6 +68,9 @@ define ['vector_helpers', 'box2d'], (VectorHelpers, B2D) ->
     getCannonTemperature: ->
       @cannonTemperature
 
+    addBulletDensity: (amount) ->
+      @bulletDensity += amount
+      
     destroy: ->
       @turnCannonOff()
 
@@ -80,7 +83,8 @@ define ['vector_helpers', 'box2d'], (VectorHelpers, B2D) ->
       bulletSpeed = @_getDirectionVector()
       bulletSpeed.Multiply(@bulletSpeed)
       bulletSpeed.Add(cannonSpeed)
-      bullet = EntityFactory.createBullet()
+      bullet = EntityFactory.createBullet
+        density: @bulletDensity
       bullet.setAngle @angle
       bullet.setPosition transformCannonOffest
       bullet.setSpeed(bulletSpeed)
