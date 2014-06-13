@@ -5,8 +5,14 @@ define ['box2d', 'math_helpers'], (B2D, MathHelpers) ->
 
       @config =
         appearance:
-          min: 15 * 1000
-          max: 25 * 1000
+          min: 20 * 1000
+          max: 30 * 1000
+
+      @powerups = 
+        'speed': ->
+          window.EntityFactory.createSpeedPowerup()
+        'bullet_mass': ->
+          window.EntityFactory.createBulletMassPowerup()
 
     startSpwaning: ->
       @_spawnNext()
@@ -23,7 +29,7 @@ define ['box2d', 'math_helpers'], (B2D, MathHelpers) ->
       , nextSpawn
 
     _spawnPowerup: ->
-      powerup = window.EntityFactory.createSpeedPowerup()
+      powerup = @_getRandomPowerup()
       powerup.setPosition new B2D.Vec2 0, 0
       powerup.goToDirection @_getRandomAngle()
 
@@ -34,5 +40,8 @@ define ['box2d', 'math_helpers'], (B2D, MathHelpers) ->
       o = 10
       x = MathHelpers.random(-@width/2 + o, @width/2 - o)
       y = MathHelpers.random(-@height/2 + o, @height/2 - o)
-      debugger
       new B2D.Vec2 x, y
+
+    _getRandomPowerup: ->
+      powerupCreationFunction = _.sample  _(@powerups).values()
+      powerupCreationFunction()
