@@ -13,6 +13,8 @@ define ['box2d', 'math_helpers'], (B2D, MathHelpers) ->
           window.EntityFactory.createSpeedPowerup()
         'bullet_mass': ->
           window.EntityFactory.createBulletMassPowerup()
+        'shockwave': ->
+          window.EntityFactory.createShockwavePowerup()
 
     startSpwaning: ->
       @_spawnNext()
