@@ -65,7 +65,7 @@ define ['entity_factory',
 
       @views = new ViewsCollection()
 
-      @pixleToUnitRatio = 8
+      @pixleToUnitRatio = @viewportHeight/45
       @zoom = @pixleToUnitRatio
       @cameraShiftDivider = 10
       @stopwatch = new Stopwatch()
