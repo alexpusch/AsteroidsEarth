@@ -1,12 +1,12 @@
 define ['box2d', 'math_helpers'], (B2D, MathHelpers) ->
   class PowerupSpawner
     constructor: (options = {}) ->
-      { @width, @height } = options
+      { @width, @height, @planet } = options
 
       @config =
         appearance:
-          min: 20 * 1000
-          max: 30 * 1000
+          min: 15 * 1000
+          max: 25 * 1000
 
       @powerups = 
         'speed': ->
@@ -15,6 +15,8 @@ define ['box2d', 'math_helpers'], (B2D, MathHelpers) ->
           window.EntityFactory.createBulletMassPowerup()
         'shockwave': ->
           window.EntityFactory.createShockwavePowerup()
+        'shield': ->
+          window.EntityFactory.createShieldPowerup()
 
     startSpwaning: ->
       @_spawnNext()
@@ -45,5 +47,13 @@ define ['box2d', 'math_helpers'], (B2D, MathHelpers) ->
       new B2D.Vec2 x, y
 
     _getRandomPowerup: ->
-      powerupCreationFunction = _.sample  _(@powerups).values()
+      avilablePowerups = @_getAvilablePowerups()      
+      powerupCreationFunction = _.sample  avilablePowerups
       powerupCreationFunction()
+
+    _getAvilablePowerups: ->
+      avilablePowerups = _(@powerups).values()
+      if @planet.hasShield()
+        avilablePowerups = _(avilablePowerups).without @powerups['shield']
+
+      avilablePowerups

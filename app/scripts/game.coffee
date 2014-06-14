@@ -25,7 +25,8 @@ define ['entity_factory',
          'speed_powerup_view',
          'powerup_spawner',
          'bullet_mass_powerup_view',
-         'shockwave_powerup_view'], (
+         'shockwave_powerup_view',
+         'shield_powerup_view'], (
           EntityFactory, 
           World, 
           WorldView,
@@ -53,7 +54,8 @@ define ['entity_factory',
           SpeedPowerupView,
           PowerupSpawner,
           BulletMassPowerupView,
-          ShockwavePowerupView) ->
+          ShockwavePowerupView,
+          ShieldPowerupView) ->
 
   class Game
    constructor: (@stage) ->
@@ -148,6 +150,7 @@ define ['entity_factory',
       new PowerupSpawner
         width: @worldWidth
         height: @worldHeight
+        planet: @planet
 
     createCamera: ->
       @camera = new Camera @stage.getWidth(), @stage.getHeight()
@@ -211,6 +214,7 @@ define ['entity_factory',
       worldView.registerView('speedPowerup', SpeedPowerupView, -1)
       worldView.registerView('bulletMassPowerup', BulletMassPowerupView, -1)
       worldView.registerView('shockwavePowerup', ShockwavePowerupView, -1)
+      worldView.registerView('shieldPowerup', ShieldPowerupView, -1)
 
     showGameOverEffect: (contactPoint) ->
       @world.startShockWave contactPoint
