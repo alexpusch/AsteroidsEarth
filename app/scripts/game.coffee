@@ -90,6 +90,7 @@ define ['entity_factory',
       delete @world
 
     endGame: ->
+      @score.updateHighscore()
       @views.add "gameOverScreen", @createGameOverScreen()
       @views.get("backgroundView").fadeAudioOut()
       @player.stopControling()
@@ -169,7 +170,7 @@ define ['entity_factory',
         upInterval: 10
 
       @astroidSpwaner.events.on "newWave", (index) ->
-        score.setMultiplier index
+        score.setMultiplier (index + 1)
 
       score
 
@@ -187,7 +188,7 @@ define ['entity_factory',
       startScreen
 
     createGameOverScreen: ->
-      gameOverScreen = new GameOverView @stage.getContainer(), @score.getScore()
+      gameOverScreen = new GameOverView @stage.getContainer(), @score
 
       gameOverScreen.events.on "gameStartClicked", =>
         @views.remove "waveView"
@@ -244,12 +245,14 @@ define ['entity_factory',
         @world.update()
 
       dt = @stopwatch.getFrameTime()
-      @score.update(dt)    
+
+      if @gameState == "gameOn"
+        @score.update(dt)
 
       @views.render()
 
       unless @gameState == "gameOver"
-        @updateParalex()        
+        @updateParalex()
 
       @stage.render()
 

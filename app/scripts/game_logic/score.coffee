@@ -15,3 +15,13 @@ define ["typed_object"], (TypedObject) ->
 
     getScore: ->
       Math.ceil @score 
+
+    updateHighscore: ->
+      if @score > @getHighScore()
+        @_setAsHighScore()
+
+    getHighScore: ->
+      parseInt(window.localStorage.getItem "highscore", 10)
+
+    _setAsHighScore: ->
+      window.localStorage.setItem "highscore", @getScore()

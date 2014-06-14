@@ -1,56 +1,34 @@
-define ['events', 'view', 'pixi_animator'], (Events, View, Animator) ->
+define ['events', 'view', 'pixi_animator', 'pixi_layout'], (Events, View, Animator, PixiLayout) ->
   class GameOverScreen extends View
     constructor: (container, @score)->
       super container
 
     createGraphics: ->
       graphics = new PIXI.Graphics()
-      gameOverText = new PIXI.Text "GAME OVER",
-        fill: "white"
-        font: "70pt DroidSans"
-        align: "center"
 
-      gameOverText.anchor = new PIXI.Point 0.5,0.5
-
-      gameOverTextHeight = @container.height/3 - gameOverText.height/2
-      gameOverText.position.x = @container.width/2
-      gameOverText.position.y = gameOverTextHeight
-
-
-      scoreText = new PIXI.Text "score: #{@score}",
-        fill: "white"
-        font: "40pt DroidSans"
-        align: "center"
-
-      scoreText.anchor = new PIXI.Point 0.5,0.5
-
-      scoreTextHeight = gameOverText.position.y + 10 + scoreText.height
-      scoreText.position.x = @container.width/2
-      scoreText.position.y = scoreTextHeight
-
-      refreshTexture = PIXI.Texture.fromImage("images/refresh.png");
-      refreshGraphics = new PIXI.Sprite(refreshTexture);
-
-      refreshGraphics.width = 100
-      refreshGraphics.height = 100
-
-      refreshGraphics.position.x = @container.width/2
-      refreshGraphics.position.y = scoreText.position.y + refreshGraphics.height + 5
-      refreshGraphics.anchor = new PIXI.Point 0.5,0.5
-
-      refreshGraphics.buttonMode = true
-      refreshGraphics.interactive = true
-
-      
-
-      refreshGraphics.click = refreshGraphics.touchstart = =>
-        @events.trigger "gameStartClicked"
-
-      graphics.addChild scoreText
-      graphics.addChild gameOverText
-      graphics.addChild refreshGraphics
+      gameOverText = @_createGameOverText()
+      scoreText = @_createScoreText()
+      highScoreText = @_createHighScoreText()
+      refreshGraphics = @_createRefreshButton()
 
       graphics.alpha = 0
+      graphics.width = @container.width
+      graphics.height = @container.height * 0.8
+      graphics.y = @container.height * 0.1
+
+      PixiLayout.order graphics, [
+        element: gameOverText
+        height: 0.3
+      ,
+        element: scoreText
+        height: 0.2
+      ,
+        element: highScoreText
+        height: 0.1
+      ,
+        element: refreshGraphics
+        height: 0.4
+      ]
 
       graphics
 
@@ -64,3 +42,41 @@ define ['events', 'view', 'pixi_animator'], (Events, View, Animator) ->
         type: "fadeIn", 
         duration: 1000
       ]
+
+    _createGameOverText: ->
+      new PIXI.Text "GAME OVER",
+        fill: "white"
+        font: "100px DroidSans"
+        align: "center"
+
+    _createScoreText: ->
+      new PIXI.Text "SCORE: #{@score.getScore()}",
+        fill: "white"
+        font: "100px DroidSans"
+        align: "center"
+
+    _createHighScoreText: ->
+      if @score.getHighScore() == @score.getScore()
+        new PIXI.Text "NEW HIGHSCORE!",
+          fill: "#ffcc00"
+          font: "100px DroidSans bold"
+          align: "center"
+      else
+        new PIXI.Text "HIGHSCORE: #{@score.getHighScore()}",
+          fill: "white"
+          font: "100px DroidSans bold"
+          align: "center"
+
+    _createRefreshButton: ->
+      refreshTexture = PIXI.Texture.fromImage("images/refresh.png");
+      refreshGraphics = new PIXI.Sprite(refreshTexture);
+
+      refreshGraphics.width = 10
+      refreshGraphics.height = 10
+      refreshGraphics.buttonMode = true
+      refreshGraphics.interactive = true
+
+      refreshGraphics.click = refreshGraphics.touchstart = =>
+        @events.trigger "gameStartClicked"
+
+      refreshGraphics
