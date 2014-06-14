@@ -1,8 +1,9 @@
-define ['entity', 'astroid'], (Entity, Astroid) ->
+define ['entity', 'astroid', 'box2d'], (Entity, Astroid, B2D) ->
   class Planet extends Entity
     constructor: (options) ->
       super 'planet'
       @radius = options.radius
+      @shieldActive = false
 
     getEntityDef: ->
       bodyDef = new B2D.BodyDef
@@ -22,4 +23,28 @@ define ['entity', 'astroid'], (Entity, Astroid) ->
 
     handleCollision: (collidingEnity, contactPoint) ->
       if collidingEnity instanceof Astroid
-        @events.trigger "worldDistruction", contactPoint
+        if @shieldActive
+          @_luanchAstroidAwaw collidingEnity
+          @dropShield()
+        else
+          @events.trigger "worldDistruction", contactPoint
+
+    deployShield: ->
+      @shieldActive = true
+      @events.trigger "rasingShield"
+
+    dropShield: ->
+      @shieldActive = false
+      @events.trigger "dropingShield"
+          
+    hasShield: ->
+      @shieldActive
+
+    _luanchAstroidAwaw: (astroid) ->
+      intensity = 500
+      astroidPosition = astroid.getPosition()
+      vectorToAstroid = astroidPosition.Copy()
+      vectorToAstroid.Add @getPosition()
+      vectorToAstroid.Multiply intensity
+
+      astroid.body.ApplyImpulse vectorToAstroid, new B2D.Vec2(0,0)

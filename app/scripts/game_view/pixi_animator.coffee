@@ -28,21 +28,57 @@ define ->
       else
         @graphics.alpha = 0
         done()
-          
-    animate: (animationPlan) ->
-      animationFunctions = []
-      for animation in animationPlan
-        func = do =>
-          currentAnimation = @[animation.type]
-          currentDuration = animation.duration
-          (done) => 
-            animationStart = new Date()
-            currentAnimation.call(@, done, animationStart, currentDuration)
+    
+    grow: (done, start, duration, options) ->
+      from = @graphics.scale.x
+      to = options.by * @graphics.scale.x
+      @_grow done, start, duration, from, to
 
-        animationFunctions.push func
+    _grow: (done, start, duration, from, to) ->
+      now = new Date()
+      ratio = (now - start)/duration
+      scale = from + (to - from) * ratio
+      @graphics.scale.x = scale
+      @graphics.scale.y = scale
+
+      if(scale < to)
+        requestAnimFrame =>
+          @_grow done, start, duration, from, to
+      else
+        @graphics.scale.x = to
+        @graphics.scale.y = to
+        done()
+
+    animateParallel: (animationPlan) ->
+      animationFunctions = @_createFunctions animationPlan
+      
+      promise = new Promise (resolve, reject) ->
+        async.parallel animationFunctions, ->
+          resolve()
+
+      promise
+
+    animate: (animationPlan) ->
+      animationFunctions = @_createFunctions animationPlan
       
       promise = new Promise (resolve, reject) ->
         async.series animationFunctions, ->
           resolve()
 
       promise
+
+    _createFunctions: (animationPlan) ->
+      animationFunctions = []
+      for animation in animationPlan
+        func = do =>
+          currentAnimation = @[animation.type]
+          currentDuration = animation.duration
+          options = _(animation).clone()
+          (done) => 
+            # console.log "start animation", options
+            animationStart = new Date()
+            currentAnimation.call(@, done, animationStart, currentDuration, options)
+
+        animationFunctions.push func
+
+      animationFunctions
