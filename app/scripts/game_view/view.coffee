@@ -16,9 +16,9 @@ define ['stopwatch', 'events'], (Stopwatch, Events) ->
       @updateGraphics?()
 
     destroy: ->
-      maybePromise = @onDestroy?()
-      if maybePromise instanceof Promise
-        maybePromise.then =>
+      @onDestroy?()
+      if @activePromise?
+        @activePromise.then =>
           @container.removeChild @graphics
       else
         @container.removeChild @graphics
@@ -29,3 +29,6 @@ define ['stopwatch', 'events'], (Stopwatch, Events) ->
     pushToTop: ->
       @container.removeChild(@graphics)
       @container.addChild(@graphics)
+
+    setActivePromise: (promise) ->
+      @activePromise = promise

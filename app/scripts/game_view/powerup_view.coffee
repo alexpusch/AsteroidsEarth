@@ -15,6 +15,10 @@ define ['view', 'conversions', 'pixi_animator'], (View, Conversions, Animator) -
       speedGraphics.position.y = -@powerup.getRadius()
 
       graphics.addChild speedGraphics
+
+      @powerup.events.on "applied", =>
+        @showAppliedAnimation()
+
       graphics
 
     updateGraphics: ->
@@ -23,7 +27,7 @@ define ['view', 'conversions', 'pixi_animator'], (View, Conversions, Animator) -
       @graphics.position = pixiPosition
       @graphics.scale = new PIXI.Point @camera.getZoom() ,@camera.getZoom()
 
-    onDestroy: ->
+    showAppliedAnimation: ->
       text = new PIXI.Text @text,
         fill: "white"
         font: "20pt DroidSans"
@@ -45,4 +49,4 @@ define ['view', 'conversions', 'pixi_animator'], (View, Conversions, Animator) -
         duration: 500
       ]
 
-      Promise.all [promise1, promise2]
+      @setActivePromise Promise.all [promise1, promise2]

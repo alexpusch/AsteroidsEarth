@@ -13,6 +13,7 @@ define ['entity', 'spaceship','planet', 'collision_helpers', 'vector_helpers'], 
       unless @applied
         if entity instanceof Spaceship
           @apply entity, contactPoint
+          @events.trigger "applied"
           @destroy()
 
     shouldPassThrough: (entity) ->
