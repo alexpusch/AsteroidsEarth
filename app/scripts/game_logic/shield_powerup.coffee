@@ -5,5 +5,6 @@ define ['powerup', 'box2d'], (Powerup, B2D) ->
       @amount = 10
 
     apply: ->
-      @planet.deployShield()
+      _.defer =>
+        @planet.deployShield()
 

@@ -64,9 +64,13 @@ define ['conversions', 'view', 'earth_graphics_points', 'pixi_animator'], (Conve
       @planet.events.on "dropingShield", => @_dropShieldAnimation()
 
     _raiseShieldAnimation: ->
+      shieldRadius = @planet.getShieldRadius()
+      planetRadius = @planet.getRadius()
+      ratio = shieldRadius/planetRadius
+
       new Animator(@shieldGraphics).animateParallel [
           type: "grow"
-          by: 1.2
+          by: ratio
           duration: 200
         ]
 

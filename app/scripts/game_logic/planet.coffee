@@ -3,6 +3,7 @@ define ['entity', 'astroid', 'box2d'], (Entity, Astroid, B2D) ->
     constructor: (options) ->
       super 'planet'
       @radius = options.radius
+      @shieldRadius = @radius * 1.2
       @shieldActive = false
 
     getEntityDef: ->
@@ -23,30 +24,43 @@ define ['entity', 'astroid', 'box2d'], (Entity, Astroid, B2D) ->
 
     handleCollision: (collidingEnity, contactPoint) ->
       if collidingEnity instanceof Astroid
-        if @shieldActive
-          @_luanchAstroidAwaw collidingEnity
-          @dropShield()
-        else
-          @events.trigger "worldDistruction", contactPoint
+        _.defer =>
+          if @shieldActive
+            @_luanchAstroidAway collidingEnity
+            @dropShield()
+          else
+            @events.trigger "worldDistruction", contactPoint
 
     deployShield: ->
       unless @shieldActive
         @shieldActive = true
+        @_changePlanetBodyRadius @shieldRadius
         @events.trigger "rasingShield"
 
     dropShield: ->
       if @shieldActive
         @shieldActive = false
+        @_changePlanetBodyRadius @radius
         @events.trigger "dropingShield"
 
     hasShield: ->
       @shieldActive
 
-    _luanchAstroidAwaw: (astroid) ->
-      intensity = 500
+    getShieldRadius: ->
+      @shieldRadius
+
+    _luanchAstroidAway: (astroid) ->
+      intensity = 300
       astroidPosition = astroid.getPosition()
       vectorToAstroid = astroidPosition.Copy()
       vectorToAstroid.Add @getPosition()
       vectorToAstroid.Multiply intensity
 
       astroid.body.ApplyImpulse vectorToAstroid, new B2D.Vec2(0,0)
+
+    _changePlanetBodyRadius: (radius) ->
+      fixture = @body.GetFixtureList()
+      @body.DestroyFixture fixture
+      newFixtureDef = @getEntityDef().fixtureDef
+      newFixtureDef.shape.SetRadius radius
+      newFixture = @body.CreateFixture newFixtureDef
