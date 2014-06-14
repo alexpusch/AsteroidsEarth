@@ -63,7 +63,15 @@ require  ['stage', 'game'], (Stage, Game) ->
         id: "background"
     ]
 
-    graphicAssets = ["images/refresh.png", "images/finger.png"]
+    graphicAssets = [
+      "images/refresh.png",
+      "images/finger.png",
+      "images/continents.png",
+      "images/mass.png",
+      "images/shield.png",
+      "images/shockwave.png",
+      "images/speed.png"
+    ]
 
   loadAssets graphicAssets, audioAssets, ->
     stage = new Stage canvas
