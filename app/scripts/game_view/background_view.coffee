@@ -22,12 +22,9 @@ define ['view'], (View) ->
       graphics
 
     onAppearance: ->
-      if @sound?
-        @sound.setVolume 1
-      else
-        @sound = createjs.Sound.play "background",
-          loop: -1
-          volume: 1
+      @sound = createjs.Sound.play "background",
+        loop: -1
+        volume: 1
 
     fadeAudioOut: ->
       @stopwatch.setMark "startFadingAudioOut"
@@ -41,7 +38,9 @@ define ['view'], (View) ->
 
         @sound.setVolume(1 - ratio)
 
-        unless ratio == 1
+        if ratio == 1
+          @sound.stop()
+        else
           requestAnimFrame fadeOutStep
 
       fadeOutStep()
