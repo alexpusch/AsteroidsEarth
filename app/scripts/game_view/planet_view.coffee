@@ -60,19 +60,24 @@ define ['conversions', 'view', 'earth_graphics_points', 'pixi_animator'], (Conve
       @planet.getRadius() * @camera.getZoom()
 
     _bindPlanetEvents: ->
-      @planet.events.on "rasingShield", =>
-        new Animator(@shieldGraphics).animateParallel [
+      @planet.events.on "rasingShield", => @_raiseShieldAnimation()
+      @planet.events.on "dropingShield", => @_dropShieldAnimation()
+
+    _raiseShieldAnimation: ->
+      new Animator(@shieldGraphics).animateParallel [
           type: "grow"
           by: 1.2
           duration: 200
         ]
 
-      @planet.events.on "dropingShield", =>
-        new Animator(@shieldGraphics).animateParallel [
+    _dropShieldAnimation: ->
+      (new Animator(@shieldGraphics).animateParallel [
           type: "grow"
           by: 1.2
           duration: 200
         ,
           type: "fadeOut"
           duration: 200
-        ]
+        ]).then =>
+          @shieldGraphics.scale.x = @shieldGraphics.scale.y = 1
+          @shieldGraphics.alpha = 1

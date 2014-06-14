@@ -30,13 +30,15 @@ define ['entity', 'astroid', 'box2d'], (Entity, Astroid, B2D) ->
           @events.trigger "worldDistruction", contactPoint
 
     deployShield: ->
-      @shieldActive = true
-      @events.trigger "rasingShield"
+      unless @shieldActive
+        @shieldActive = true
+        @events.trigger "rasingShield"
 
     dropShield: ->
-      @shieldActive = false
-      @events.trigger "dropingShield"
-          
+      if @shieldActive
+        @shieldActive = false
+        @events.trigger "dropingShield"
+
     hasShield: ->
       @shieldActive
 
