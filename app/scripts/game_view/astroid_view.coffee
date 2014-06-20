@@ -13,7 +13,7 @@ define ['conversions', 'view', 'color_helpers'], (Conversions, View, ColorHelper
       graphics.endFill()
 
       graphics
-      
+
     updateGraphics: ->
       vec2Position = @camera.project(@astroid.getPosition())
       pixiPosition = Conversions.B2DtoPIXI.toPoint vec2Position
@@ -27,7 +27,7 @@ define ['conversions', 'view', 'color_helpers'], (Conversions, View, ColorHelper
       highDensityColor = 0x520000
 
       min = 0.3
-      max = 1.5
+      max = 3
 
       t = 1 - (density - min)/(max - min)
 
