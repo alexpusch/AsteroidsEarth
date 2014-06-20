@@ -21,7 +21,12 @@ define ["typed_object"], (TypedObject) ->
         @_setAsHighScore()
 
     getHighScore: ->
-      parseInt(window.localStorage.getItem "highscore", 10)
+      highscore = window.localStorage.getItem "highscore"
+      
+      unless highscore?
+        highscore = "0"
+
+      parseInt(highscore, 10)
 
     _setAsHighScore: ->
       window.localStorage.setItem "highscore", @getScore()
