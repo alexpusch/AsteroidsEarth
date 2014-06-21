@@ -9,7 +9,7 @@ define ['events', 'view', 'pixi_animator', 'pixi_layout'], (Events, View, Animat
       gameOverText = @_createGameOverText()
       scoreText = @_createScoreText()
       highScoreText = @_createHighScoreText()
-      refreshGraphics = @_createRefreshButton()
+      @refreshGraphics = @_createRefreshButton()
 
       graphics.alpha = 0
       graphics.width = @container.width
@@ -26,20 +26,27 @@ define ['events', 'view', 'pixi_animator', 'pixi_layout'], (Events, View, Animat
         element: highScoreText
         height: 0.1
       ,
-        element: refreshGraphics
+        element: @refreshGraphics
         height: 0.4
       ]
 
       graphics
 
     updateGraphics: ->
-      unless @fadedIn
+
+    onAppearance: ->
         @fadeIn()
-        @fadedIn = true
+        setTimeout =>
+          new Animator(@refreshGraphics).animate([
+              type: "fadeIn"
+              duration: 1000
+          ]).then =>
+            @refreshGraphics.interactive = true
+        , 1000
 
     fadeIn: ->
       new Animator(@graphics).animate [
-        type: "fadeIn", 
+        type: "fadeIn",
         duration: 1000
       ]
 
@@ -74,7 +81,8 @@ define ['events', 'view', 'pixi_animator', 'pixi_layout'], (Events, View, Animat
       refreshGraphics.width = 10
       refreshGraphics.height = 10
       refreshGraphics.buttonMode = true
-      refreshGraphics.interactive = true
+      refreshGraphics.interactive = false
+      refreshGraphics.alpha = 0
 
       refreshGraphics.click = refreshGraphics.touchstart = =>
         @events.trigger "gameStartClicked"
