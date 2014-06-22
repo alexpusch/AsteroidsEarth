@@ -1,14 +1,18 @@
-define ->
+define ['events'], (Events) ->
   class Stage
-    constructor: (container)->
-      @stage = new PIXI.Stage(0x1b6dab, true) 
-      @stage.setInteractive(true)
-      @stage.setBackgroundColor 0x1b6dab
-      
-      @width = container.width
-      @height = container.height
+    constructor: (containerElement)->
+      #0x1b6dab
+      canvas = @createCanvas()
+      containerElement.appendChild canvas
 
-      @pixiRenderer = PIXI.autoDetectRenderer(@width, @height, container)
+      @stage = new PIXI.Stage(0x122a39, true)
+      @stage.setInteractive(true)
+      @stage.setBackgroundColor 0x122a39
+
+      @width = canvas.width
+      @height = canvas.height
+
+      @pixiRenderer = PIXI.autoDetectRenderer(@width, @height, canvas)
 
       @pixleRatio = window.devicePixelRatio
       @container = new PIXI.DisplayObjectContainer()
@@ -17,6 +21,28 @@ define ->
       @container.pivot = new PIXI.Point 0.5, 0.5
       @container.scale = new PIXI.Point @pixleRatio, @pixleRatio
       @stage.addChild @container
+
+      createjs.Sound.initializeDefaultPlugins()
+      createjs.Sound.registerPlugins([createjs.CocoonJSAudioPlugin]);
+
+      @events = new Events()
+
+    createCanvas: ->
+      canvas = document.createElement "canvas"
+      canvas.style.width = window.innerWidth
+      canvas.style.height = window.innerHeight
+      canvas.width = window.innerWidth * window.devicePixelRatio;
+      canvas.height = window.innerHeight * window.devicePixelRatio;
+
+      canvas
+
+    startMainLoop: ->
+      mainLoop = =>
+        @events.trigger "frame"
+        @render()
+        requestAnimFrame mainLoop
+
+      mainLoop()
 
     getContainer: ->
       @container

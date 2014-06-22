@@ -1,20 +1,20 @@
 define ['entity_factory',
-         'world', 
+         'world',
          'world_view',
-         'spaceship', 
-         'player', 
-         'spaceship_view', 
-         'bullet_view', 
+         'spaceship',
+         'player',
+         'spaceship_view',
+         'bullet_view',
          'planet_view'
          'astroid_view'
-         'camera', 
-         'planet', 
-         'astroid_spwaner', 
-         'score', 
+         'camera',
+         'planet',
+         'astroid_spwaner',
+         'score',
          'score_view',
          'start_screen_view'
-         'game_over_view', 
-         'wave_view', 
+         'game_over_view',
+         'wave_view',
          'background_view',
          'box2d',
          'shockwave_view',
@@ -27,21 +27,21 @@ define ['entity_factory',
          'bullet_mass_powerup_view',
          'shockwave_powerup_view',
          'shield_powerup_view'], (
-          EntityFactory, 
-          World, 
+          EntityFactory,
+          World,
           WorldView,
-          Spaceship, 
-          Player, 
-          SpaceshipView, 
-          BulletView, 
+          Spaceship,
+          Player,
+          SpaceshipView,
+          BulletView,
           PlanetView
           AstroidView,
-          Camera, 
-          Planet, 
-          AstroidSpwaner, 
-          Score, 
+          Camera,
+          Planet,
+          AstroidSpwaner,
+          Score,
           ScoreView,
-          StartScreenView, 
+          StartScreenView,
           GameOverView,
           WaveView,
           BackgroundView,
@@ -72,9 +72,12 @@ define ['entity_factory',
       [@worldWidth, @worldHeight] = @calculateWorldDimenstion()
 
     start: ->
+      @stage.events.on "frame", =>
+        @update()
+
       @views.add "startScreen", @createStartScreen(), 1
       @createGameObjects()
-      @mainLoop()
+      # @mainLoop()
 
     startGame: ->
       @gameState = "gameOn"
@@ -127,7 +130,7 @@ define ['entity_factory',
         size:
           width: @worldWidth
           height: @worldHeight
-          
+
       world
 
     createPlanet: ->
@@ -159,12 +162,12 @@ define ['entity_factory',
 
       @camera
 
-    createWorldView: ->     
+    createWorldView: ->
       worldView = new WorldView @stage.getContainer(), @camera, @world
       @registerViewTypes worldView
 
       worldView
-      
+
     createScore: ->
       score = new Score
         upInterval: 10
@@ -221,7 +224,7 @@ define ['entity_factory',
       @world.startShockWave contactPoint
       CameraShaker shaker = new CameraShaker(@camera)
       shaker.shake()
-      @views.add "shockwaveView", new ShockwaveView @stage.getContainer(), @camera, contactPoint     
+      @views.add "shockwaveView", new ShockwaveView @stage.getContainer(), @camera, contactPoint
 
     calculateWorldDimenstion: ->
       worldWidth = @viewportWidth/@pixleToUnitRatio
@@ -240,7 +243,7 @@ define ['entity_factory',
 
       [worldWidth, worldHeight]
 
-    mainLoop: ->
+    update: ->
       if @gameState != "gameOver" or (@gameState == "gameOver" and @stopwatch.getTimeSinceMark("gameOver") < 3000)
         @world.update()
 
@@ -254,9 +257,9 @@ define ['entity_factory',
       unless @gameState == "gameOver"
         @updateParalex()
 
-      @stage.render()
+      # @stage.render()
 
-      requestAnimFrame => @mainLoop()
+      # requestAnimFrame => @mainLoop()
 
     updateParalex: ->
       spaceshipPosition = @spaceship.getPosition()
