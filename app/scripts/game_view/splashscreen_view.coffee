@@ -4,7 +4,7 @@ define ['view', 'pixi_animator'], (View, Animator) ->
       super container
 
     createGraphics: ->
-      splashTexture = PIXI.Texture.fromImage("images/splashscreen2.png");
+      splashTexture = PIXI.Texture.fromImage("images/splashscreen.png");
       splashGraphics = new PIXI.Sprite(splashTexture);
 
       rx = @container.width / splashGraphics.width

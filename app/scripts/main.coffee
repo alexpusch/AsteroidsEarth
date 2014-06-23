@@ -17,7 +17,7 @@ require  ['stage', 'asset_loader', 'splashscreen_view', 'game'], (Stage, AssetLo
 
   showSplashScreen = (stage) ->
     splashscrenAssets = [
-      "images/splashscreen2.png"
+      "images/splashscreen.png"
     ]
 
     AssetLoader.loadGraphicAssets(splashscrenAssets).then ->
