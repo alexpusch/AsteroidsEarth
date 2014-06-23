@@ -1,4 +1,4 @@
-define ['entity_factory', 'world', 'spaceship', 'bullet', 'astroid'], (EntityFactory, World, Spaceship, Bullet, Astroid) ->
+define ['entity_factory', 'world', 'spaceship', 'bullet', 'astroid', 'speed_powerup'], (EntityFactory, World, Spaceship, Bullet, Astroid, SpeedPowerup) ->
   describe "EntityFactory", ->
     beforeEach ->
       @world = jasmine.createSpyObj('world', ['registerEntity'])
@@ -34,3 +34,13 @@ define ['entity_factory', 'world', 'spaceship', 'bullet', 'astroid'], (EntityFac
 
       it "registerEntity it with the given world", ->
         expect(@world.registerEntity).toHaveBeenCalledWith @astroid
+
+    describe "createSpeedPowerup", ->
+      beforeEach ->
+        @speedPowerup = @ef.createSpeedPowerup()
+
+      it "returns a new speedPowerup", ->
+        expect(@speedPowerup).toEqual(jasmine.any SpeedPowerup)
+
+      it "registerEntity it with the given world", ->
+        expect(@world.registerEntity).toHaveBeenCalledWith @speedPowerup
