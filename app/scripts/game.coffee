@@ -247,15 +247,15 @@ define ['entity_factory',
       if @gameState != "gameOver" or (@gameState == "gameOver" and @stopwatch.getTimeSinceMark("gameOver") < 3000)
         @world.update()
 
+      unless @gameState == "gameOver"
+        @updateParalex()
+
       dt = @stopwatch.getFrameTime()
 
       if @gameState == "gameOn"
         @score.update(dt)
 
       @views.render()
-
-      unless @gameState == "gameOver"
-        @updateParalex()
 
       # @stage.render()
 
