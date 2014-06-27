@@ -1,12 +1,12 @@
-define ['entity', 'spaceship','planet', 'collision_helpers', 'vector_helpers'], (Entity, Spaceship, Planet, CollisionHelpers, VectorHelpers) ->
+define ['entity', 'spaceship', 'bullet', 'astroid', 'planet', 'collision_helpers', 'vector_helpers'], (Entity, Spaceship, Bullet, Astroid, Planet, CollisionHelpers, VectorHelpers) ->
   class Powerup extends Entity
     @categoryBits: CollisionHelpers.getAviliableCategoryBit()
 
     constructor: (powerupType) ->
       super powerupType
       @applied = false
-      
-      @options = 
+
+      @options =
         radius: 1
 
     handleCollision: (entity, contactPoint) ->
@@ -18,6 +18,8 @@ define ['entity', 'spaceship','planet', 'collision_helpers', 'vector_helpers'], 
 
     shouldPassThrough: (entity) ->
       entity instanceof Spaceship or
+      entity instanceof Bullet or
+      entity instanceof Astroid or
       entity instanceof Planet
 
     handleExitWorld: ->
@@ -36,7 +38,7 @@ define ['entity', 'spaceship','planet', 'collision_helpers', 'vector_helpers'], 
       bodyDef = new B2D.BodyDef
       bodyDef.type = B2D.Body.b2_dynamicBody
       bodyDef.position = new B2D.Vec2 0,0
-      
+
       fixtureDef = new B2D.FixtureDef
       fixtureDef.density = 10
       fixtureDef.friction = 0.5
