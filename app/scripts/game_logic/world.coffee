@@ -1,5 +1,5 @@
 define ['box2d', 'events', 'stopwatch', 'astroid', 'planet', 'spaceship', 'powerup'], (B2D, Events, Stopwatch, Astroid, Planet, Spaceship, Powerup) ->
-  
+
   class WorldContactListener
     constructor: (@worldBody) ->
       @events = new Events()
@@ -25,7 +25,7 @@ define ['box2d', 'events', 'stopwatch', 'astroid', 'planet', 'spaceship', 'power
       entityB = contact.GetFixtureB().GetBody().GetUserData()
 
       if (entityA.shouldPassThrough? entityB) or (entityB.shouldPassThrough? entityA)
-        contact.SetEnabled false  
+        contact.SetEnabled false
 
     PostSolve: ->
       # console.log "PostSolve"
@@ -62,7 +62,7 @@ define ['box2d', 'events', 'stopwatch', 'astroid', 'planet', 'spaceship', 'power
 
       @worldBody = @_createWorldBody()
 
-      worldContactListener = new WorldContactListener @worldBody    
+      worldContactListener = new WorldContactListener @worldBody
 
       worldContactListener.events.on "collision", (entityA, entityB, contactPoint) =>
         entityA.handleCollision? entityB, contactPoint
@@ -70,7 +70,7 @@ define ['box2d', 'events', 'stopwatch', 'astroid', 'planet', 'spaceship', 'power
 
       worldContactListener.events.on "entityEnter", (entity) ->
         entity.handleEnterWorld()
-        
+
       worldContactListener.events.on "entityExit", (entity) ->
         entity.handleExitWorld()
 
@@ -96,11 +96,18 @@ define ['box2d', 'events', 'stopwatch', 'astroid', 'planet', 'spaceship', 'power
     getEntities: ->
       @entities
 
-    startShockWave: (position) ->
+    startShockWave: (position, affectedTypes) ->
       @shockWavePosition = position
       shokwaveMagnitude = 600
 
-      for entity in @entities
+      if affectedTypes?
+        affectedEnteties = _(@entities).filter (entity) ->
+          _(affectedTypes).any (type) ->
+            entity instanceof type
+      else
+        affectedEnteties = @entities
+
+      for entity in affectedEnteties
         entityPosition = entity.getPosition()
         forceVector = entityPosition.Copy()
         forceVector.Add position.GetNegative()
@@ -115,7 +122,7 @@ define ['box2d', 'events', 'stopwatch', 'astroid', 'planet', 'spaceship', 'power
         if not e.exists()
           @world.DestroyBody e.body
           @entities = _(@entities).without e
-       
+
         e.update? dt
 
       @world.Step(dt, 10, 10);
@@ -160,7 +167,7 @@ define ['box2d', 'events', 'stopwatch', 'astroid', 'planet', 'spaceship', 'power
       fixtureDef.friction = 0
       fixtureDef.shape = new B2D.PolygonShape
       fixtureDef.shape.SetAsBox(@size.width/2, @size.height/2)
-      fixtureDef.isSensor = true     
+      fixtureDef.isSensor = true
       worldBody = @world.CreateBody bodyDef
       worldBody.CreateFixture fixtureDef
 
