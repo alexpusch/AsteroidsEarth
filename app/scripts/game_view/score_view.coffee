@@ -4,12 +4,18 @@ define ['view'], (View) ->
       super container
 
     createGraphics: ->
-      scoreText = new PIXI.Text(@score.getScore())
-      scoreText.position.x = 50
-      scoreText.position.y = 50
+      size = @container.height/6
+      scoreText = new PIXI.Text @score.getScore(),
+        fill: "white"
+        font: "#{size}px DroidSans"
+        align: "center"
 
+      scoreText.alpha = 0.6
+      scoreText.position.x = 10
+      scoreText.position.y = @container.height
+      scoreText.anchor = new PIXI.Point 0, 1
       scoreText
 
     updateGraphics: ->
       @graphics.setText @score.getScore()
-      
+

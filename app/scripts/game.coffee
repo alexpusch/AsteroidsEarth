@@ -82,6 +82,7 @@ define ['entity_factory',
     startGame: ->
       @gameState = "gameOn"
       @player.control @spaceship
+      @views.add "scoreView", @createScoreView(), 1
       @astroidSpwaner.startSpwaning()
       @powerupSpawner.startSpwaning()
 
@@ -95,6 +96,7 @@ define ['entity_factory',
     endGame: ->
       @score.updateHighscore()
       @views.add "gameOverScreen", @createGameOverScreen()
+      @views.remove "scoreView"
       @views.get("backgroundView").fadeAudioOut()
       @player.stopControling()
       @stopwatch.setMark("gameOver")
@@ -168,9 +170,12 @@ define ['entity_factory',
 
       worldView
 
+    createScoreView: ->
+      new ScoreView @stage.getContainer(), @score
+
     createScore: ->
       score = new Score
-        upInterval: 10
+        upInterval: 300
 
       @astroidSpwaner.events.on "newWave", (index) ->
         score.setMultiplier (index + 1)
