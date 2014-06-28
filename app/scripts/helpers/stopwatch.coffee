@@ -4,13 +4,14 @@ define ->
       @marks = {}
 
     getFrameTime: ->
-      time = (new Date).getTime()
-      frameTime = if @lastTime? 
-        (time - @lastTime)/1000
+      if @paused
+        throw new Error("Time is paused. Cannot read frame time")
+      now = (new Date).getTime()
+      frameTime = if @lastTime?
+        (now - @lastTime)/1000
       else
         1/60
-      @lastTime = time
-
+      @lastTime = now
       frameTime
 
     setMark: (name) ->
@@ -22,3 +23,13 @@ define ->
 
       now = new Date()
       now - @marks[name]
+
+    pause: ->
+      now = new Date()
+      @frameTimeAtPause = now - @lastTime
+      @paused = true
+
+    resume: ->
+      @paused = false
+      now = new Date()
+      @lastTime = now - @frameTimeAtPause

@@ -1,4 +1,4 @@
-define ['box2d', 'events', 'stopwatch', 'astroid', 'planet', 'spaceship', 'powerup'], (B2D, Events, Stopwatch, Astroid, Planet, Spaceship, Powerup) ->
+define ['box2d', 'events', 'astroid', 'planet', 'spaceship', 'powerup'], (B2D, Events, Astroid, Planet, Spaceship, Powerup) ->
 
   class WorldContactListener
     constructor: (@worldBody) ->
@@ -76,8 +76,6 @@ define ['box2d', 'events', 'stopwatch', 'astroid', 'planet', 'spaceship', 'power
 
       @world.SetContactListener worldContactListener
 
-      @stopwatch = new Stopwatch()
-
     registerEntity: (entity) ->
       fixtureDef =  entity.getEntityDef().fixtureDef
       bodyDef = entity.getEntityDef().bodyDef
@@ -116,8 +114,7 @@ define ['box2d', 'events', 'stopwatch', 'astroid', 'planet', 'spaceship', 'power
 
         entity.body.ApplyImpulse forceVector, new B2D.Vec2(0,0)
 
-    update: ->
-      dt = @_getFrameTime()
+    update: (dt) ->
       _.each @entities, (e) =>
         if not e.exists()
           @world.DestroyBody e.body
@@ -172,6 +169,3 @@ define ['box2d', 'events', 'stopwatch', 'astroid', 'planet', 'spaceship', 'power
       worldBody.CreateFixture fixtureDef
 
       worldBody
-
-    _getFrameTime: ->
-      @stopwatch.getFrameTime()

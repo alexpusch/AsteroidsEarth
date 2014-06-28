@@ -248,14 +248,21 @@ define ['entity_factory',
 
       [worldWidth, worldHeight]
 
+    pause: ->
+      @stopwatch.pause()
+
+    resume: ->
+      @stopwatch.resume()
+
     update: ->
+      dt = @stopwatch.getFrameTime()
+
       if @gameState != "gameOver" or (@gameState == "gameOver" and @stopwatch.getTimeSinceMark("gameOver") < 3000)
-        @world.update()
+        @world.update dt
 
       unless @gameState == "gameOver"
         @updateParalex()
 
-      dt = @stopwatch.getFrameTime()
 
       if @gameState == "gameOn"
         @score.update(dt)

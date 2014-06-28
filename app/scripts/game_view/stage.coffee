@@ -38,11 +38,19 @@ define ['events'], (Events) ->
 
     startMainLoop: ->
       mainLoop = =>
-        @events.trigger "frame"
-        @render()
-        requestAnimFrame mainLoop
+        unless @paused
+          @events.trigger "frame"
+          @render()
+          requestAnimFrame mainLoop
 
       mainLoop()
+
+    pause: ->
+      @paused = true
+
+    resume: ->
+      @paused = false
+      @startMainLoop()
 
     getContainer: ->
       @container
