@@ -1,4 +1,4 @@
-define ['box2d'], (B2D)->
+define ['box2d', 'dom_events'], (B2D, DOMEvents)->
   class Player
     constructor: (@camera, @world) ->
       @mapping =
@@ -13,7 +13,7 @@ define ['box2d'], (B2D)->
     control: (@spaceship) ->
       @keyDownCallback = (e) =>
         @mapping[e.keyCode]?.apply(this, ['on'])
-      
+
       @keyUpCallback = (e) =>
         @mapping[e.keyCode]?.apply(this, ['off'])
 
@@ -21,7 +21,7 @@ define ['box2d'], (B2D)->
         @handleTouch e
 
       @touchEndCallback = (e) =>
-        @handleTouchEnd e  
+        @handleTouchEnd e
 
       @_addEvent document,'keydown', @keyDownCallback
       @_addEvent document, 'keyup', @keyUpCallback
@@ -33,25 +33,25 @@ define ['box2d'], (B2D)->
     setLeftThrusters: (state) ->
       if state == 'on'
         @spaceship.fireLeftThrusters()
-      else 
+      else
         @spaceship.turnLeftThrustersOff()
 
     setRightThrusters: (state) ->
       if state == 'on'
         @spaceship.fireRightThrusters()
-      else 
+      else
         @spaceship.turnRightThrustersOff()
 
     setMainThrusters: (state) ->
       if state == 'on'
         @spaceship.fireMainThrusters()
-      else 
+      else
         @spaceship.turnMainThrustersOff()
 
     fireCannon: (state) ->
       if state == 'on'
         @spaceship.fireCannon()
-      else 
+      else
         @spaceship.turnCannonOff()
 
       false
@@ -64,7 +64,7 @@ define ['box2d'], (B2D)->
       if @world.hitCheck "astroid", worldPoint
         @spaceship.fireCannon()
       else
-        @spaceship.turnCannonOff()        
+        @spaceship.turnCannonOff()
       @spaceship.setAutoPilotTarget worldPoint
 
     handleTouchEnd: (event) ->
@@ -89,18 +89,7 @@ define ['box2d'], (B2D)->
       @stopControling()
 
     _addEvent: ( obj, type, fn ) ->
-      if obj.attachEvent
-        obj['e'+type+fn] = fn;
-        obj[type+fn] = ->
-          obj['e'+type+fn]( window.event )
-        obj.attachEvent( 'on'+type, obj[type+fn] );
-      else
-        obj.addEventListener( type, fn, false );
-  
+      DOMEvents.bind obj, type, fn
+
     _removeEvent: ( obj, type, fn ) ->
-      if obj.detachEvent
-        obj.detachEvent( 'on'+type, obj[type+fn] );
-        obj[type+fn] = null;
-      else
-        obj.removeEventListener( type, fn, false );
-    
+      DOMEvents.unbind obj, type, fn
