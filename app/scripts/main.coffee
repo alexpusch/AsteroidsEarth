@@ -48,9 +48,26 @@ require  ['stage', 'asset_loader', 'splashscreen_view', 'game', 'dom_events'], (
     CocoonJS.App.onActivated.addEventListener ->
       resume()
 
+  isMobileWeb = ->
+    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+
+  window.isCocoonJS = ->
+    navigator.isCocoonJS
 
   if document.getElementById("game")?
-    stage = new Stage document.body
+    if isCocoonJS()
+      options =
+        width: window.innerWidth
+        height: window.innerHeight
+        container: document.body
+    else
+      gameEl = document.getElementById "game"
+      options =
+        width: gameEl.clientWidth
+        height: gameEl.clientHeight
+        container: gameEl
+
+    stage = new Stage options
 
     audioAssets = [
       src: "shoot.ogg"
@@ -59,8 +76,11 @@ require  ['stage', 'asset_loader', 'splashscreen_view', 'game', 'dom_events'], (
       src: "explosion.ogg"
       id: "explosion"
     ,
+      # src: "Broke_For_Free_-_01_-_Night_Owl.ogg"
+      # src: "nightowl2.ogg"
       src: "background.ogg"
       id: "background"
+    # ,
     ]
 
     graphicAssets = [

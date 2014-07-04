@@ -1,8 +1,8 @@
 define ['events'], (Events) ->
   class Stage
-    constructor: (containerElement)->
-      #0x1b6dab
+    constructor: (@options)->
       canvas = @createCanvas()
+      containerElement = @options.container
       containerElement.appendChild canvas
 
       @stage = new PIXI.Stage(0x122a39, true)
@@ -29,11 +29,10 @@ define ['events'], (Events) ->
 
     createCanvas: ->
       canvas = document.createElement "canvas"
-      canvas.style.width = window.innerWidth
-      canvas.style.height = window.innerHeight
-      canvas.width = window.innerWidth * window.devicePixelRatio;
-      canvas.height = window.innerHeight * window.devicePixelRatio;
-
+      canvas.style.width = @options.width #window.innerWidth
+      canvas.style.height = @options.height #window.innerHeight
+      canvas.width = @options.width * window.devicePixelRatio
+      canvas.height = @options.height * window.devicePixelRatio
       canvas
 
     startMainLoop: ->
