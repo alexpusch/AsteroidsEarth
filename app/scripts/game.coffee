@@ -250,9 +250,13 @@ define ['entity_factory',
 
     pause: ->
       @stopwatch.pause()
+      @powerupSpawner.pause()
+      @astroidSpwaner.pause()
 
     resume: ->
       @stopwatch.resume()
+      @powerupSpawner.resume()
+      @astroidSpwaner.resume()
 
     update: ->
       dt = @stopwatch.getFrameTime()

@@ -1,4 +1,4 @@
-define ['box2d', 'math_helpers', 'shield_powerup'], (B2D, MathHelpers, ShieldPowerup) ->
+define ['box2d', 'math_helpers', 'shield_powerup', 'pauseable_timeout'], (B2D, MathHelpers, ShieldPowerup, PauseableTimeout) ->
   class PowerupSpawner
     constructor: (options = {}) ->
       { @width, @height, @planet } = options
@@ -29,16 +29,23 @@ define ['box2d', 'math_helpers', 'shield_powerup'], (B2D, MathHelpers, ShieldPow
     startSpwaning: ->
       @_spawnNext()
 
+    pause: ->
+      @timeoutHandler.pause()
+
+    resume: ->
+      @timeoutHandler.resume()
+
     destroy: ->
-      clearTimeout @timeout
+      @timeoutHandler.clear()
 
     _spawnNext: ->
-      nextSpawn = _.random @config.appearance.min, @config.appearance.max
-      @timeout = setTimeout =>
+      nextSpawnTimeout = _.random @config.appearance.min, @config.appearance.max
+
+      @timeoutHandler = PauseableTimeout.setTimeout =>
         console.log "spawn powerup"
         @_spawnPowerup()
         @_spawnNext()
-      , nextSpawn
+      , nextSpawnTimeout
 
     _spawnPowerup: ->
       powerup = @_getRandomPowerup()

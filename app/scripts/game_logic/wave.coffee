@@ -1,4 +1,4 @@
-define ['events'], (Events)->
+define ['events', 'pauseable_timeout'], (Events, PauseableTimeout)->
   class Wave
     constructor: (@wavePlan)->
       @events = new Events()
@@ -13,17 +13,23 @@ define ['events'], (Events)->
 
       astroidPlan = @wavePlan[waveIndex]
 
-      @waveTimeoutHandler = setTimeout =>
+      @waveTimeoutHandler = PauseableTimeout.setTimeout =>
         @_spwanAstroid astroidPlan
         @continueWave(waveIndex + 1)
       , astroidPlan.offset
 
+    pause: ->
+      @waveTimeoutHandler.pause()
+
+    resume: ->
+      @waveTimeoutHandler.resume()
+
     destroy: ->
-      clearTimeout @waveTimeoutHandler
-      
+      PauseableTimeout.clear @waveTimeoutHandler
+
     _spwanAstroid: (astroidPlan)->
       console.log "spwaning astroid"
-      options = 
+      options =
           radius: astroidPlan.radius
           position: astroidPlan.position
           density: astroidPlan.density
@@ -31,7 +37,7 @@ define ['events'], (Events)->
       astroid = window.EntityFactory.createAstroid options
 
       @events.trigger "newAstroid", astroid
-      
+
       astroid.on 'destroy', =>
         @activeAstroids--
         if @activeAstroids == 0

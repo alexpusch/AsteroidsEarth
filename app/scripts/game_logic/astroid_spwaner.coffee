@@ -55,6 +55,12 @@ define ['typed_object', 'planet', 'wave', 'events', 'math_helpers'], (TypedObjec
     getWaveNumber: ->
       @waveIndex
 
+    pause: ->
+      @currentWave.pause()
+
+    resume: ->
+      @currentWave.resume()
+
     destroy: ->
       @currentWave.events.off "waveDestroyed", @waveDestroyedCallback
       @currentWave.destroy()
