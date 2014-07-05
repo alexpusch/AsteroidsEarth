@@ -212,7 +212,8 @@ define ['entity_factory',
       new BackgroundView @stage.getContainer(), @camera
 
     createTutorialView: ->
-      new TutorialView @stage.getContainer(), @camera, @astroidSpwaner
+      tutorialViewType = @config.tutorialViewType
+      new tutorialViewType @stage.getContainer(), @camera, @astroidSpwaner
 
     registerViewTypes: (worldView) ->
       worldView.registerView('spaceship', SpaceshipView)

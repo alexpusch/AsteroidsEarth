@@ -1,4 +1,4 @@
-define ['view'], (View) ->
+define ['view', 'math_helpers', 'pixi_animator'], (View, MathHelpers, Animator) ->
   class DesktopTutorialView extends View
     constructor: (container, stage) ->
       super container, stage
@@ -11,29 +11,64 @@ define ['view'], (View) ->
       gridUnit = cellSize + padding
 
       x = gridUnit
-      y = @container.height/2 - gridUnit * 3
-      
-      @_drawMovmentTutorial graphics, x, y, cellSize, padding
-      @_drawCannonTutorial graphics, x, y, cellSize, padding
-      @_drawObjectiveTutorial graphics, x, y, cellSize, padding  
+      y = @container.height/2
+
+      @keysTutorialContainter = new PIXI.Graphics()
+      @_drawMovmentTutorial @keysTutorialContainter, x, y, cellSize, padding
+      @_drawCannonTutorial @keysTutorialContainter, x, y, cellSize, padding
+
+      @keysTutorialContainter.alpha = 0
+
+      @objectiveTutorialContainer = new PIXI.Graphics()
+      @_drawObjectiveTutorial @objectiveTutorialContainer, x, y, cellSize, padding
+      @objectiveTutorialContainer.alpha = 0
+
+      graphics.addChild @keysTutorialContainter
+      graphics.addChild @objectiveTutorialContainer
 
       graphics
 
+    onAppearance: ->
+      (new Animator(@keysTutorialContainter).animate [
+        type: 'fadeIn'
+        duration: 1000
+      ,
+        type: 'stay'
+        duration: 1000
+      ,
+        type: 'fadeOut'
+        duration: 1000
+      ,
+        type: 'stay'
+        duration: 1000
+      ,
+      ]).then =>
+        new Animator(@objectiveTutorialContainer).animate [
+          type: 'fadeIn'
+          duration: 1000
+        ,
+          type: 'stay'
+          duration: 1000
+        ,
+          type: 'fadeOut'
+          duration: 1000
+        ]
+
     _drawMovmentTutorial: (graphics, x, y, cellSize, padding)->
       gridUnit = cellSize + padding
-      @_drawArrowGraphcis graphics, 
-        position: new PIXI.Point(x,y),
+      @_drawArrowGraphcis graphics,
+        position: new PIXI.Point(x,y - cellSize),
         keysize: cellSize
         charSet: ["A", "D", "W"]
         padding: 5
 
-      @_drawArrowGraphcis graphics, 
-        position: new PIXI.Point(x + gridUnit * 4, y),
+      @_drawArrowGraphcis graphics,
+        position: new PIXI.Point(x + gridUnit * 4, y - cellSize),
         keysize: cellSize
         charSet: ["⬅",  "➡", "⬆"]
         padding: 5
 
-      orGraphics = new PIXI.Text "/", 
+      orGraphics = new PIXI.Text "/",
         font: "12pt Helvetica"
         fill: "EEEEEE"
         align: "center"
@@ -56,15 +91,15 @@ define ['view'], (View) ->
 
     _drawCannonTutorial: (graphics, x, y, cellSize, padding) ->
       gridUnit = cellSize + padding
-      @_drawKey graphics, x, y + gridUnit * 2, gridUnit * 7 - padding, cellSize , "SPACE"
+      @_drawKey graphics, x, y + gridUnit * 1, gridUnit * 7 - padding, cellSize , "SPACE"
 
     _drawKey: (graphics, x, y, width,height, text) ->
       graphics.lineStyle 2, 0xEEEEEE, 0.7
-      graphics.beginFill 0x1b6dab
+      graphics.beginFill 0x122a39
       graphics.drawRect x, y, width, height
       graphics.endFill()
 
-      text = new PIXI.Text text, 
+      text = new PIXI.Text text,
         font: "12pt DroidSans"
         fill: "white"
         align: "center"
@@ -78,10 +113,10 @@ define ['view'], (View) ->
       gridUnit = cellSize + padding
       graphics.lineStyle 3, 0xDDDDDD, 1
 
-      [startX, startY] =  [x + gridUnit, y + gridUnit * 5]
+      [startX, startY] =  [x + gridUnit, y]
 
       graphics.drawCircle startX, startY , cellSize
-      
+
       drawSwiftLine = (angle, length) =>
         @_drawSwiftLine graphics, startX, startY, cellSize, length, angle
 
