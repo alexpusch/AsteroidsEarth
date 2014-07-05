@@ -1,20 +1,13 @@
 define ['world', 'spaceship', 'bullet', 'astroid', 'planet', 'speed_powerup', 'bullet_mass_powerup', 'shockwave_powerup', 'shield_powerup'], (World, Spaceship, Bullet, Astroid, Planet, SpeedPowerup, BulletMassPowerup, ShockwavePowerup, ShieldPowerup)->
   class EntityFactory
-    constructor: (@world) ->
+    constructor: (@world, @config) ->
 
     createSpaceship: () ->
       @_createEntity Spaceship,
-        speed: 120
-        angularSpeed: 100
-        width: 2
-        length: 3
-        cannonHeatRate: 0.13
-        cannonCooldownRate: 0.3
-        angularDamping: 5
-        linearDamping: 1.3
+        @config.Spaceship
 
     createBullet: (options = {}) ->
-      _.defaults options, 
+      _.defaults options,
         radius: 0.3
         density: 7
 
@@ -28,7 +21,7 @@ define ['world', 'spaceship', 'bullet', 'astroid', 'planet', 'speed_powerup', 'b
     createPlanet: ->
       @planet = @_createEntity Planet,
         radius: 10
-      
+
       @planet
 
     createSpeedPowerup: ->

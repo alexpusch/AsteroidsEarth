@@ -58,7 +58,7 @@ define ['entity_factory',
           ShieldPowerupView) ->
 
   class Game
-   constructor: (@stage) ->
+   constructor: (@stage, @config) ->
       @gameState = "startScreen"
       @viewportWidth = @stage.getWidth()
       @viewportHeight = @stage.getHeight()
@@ -107,7 +107,7 @@ define ['entity_factory',
     createGameObjects: ->
       @world = @createWorld()
 
-      window.EntityFactory = new EntityFactory @world
+      window.EntityFactory = new EntityFactory @world, @config
 
       @spaceship = window.EntityFactory.createSpaceship()
 

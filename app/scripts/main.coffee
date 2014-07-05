@@ -8,7 +8,7 @@ requirejs.config
       exports: 'PIXI'
 
 # CocoonJS.App.setAntialias true
-require  ['stage', 'asset_loader', 'splashscreen_view', 'game', 'dom_events'], (Stage, AssetLoader, SplashScreenView, Game, DOMEvents) ->
+require  ['stage', 'asset_loader', 'splashscreen_view', 'game', 'dom_events', 'configuration'], (Stage, AssetLoader, SplashScreenView, Game, DOMEvents, Configuration) ->
   getDelayedPromise = (delay) ->
     deleyedPromise = new Promise (resolve, reject) ->
       setTimeout ->
@@ -60,12 +60,14 @@ require  ['stage', 'asset_loader', 'splashscreen_view', 'game', 'dom_events'], (
         width: window.innerWidth
         height: window.innerHeight
         container: document.body
+      gameConfig = Configuration.Mobile
     else
       gameEl = document.getElementById "game"
       options =
         width: gameEl.clientWidth
         height: gameEl.clientHeight
         container: gameEl
+      gameConfig = Configuration.Desktop
 
     stage = new Stage options
 
@@ -98,11 +100,11 @@ require  ['stage', 'asset_loader', 'splashscreen_view', 'game', 'dom_events'], (
       Promise.all([
         AssetLoader.loadAudioAssets(audioAssets),
         AssetLoader.loadGraphicAssets(graphicAssets),
-        getDelayedPromise 2000
+        getDelayedPromise 0
       ]).then ->
         splashScreen.fadeOut().then ->
           splashScreen.destroy()
-          game = new Game(stage)
+          game = new Game stage, gameConfig
           game.start()
 
           bindPauseEvents game, stage
