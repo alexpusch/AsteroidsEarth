@@ -37,8 +37,8 @@ define ['view'], (View) ->
       @ticksContainer = new PIXI.Graphics()
       graphics.addChild @ticksContainer
 
-      graphics.position.x = @container.width/2 - @options.width/2
-      graphics.position.y = @container.height - @options.height - 30
+      graphics.position.x = @container.width - @options.width - @container.width/40
+      graphics.position.y = @container.height - @options.height - @container.width/40
       graphics
 
     _createBoderGraphics: ->
@@ -75,7 +75,7 @@ define ['view'], (View) ->
 
     _calculateTickColor: (tickIndex, temperature) ->
       tickTempDiff = 1/@options.numberOfTicks
-      
+
       if tickIndex * tickTempDiff > temperature
         return 0xffffff
 
@@ -91,5 +91,5 @@ define ['view'], (View) ->
       shiftedRed = red << 16
       shiftedGreen = green << 8
 
-      color = blue + shiftedGreen + shiftedRed      
+      color = blue + shiftedGreen + shiftedRed
       color
