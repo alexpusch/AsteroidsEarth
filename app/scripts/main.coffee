@@ -28,24 +28,34 @@ require  ['stage', 'asset_loader', 'splashscreen_view', 'game', 'dom_events', 'c
       Promise.resolve(splashScreen)
 
   bindPauseEvents = (game, stage) ->
+    paused = false
+
     pause = ->
-      game.pause()
-      stage.pause()
+      unless paused
+        game.pause()
+        stage.pause()
+        paused = true
 
     resume = ->
-      game.resume()
-      stage.resume()
+      if paused
+        game.resume()
+        stage.resume()
+        paused = false
 
     DOMEvents.bind window, 'blur', ->
+      console.log "blur"
       pause()
 
     DOMEvents.bind window, 'focus', ->
+      console.log "focus"
       resume()
 
     CocoonJS.App.onSuspended.addEventListener ->
+      console.log "pause"
       pause()
 
     CocoonJS.App.onActivated.addEventListener ->
+      console.log "resume"
       resume()
 
   isMobileWeb = ->
