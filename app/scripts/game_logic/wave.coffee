@@ -25,7 +25,7 @@ define ['events', 'pauseable_timeout'], (Events, PauseableTimeout)->
       @waveTimeoutHandler.resume()
 
     destroy: ->
-      PauseableTimeout.clear @waveTimeoutHandler
+      @waveTimeoutHandler.clear()
 
     _spwanAstroid: (astroidPlan)->
       console.log "spwaning astroid"

@@ -50,12 +50,17 @@ require  ['stage', 'asset_loader', 'splashscreen_view', 'game', 'dom_events', 'c
       console.log "focus"
       resume()
 
+    CocoonJS.App.setAppShouldFinishCallback ->
+      console.log "app should finish"
+      pause()
+      true
+
     CocoonJS.App.onSuspended.addEventListener ->
-      console.log "pause"
+      console.log "onSuspended"
       pause()
 
     CocoonJS.App.onActivated.addEventListener ->
-      console.log "resume"
+      console.log "onActivated"
       resume()
 
   isMobileWeb = ->
