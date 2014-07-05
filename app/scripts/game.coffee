@@ -250,14 +250,16 @@ define ['entity_factory',
       [worldWidth, worldHeight]
 
     pause: ->
-      @stopwatch.pause()
-      @powerupSpawner.pause()
-      @astroidSpwaner.pause()
+      unless gameState = "gameOver"
+        @stopwatch.pause()
+        @powerupSpawner.pause()
+        @astroidSpwaner.pause()
 
     resume: ->
-      @stopwatch.resume()
-      @powerupSpawner.resume()
-      @astroidSpwaner.resume()
+      unless gameState = "gameOver"
+        @stopwatch.resume()
+        @powerupSpawner.resume()
+        @astroidSpwaner.resume()
 
     update: ->
       dt = @stopwatch.getFrameTime()
