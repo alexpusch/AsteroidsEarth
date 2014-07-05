@@ -5,7 +5,7 @@
 //  compile cs and sruff
 //  runs server
 //  compile tests
-//  
+//
 
 // # Globbing
 // for performance reasons we're only matching one level down:
@@ -20,7 +20,7 @@ module.exports = function (grunt) {
     require('load-grunt-tasks')(grunt);
     grunt.loadNpmTasks('grunt-requirejs');
     grunt.loadNpmTasks('grunt-notify');
-    
+
     grunt.initConfig({
         // configurable paths
         yeoman: {
@@ -30,7 +30,7 @@ module.exports = function (grunt) {
         watch: {
             options: {
                 nospawn: true
-            }, 
+            },
             coffee: {
                 files: ['<%= yeoman.app %>/scripts/{,*/}*.coffee'],
                 tasks: ['coffee:dist']
@@ -296,7 +296,8 @@ module.exports = function (grunt) {
                         '.htaccess',
                         'images/{,*/}*.{png, jpeg, jpg, webp,gif}',
                         'styles/fonts/{,*/}*.*',
-                        'audio/{,*/}*.ogg'
+                        'audio/explosion.ogg',
+                        'audio/shoot.ogg'
                     ]
                 }]
             },
@@ -342,7 +343,7 @@ module.exports = function (grunt) {
             }
         }
     });
-    
+
     grunt.loadNpmTasks('grunt-contrib-jasmine');
     // grunt.loadNpmTasks('grunt-bower-requirejs');
 
