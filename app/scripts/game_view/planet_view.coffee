@@ -51,7 +51,7 @@ define ['conversions', 'view', 'earth_graphics_points', 'pixi_animator'], (Conve
     _getShieldGraphics: ->
       shieldGraphics = new PIXI.Graphics()
       lineWidth = 0.5 * @camera.getZoom()
-      shieldGraphics.lineStyle lineWidth , 0xcccccc, 0.5
+      shieldGraphics.lineStyle lineWidth , 0xFFFFFF, 0.85
       shieldGraphics.drawCircle 0, 0, @_getScaledRadius() - lineWidth
 
       shieldGraphics

@@ -11,7 +11,7 @@ define ['entity'], (Entity) ->
       bodyDef = new B2D.BodyDef
       bodyDef.type = B2D.Body.b2_dynamicBody
       bodyDef.position = new B2D.Vec2 0,0
-      
+
       fixtureDef = new B2D.FixtureDef
       fixtureDef.density = @density
       fixtureDef.friction = 0
@@ -25,8 +25,8 @@ define ['entity'], (Entity) ->
       force.Subtract(@getPosition())
       distance = force.Length()
       force.Normalize()
-      G = 400
-      forceMagniture = Math.max(8, G * ( @body.GetMass())/(distance*distance))
+      G = 200
+      forceMagniture = Math.max(6, G * ( @body.GetMass())/(distance*distance))
       force?.Multiply(forceMagniture)
 
       @body.ApplyForce force, @body.GetWorldPoint(new B2D.Vec2(0,0))

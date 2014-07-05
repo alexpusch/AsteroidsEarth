@@ -42,13 +42,12 @@ define ['typed_object', 'box2d', 'events'], (TypedObject, B2D, Events)->
       @body.SetAngle angle
 
     destroy: ->
-      console.log "entity #{@id} destroyed"
       @_exists = false
       @events.trigger 'destroy', this
 
     exists: ->
       @_exists
-    
+
     getAABB: ->
       @body.GetFixtureList().GetAABB()
     on: (eventName, callback)->

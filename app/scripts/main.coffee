@@ -110,7 +110,7 @@ require  ['stage', 'asset_loader', 'splashscreen_view', 'game', 'dom_events', 'c
       Promise.all([
         AssetLoader.loadAudioAssets(audioAssets),
         AssetLoader.loadGraphicAssets(graphicAssets),
-        getDelayedPromise 0
+        getDelayedPromise 2000
       ]).then ->
         splashScreen.fadeOut().then ->
           splashScreen.destroy()

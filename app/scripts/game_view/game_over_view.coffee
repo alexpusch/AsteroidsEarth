@@ -66,12 +66,12 @@ define ['events', 'view', 'pixi_animator', 'pixi_layout'], (Events, View, Animat
       if @score.getHighScore() == @score.getScore()
         new PIXI.Text "NEW HIGHSCORE!",
           fill: "#ffcc00"
-          font: "100px DroidSans bold"
+          font: "100px DroidSans"
           align: "center"
       else
         new PIXI.Text "HIGHSCORE: #{@score.getHighScore()}",
           fill: "white"
-          font: "100px DroidSans bold"
+          font: "100px DroidSans"
           align: "center"
 
     _createRefreshButton: ->

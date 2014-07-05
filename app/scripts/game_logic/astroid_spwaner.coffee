@@ -12,7 +12,7 @@ define ['typed_object', 'planet', 'wave', 'events', 'math_helpers'], (TypedObjec
           min: 3
           max: 4
         timeOffset:
-          min: 800
+          min: 1000
           max: 3000
           range: 1000
           step: 200

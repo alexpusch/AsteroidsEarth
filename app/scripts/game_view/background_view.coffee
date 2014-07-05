@@ -1,13 +1,13 @@
 define ['view'], (View) ->
   class Background extends View
     constructor: (container, camera) ->
-      @options = 
+      @options =
         numberOfStarts: 50
         starRadiusRange:
           min: (3/8) * camera.getZoom()
           max: (5/8) * camera.getZoom()
         startPoints: 5
-        starRatio: 0.4
+        starRatio: 0.3
         musicFadeOutDuration: 1000
 
       super container, camera
@@ -22,28 +22,28 @@ define ['view'], (View) ->
       graphics
 
     onAppearance: ->
-      @sound = createjs.Sound.play "background",
-        loop: -1
-        volume: 1
+      # @sound = createjs.Sound.play "background",
+      #   loop: -1
+      #   volume: 0.2
 
     fadeAudioOut: ->
-      @stopwatch.setMark "startFadingAudioOut"
-      duration = @options.musicFadeOutDuration
-      fadeOutStep = =>
-        now = new Date()
-        ratio = @stopwatch.getTimeSinceMark("startFadingAudioOut") / duration
+      # @stopwatch.setMark "startFadingAudioOut"
+      # duration = @options.musicFadeOutDuration
+      # fadeOutStep = =>
+      #   now = new Date()
+      #   ratio = @stopwatch.getTimeSinceMark("startFadingAudioOut") / duration
 
-        if ratio > 1
-          ratio = 1
+      #   if ratio > 1
+      #     ratio = 1
 
-        @sound.setVolume(1 - ratio)
+      #   @sound.setVolume(1 - ratio)
 
-        if ratio == 1
-          @sound.stop()
-        else
-          requestAnimFrame fadeOutStep
+      #   if ratio == 1
+      #     @sound.stop()
+      #   else
+      #     requestAnimFrame fadeOutStep
 
-      fadeOutStep()
+      # fadeOutStep()
 
     onDestroy: ->
       @sound.stop()
@@ -65,13 +65,13 @@ define ['view'], (View) ->
 
       point = @_getPointInAngle angle0, radius, position
       graphics.moveTo point.x, point.y
-    
+
       skipAngle = Math.PI / @options.startPoints
       for i in [1..(@options.startPoints * 2)]
         currentAngle = skipAngle * i + angle0
         currentRadius = if (i % 2 == 0) then radius else (radius * @options.starRatio)
         point = @_getPointInAngle currentAngle, currentRadius, position
-        
+
         graphics.lineTo point.x, point.y
 
       graphics.endFill()
