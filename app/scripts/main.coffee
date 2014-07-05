@@ -64,14 +64,21 @@ require  ['stage', 'asset_loader', 'splashscreen_view', 'game', 'dom_events', 'c
   window.isCocoonJS = ->
     navigator.isCocoonJS
 
-  if document.getElementById("game")?
+  putTempalte = (templateId, targetId) ->
+    templateContent = document.getElementById(templateId).innerHTML
+    container = document.getElementById targetId
+    container.innerHTML = templateContent
+
+  if document.getElementById("container")?
     if isCocoonJS()
+      putTempalte "cocoon-template", "container"
       options =
         width: window.innerWidth
         height: window.innerHeight
         container: document.body
       gameConfig = Configuration.Mobile
     else
+      putTempalte "desktop-template", "container"
       gameEl = document.getElementById "game"
       options =
         width: gameEl.clientWidth

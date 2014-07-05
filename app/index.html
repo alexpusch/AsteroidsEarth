@@ -14,31 +14,28 @@
         <link rel="stylesheet" href="styles/main.css">
         <!-- endbuild -->
     </head>
-    <body class = "desktop">
-        <div id="container">
-            <div id="header"></div>
-            <div id="game"></div>
+    <body>
+        <script type="text/template" id = "desktop-template">
+            <div id="header">
+                <h1>ASTEROIDS: EARTH</h1>
+            </div>
+            <div id = "content">
+                <div id="game"></div>
+                <div><a href="https://play.google.com/store/apps/details?id=alex.games.asteroidsearth"><img src="images/playstore.png"></a></div>
+            </div>
             <div id="footer"></div>
-        </div>
+        </script>
+
+        <script type="text/template" id = "cocoon-template">
+            <div id="game"></div>
+        </script>
+
+        <div id="container"></div>
+
         <!--[if lt IE 10]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
 
-        <!-- <div id='container'>
-            <div id='header'>
-                <h1> SpaceWars </h1>
-            </div>
-            <div id='main'>
-                <div id='game-container'>
-                    <canvas id = 'gameCanvas'></canvas>
-                </div>
-            </div>
-            <div id='footer'>
-                <ul>
-                    <li>Made by me</li>
-                </ul>
-            </div>
-        </div> -->
         <!-- build:js scripts/vendor.js -->
         <!-- bower:js -->
         <script src="bower_components/es6-promise/promise.js"></script>
