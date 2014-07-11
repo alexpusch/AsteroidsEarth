@@ -11,9 +11,9 @@ define ['vector_helpers', 'box2d'], (VectorHelpers, B2D) ->
       @cannonOffset = options.cannonOffset
       @cannonHeatRate = options.cannonHeatRate
       @cannonCooldownRate = options.cannonCooldownRate
-      @cannonTemperature = 0  
+      @cannonTemperature = 0
       @bulletSpeed = options.bulletSpeed
-      @bulletDensity = 7
+      @bulletDensity = 15
       @speed = new B2D.Vec2 0, 0
       @position = new B2D.Vec2 0, 0
       @angle = 0
@@ -32,7 +32,7 @@ define ['vector_helpers', 'box2d'], (VectorHelpers, B2D) ->
       unless @cannonIntervalHandler?
         @fireBullet()
         @cannonIntervalHandler = setInterval(
-          => 
+          =>
            @fireBullet()
         , @cannonRate)
 
@@ -70,7 +70,7 @@ define ['vector_helpers', 'box2d'], (VectorHelpers, B2D) ->
 
     addBulletDensity: (amount) ->
       @bulletDensity += amount
-      
+
     destroy: ->
       @turnCannonOff()
 

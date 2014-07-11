@@ -17,10 +17,10 @@ define ['typed_object', 'planet', 'wave', 'events', 'math_helpers'], (TypedObjec
           range: 1000
           step: 200
         density:
-          min: 0.3
-          max: 3
-          step: 0.1
-          range: 0.2
+          min: 1
+          max: 9
+          step: 0.2
+          range: 0.4
 
     startSpwaning: ->
       @startNextWave(0)

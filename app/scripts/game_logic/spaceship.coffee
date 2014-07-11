@@ -1,5 +1,5 @@
 define ['box2d', 'entity', 'vector_helpers', 'math_helpers', 'cannon'], (B2D, Entity, VectorHelpers, MathHelpers, Cannon) ->
-  
+
   class Spaceship extends Entity
     constructor: (options) ->
       super 'spaceship'
@@ -11,7 +11,7 @@ define ['box2d', 'entity', 'vector_helpers', 'math_helpers', 'cannon'], (B2D, En
       @cannon = new Cannon
         bulletSpeed: 30
         cannonOffset: new B2D.Vec2(@length)
-        cannonRate: 200    
+        cannonRate: 200
         cannonHeatRate: options.cannonHeatRate
         cannonCooldownRate: options.cannonCooldownRate
 
@@ -36,7 +36,7 @@ define ['box2d', 'entity', 'vector_helpers', 'math_helpers', 'cannon'], (B2D, En
       fixtureDef.density = 1
       fixtureDef.friction = 0
       fixtureDef.shape = new B2D.PolygonShape
-      fixtureDef.shape.SetAsArray [ 
+      fixtureDef.shape.SetAsArray [
           new B2D.Vec2(-@length/2, -@width/2),
           new B2D.Vec2(@length/2, 0),
           new B2D.Vec2(-@length/2, @width/2)], 3
@@ -108,7 +108,7 @@ define ['box2d', 'entity', 'vector_helpers', 'math_helpers', 'cannon'], (B2D, En
 
     destroy: ->
       @cannon.destroy()
-    
+
     handleExitWorld: ->
       @outOfWorld = true
 
@@ -133,11 +133,11 @@ define ['box2d', 'entity', 'vector_helpers', 'math_helpers', 'cannon'], (B2D, En
 
     addBulletDensity: (amount) ->
       @cannon.addBulletDensity amount
-      
+
     _autoPilot: ->
       angle = @_calculateAngleTwardsTarget()
-      
-      if Math.abs(angle) < 5 
+
+      if Math.abs(angle) < 5
         @fireMainThrusters() unless @isCannonOn()
         @turnLeftThrustersOff()
         @turnRightThrustersOff()
@@ -154,11 +154,11 @@ define ['box2d', 'entity', 'vector_helpers', 'math_helpers', 'cannon'], (B2D, En
       position = @body.GetPosition()
       pointDirection = new B2D.Vec2(@autoPilotTarget.x - position.x, @autoPilotTarget.y - position.y)
       pointDirection.Normalize()
-      
+
       direction = @_getDirectionVector()
 
       angle = Math.atan2(pointDirection.x, pointDirection.y) - Math.atan2(direction.x, direction.y)
-      angle = MathHelpers.r2d angle        
+      angle = MathHelpers.r2d angle
       angle = MathHelpers.adjustAngle angle
 
       angle

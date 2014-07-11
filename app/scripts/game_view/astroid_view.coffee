@@ -26,8 +26,8 @@ define ['conversions', 'view', 'color_helpers'], (Conversions, View, ColorHelper
       lowDensityColor = 0xed8c00
       highDensityColor = 0x520000
 
-      min = 0.3
-      max = 3
+      min = 1
+      max = 9
 
       t = 1 - (density - min)/(max - min)
 

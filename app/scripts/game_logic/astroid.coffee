@@ -29,9 +29,10 @@ define ['entity'], (Entity) ->
       force.Subtract(@getPosition())
       distance = force.Length()
       force.Normalize()
-      G = 1/4
-      forceMagniture = G * @body.GetMass()
+      G = 0.003
+      forceMagniture = G * @body.GetMass() * @body.GetMass()
       force?.Multiply(forceMagniture)
+      # window.log "force: #{forceMagniture} speed: #{@body.GetLinearVelocity().Length()}"
       @body.ApplyForce force, @body.GetWorldPoint(new B2D.Vec2(0,0))
 
     getRadius: ->
