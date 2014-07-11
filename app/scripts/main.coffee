@@ -53,10 +53,18 @@ require  ['stage', 'asset_loader', 'splashscreen_view', 'game', 'dom_events', 'c
     CocoonJS.App.setAppShouldFinishCallback ->
       console.log "app should finish"
       pause()
-      true
+      CocoonJS.App.showMessageBox("Confirmation" , "Are you sure you want to quit?", "Yes", "No")
 
-    CocoonJS.App.onSuspended.addEventListener ->
-      console.log "onSuspended"
+      CocoonJS.App.onMessageBoxConfirmed.addEventListener ->
+        CocoonJS.App.forceToFinish()
+
+      CocoonJS.App.onMessageBoxDenied.addEventListener ->
+        resume()
+
+      false
+
+    CocoonJS.App.onSuspending.addEventListener ->
+      console.log "onSuspending"
       pause()
 
     CocoonJS.App.onActivated.addEventListener ->
@@ -102,9 +110,9 @@ require  ['stage', 'asset_loader', 'splashscreen_view', 'game', 'dom_events', 'c
     ,
       # src: "Broke_For_Free_-_01_-_Night_Owl.ogg"
       # src: "nightowl2.ogg"
-      src: "background.ogg"
-      id: "background"
-    # ,
+      # src: "background.ogg"
+      # id: "background"
+
     ]
 
     graphicAssets = [

@@ -12,10 +12,16 @@ define ['box2d', 'dom_events'], (B2D, DOMEvents)->
 
     control: (@spaceship) ->
       @keyDownCallback = (e) =>
-        @mapping[e.keyCode]?.apply(this, ['on'])
+        handler = @mapping[e.keyCode]
+        if handler?
+          handler.apply(this, ['on'])
+          e.preventDefault()
 
       @keyUpCallback = (e) =>
-        @mapping[e.keyCode]?.apply(this, ['off'])
+        handler = @mapping[e.keyCode]
+        if handler?
+          handler.apply(this, ['off'])
+          e.preventDefault()
 
       @touchstartCallback = (e) =>
         @handleTouch e
@@ -53,8 +59,6 @@ define ['box2d', 'dom_events'], (B2D, DOMEvents)->
         @spaceship.fireCannon()
       else
         @spaceship.turnCannonOff()
-
-      false
 
     handleTouch: (event) ->
       touch = event.touches[0]
