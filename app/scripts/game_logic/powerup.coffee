@@ -1,7 +1,5 @@
-define ['entity', 'spaceship', 'bullet', 'astroid', 'planet', 'collision_helpers', 'vector_helpers'], (Entity, Spaceship, Bullet, Astroid, Planet, CollisionHelpers, VectorHelpers) ->
+define ['entity', 'spaceship', 'bullet', 'astroid', 'planet', 'vector_helpers'], (Entity, Spaceship, Bullet, Astroid, Planet, VectorHelpers) ->
   class Powerup extends Entity
-    @categoryBits: CollisionHelpers.getAviliableCategoryBit()
-
     constructor: (powerupType) ->
       super powerupType
       @applied = false

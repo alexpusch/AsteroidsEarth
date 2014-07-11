@@ -6,7 +6,9 @@
     "box2dweb": "latest",
     "pixi" : "git@github.com:videlais/pixi.js.git#dev",
     "underscore": "~1.5.2",
-    "es6-promise": "latest"
+    "es6-promise": "latest",
+    "SoundJS": "latest",
+    "soundjsCocoonjsPlugin": "~0.5.2"
   },
   "devDependencies": {
     "requirejs": "~2.1.9"
