@@ -1,4 +1,4 @@
-define ['world', 'spaceship', 'bullet', 'astroid', 'planet', 'speed_powerup', 'bullet_mass_powerup', 'shockwave_powerup', 'shield_powerup'], (World, Spaceship, Bullet, Astroid, Planet, SpeedPowerup, BulletMassPowerup, ShockwavePowerup, ShieldPowerup)->
+define ['world', 'spaceship', 'bullet', 'asteroid', 'planet', 'speed_powerup', 'bullet_mass_powerup', 'shockwave_powerup', 'shield_powerup'], (World, Spaceship, Bullet, Asteroid, Planet, SpeedPowerup, BulletMassPowerup, ShockwavePowerup, ShieldPowerup)->
   class EntityFactory
     constructor: (@world, @config) ->
 
@@ -13,9 +13,9 @@ define ['world', 'spaceship', 'bullet', 'astroid', 'planet', 'speed_powerup', 'b
 
       @_createEntity Bullet, options
 
-    createAstroid: (options = {}) ->
+    createAsteroid: (options = {}) ->
       options.planet = @planet
-      @_createEntity Astroid,
+      @_createEntity Asteroid,
         options
 
     createPlanet: ->

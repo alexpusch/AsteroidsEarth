@@ -1,6 +1,6 @@
 define ['view', 'box2d', 'conversions', 'pixi_animator'], (View, B2D, Conversions, Animator) ->
   class WaveView extends View
-    constructor: (container, camera, @astroidSpwaner) ->
+    constructor: (container, camera, @asteroidSpwaner) ->
       super container, camera
       @animationDirection = 0
 
@@ -15,8 +15,8 @@ define ['view', 'box2d', 'conversions', 'pixi_animator'], (View, B2D, Conversion
 
         @animate()
 
-      @astroidSpwaner.events.on "newWave", @newWaveHandler
-          
+      @asteroidSpwaner.events.on "newWave", @newWaveHandler
+
     createGraphics: ->
       @graphics = new PIXI.Text "WAVE 1",
         font: '30pt DroidSans'
@@ -49,4 +49,4 @@ define ['view', 'box2d', 'conversions', 'pixi_animator'], (View, B2D, Conversion
 
 
     onDestroy: ->
-      @astroidSpwaner.events.off "newWave", @newWaveHandler
+      @asteroidSpwaner.events.off "newWave", @newWaveHandler

@@ -1,4 +1,4 @@
-define ['entity', 'spaceship', 'bullet', 'astroid', 'planet', 'vector_helpers'], (Entity, Spaceship, Bullet, Astroid, Planet, VectorHelpers) ->
+define ['entity', 'spaceship', 'bullet', 'asteroid', 'planet', 'vector_helpers'], (Entity, Spaceship, Bullet, Asteroid, Planet, VectorHelpers) ->
   class Powerup extends Entity
     constructor: (powerupType) ->
       super powerupType
@@ -17,7 +17,7 @@ define ['entity', 'spaceship', 'bullet', 'astroid', 'planet', 'vector_helpers'],
     shouldPassThrough: (entity) ->
       entity instanceof Spaceship or
       entity instanceof Bullet or
-      entity instanceof Astroid or
+      entity instanceof Asteroid or
       entity instanceof Planet
 
     handleExitWorld: ->

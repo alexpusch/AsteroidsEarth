@@ -1,4 +1,4 @@
-define ['entity_factory', 'world', 'spaceship', 'bullet', 'astroid', 'speed_powerup'], (EntityFactory, World, Spaceship, Bullet, Astroid, SpeedPowerup) ->
+define ['entity_factory', 'world', 'spaceship', 'bullet', 'asteroid', 'speed_powerup'], (EntityFactory, World, Spaceship, Bullet, Asteroid, SpeedPowerup) ->
   describe "EntityFactory", ->
     beforeEach ->
       @world = jasmine.createSpyObj('world', ['registerEntity'])
@@ -22,18 +22,18 @@ define ['entity_factory', 'world', 'spaceship', 'bullet', 'astroid', 'speed_powe
       it "registerEntity it with the given world", ->
         expect(@world.registerEntity).toHaveBeenCalledWith @bullet
 
-    describe "createAstroid", ->
+    describe "createAsteroid", ->
       beforeEach ->
         @planet = @ef.createPlanet()
-        @astroid = @ef.createAstroid()
+        @asteroid = @ef.createAsteroid()
 
-      it "returns a new astroid using the previously created planet", ->
-        
-        expect(@astroid).toEqual(jasmine.any Astroid)
-        expect(@astroid.planet).toEqual @planet
+      it "returns a new asteroid using the previously created planet", ->
+
+        expect(@asteroid).toEqual(jasmine.any Asteroid)
+        expect(@asteroid.planet).toEqual @planet
 
       it "registerEntity it with the given world", ->
-        expect(@world.registerEntity).toHaveBeenCalledWith @astroid
+        expect(@world.registerEntity).toHaveBeenCalledWith @asteroid
 
     describe "createSpeedPowerup", ->
       beforeEach ->

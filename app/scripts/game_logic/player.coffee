@@ -65,7 +65,7 @@ define ['box2d', 'dom_events'], (B2D, DOMEvents)->
       viewPoint = new B2D.Vec2(touch.pageX, touch.pageY)
       worldPoint = @camera.backProject viewPoint
 
-      if @world.hitCheck "astroid", worldPoint
+      if @world.hitCheck "asteroid", worldPoint
         @spaceship.fireCannon()
       else
         @spaceship.turnCannonOff()

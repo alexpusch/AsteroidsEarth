@@ -1,15 +1,15 @@
 define ['view', 'pixi_animator'], (View, Animator) ->
   class TutorialView extends View
-    constructor: (container, camera, astroidSpwaner) ->
+    constructor: (container, camera, asteroidSpwaner) ->
       super container, camera
 
-      firstAstroidCallback = (astroid) =>
-        astroidSpwaner.events.off "newAstroid", firstAstroidCallback  
-        @astroidToFollow = astroid
-        @_showFireTutorial astroid
+      firstAsteroidCallback = (asteroid) =>
+        asteroidSpwaner.events.off "newAsteroid", firstAsteroidCallback
+        @asteroidToFollow = asteroid
+        @_showFireTutorial asteroid
 
-      astroidSpwaner.events.on "newAstroid", firstAstroidCallback
-    
+      asteroidSpwaner.events.on "newAsteroid", firstAsteroidCallback
+
     createGraphics: ->
       graphics = new PIXI.DisplayObjectContainer()
 
@@ -23,7 +23,7 @@ define ['view', 'pixi_animator'], (View, Animator) ->
       @moveFingerGraphics.height = 100
       @moveFingerGraphics.width = 100 * r
       @moveTutorialGraphics.addChild @moveFingerGraphics
-      
+
       @fireTutorialGraphics = new PIXI.DisplayObjectContainer()
 
       @fireFingerGraphics = new PIXI.Sprite fingerTexture
@@ -44,11 +44,11 @@ define ['view', 'pixi_animator'], (View, Animator) ->
     updateGraphics: ->
       # @pushToTop()
 
-      if @astroidToFollow?
-        astroidPoint = @camera.project @astroidToFollow.getPosition()
-        @fireTutorialGraphics.position = astroidPoint
+      if @asteroidToFollow?
+        asteroidPoint = @camera.project @asteroidToFollow.getPosition()
+        @fireTutorialGraphics.position = asteroidPoint
 
-    _showMoveTutorial: ->     
+    _showMoveTutorial: ->
       x = @container.width * 0.8
       y = @container.height * 0.2
       @moveTutorialGraphics.position.x = x
@@ -56,7 +56,7 @@ define ['view', 'pixi_animator'], (View, Animator) ->
 
       @_showTappingFinger @moveFingerGraphics, [1000, 1000, 1000]
 
-    _showFireTutorial: (astroid) ->
+    _showFireTutorial: (asteroid) ->
       @fireTutorialGraphics.visible = true
       @_showTappingFinger @fireFingerGraphics, [2000, 2000, 100, 100, 100, 100, 1000, 1000, 100, 100, 100, 100]
 

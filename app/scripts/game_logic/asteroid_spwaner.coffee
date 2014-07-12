@@ -1,7 +1,7 @@
 define ['typed_object', 'planet', 'wave', 'events', 'math_helpers'], (TypedObject, Planet, Wave, Events, MathHelpers) ->
-  class AstroidSpwaner extends TypedObject
+  class AsteroidSpwaner extends TypedObject
     constructor: (options) ->
-      super "astroidSpwaner"
+      super "asteroidSpwaner"
       @width = options.width
       @height = options.height
       @waveIndex = 0
@@ -30,8 +30,8 @@ define ['typed_object', 'planet', 'wave', 'events', 'math_helpers'], (TypedObjec
       @events.trigger "newWave", waveIndex
       @currentWave = new Wave wavePlan
 
-      @currentWave.events.on "newAstroid", (astroid) =>
-        @events.trigger "newAstroid", astroid
+      @currentWave.events.on "newAsteroid", (asteroid) =>
+        @events.trigger "newAsteroid", asteroid
 
       @waveDestroyedCallback = =>
         @waveIndex++
@@ -43,10 +43,10 @@ define ['typed_object', 'planet', 'wave', 'events', 'math_helpers'], (TypedObjec
       @currentWave.start()
 
     generageWavePlan: (waveIndex)->
-      @currentWaveCount = @_getRandomAstroidsCount waveIndex
+      @currentWaveCount = @_getRandomAsteroidsCount waveIndex
       wavePlan = []
       for i in [0..@currentWaveCount]
-        wavePlan.push @_generageRandomAstroidPlan waveIndex
+        wavePlan.push @_generageRandomAsteroidPlan waveIndex
 
       wavePlan
 
@@ -63,18 +63,18 @@ define ['typed_object', 'planet', 'wave', 'events', 'math_helpers'], (TypedObjec
       @currentWave.events.off "waveDestroyed", @waveDestroyedCallback
       @currentWave.destroy()
 
-    _generageRandomAstroidPlan: (waveIndex) ->
+    _generageRandomAsteroidPlan: (waveIndex) ->
       radius = @_getRandomRadius()
 
-      astroidPlan =
+      asteroidPlan =
         radius: radius
         position: @_getRandomPosition radius
         offset: @_getRandomTimeOffset waveIndex
         density: @_getRandomDensity waveIndex
 
-      astroidPlan
+      asteroidPlan
 
-    _getRandomAstroidsCount: (waveIndex) ->
+    _getRandomAsteroidsCount: (waveIndex) ->
       3 + Math.floor(Math.pow((waveIndex + 1), 1.2))
 
     _getRandomRadius: ->
@@ -94,7 +94,7 @@ define ['typed_object', 'planet', 'wave', 'events', 'math_helpers'], (TypedObjec
 
       offset
 
-    _getRandomPosition: (astroidRadius) ->
+    _getRandomPosition: (asteroidRadius) ->
       side = _.random 3, 4
 
       randomY = _.random -@height/2, @height/2
@@ -105,17 +105,17 @@ define ['typed_object', 'planet', 'wave', 'events', 'math_helpers'], (TypedObjec
         # top
         when 1
           x: randomX
-          y: -@height/2 -astroidRadius + offset
+          y: -@height/2 -asteroidRadius + offset
         # bottom
         when 2
           x: randomX
-          y: @height/2 + astroidRadius - offset
+          y: @height/2 + asteroidRadius - offset
         # left
         when 3
-          x: -@width/2 - astroidRadius + offset
+          x: -@width/2 - asteroidRadius + offset
           y: randomY
         # right
         when 4
-          x: @width/2 + astroidRadius - offset
+          x: @width/2 + asteroidRadius - offset
           y: randomY
 

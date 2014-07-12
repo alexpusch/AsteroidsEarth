@@ -1,4 +1,4 @@
-define ['box2d', 'events', 'astroid', 'planet', 'spaceship', 'powerup'], (B2D, Events, Astroid, Planet, Spaceship, Powerup) ->
+define ['box2d', 'events', 'asteroid', 'planet', 'spaceship', 'powerup'], (B2D, Events, Asteroid, Planet, Spaceship, Powerup) ->
 
   class WorldContactListener
     constructor: (@worldBody) ->

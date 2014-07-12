@@ -2,7 +2,7 @@ define ['events', 'pauseable_timeout'], (Events, PauseableTimeout)->
   class Wave
     constructor: (@wavePlan)->
       @events = new Events()
-      @activeAstroids = @wavePlan.length
+      @activeAsteroids = @wavePlan.length
 
     start: ->
       @continueWave(0)
@@ -11,12 +11,12 @@ define ['events', 'pauseable_timeout'], (Events, PauseableTimeout)->
       if(waveIndex == @wavePlan.length)
         return
 
-      astroidPlan = @wavePlan[waveIndex]
+      asteroidPlan = @wavePlan[waveIndex]
 
       @waveTimeoutHandler = PauseableTimeout.setTimeout =>
-        @_spwanAstroid astroidPlan
+        @_spwanAsteroid asteroidPlan
         @continueWave(waveIndex + 1)
-      , astroidPlan.offset
+      , asteroidPlan.offset
 
     pause: ->
       @waveTimeoutHandler.pause()
@@ -27,17 +27,17 @@ define ['events', 'pauseable_timeout'], (Events, PauseableTimeout)->
     destroy: ->
       @waveTimeoutHandler.clear()
 
-    _spwanAstroid: (astroidPlan)->
+    _spwanAsteroid: (asteroidPlan)->
       options =
-          radius: astroidPlan.radius
-          position: astroidPlan.position
-          density: astroidPlan.density
+          radius: asteroidPlan.radius
+          position: asteroidPlan.position
+          density: asteroidPlan.density
 
-      astroid = window.EntityFactory.createAstroid options
+      asteroid = window.EntityFactory.createAsteroid options
 
-      @events.trigger "newAstroid", astroid
+      @events.trigger "newAsteroid", asteroid
 
-      astroid.on 'destroy', =>
-        @activeAstroids--
-        if @activeAstroids == 0
+      asteroid.on 'destroy', =>
+        @activeAsteroids--
+        if @activeAsteroids == 0
           @events.trigger 'waveDestroyed'

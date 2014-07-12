@@ -1,8 +1,8 @@
-define ['powerup', 'box2d', 'spaceship', 'astroid', 'bullet'], (Powerup, B2D, Spaceship, Astroid, Bullet) ->
+define ['powerup', 'box2d', 'spaceship', 'asteroid', 'bullet'], (Powerup, B2D, Spaceship, Asteroid, Bullet) ->
   class ShockwavePowerup extends Powerup
     constructor: (@world) ->
       super "shockwavePowerup"
 
     apply: ->
-      @world.startShockWave @getPosition(), [Spaceship, Astroid, Bullet]
+      @world.startShockWave @getPosition(), [Spaceship, Asteroid, Bullet]
 

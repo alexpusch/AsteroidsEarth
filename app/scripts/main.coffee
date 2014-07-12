@@ -60,7 +60,7 @@ require  ['stage', 'asset_loader', 'splashscreen_view', 'game', 'dom_events', 'c
 
       false
 
-    CocoonJS.App.onSuspending.addEventListener ->
+    CocoonJS.App.onSuspended.addEventListener ->
       pause()
 
     CocoonJS.App.onActivated.addEventListener ->

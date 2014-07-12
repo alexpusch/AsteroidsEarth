@@ -6,10 +6,10 @@ define ['entity_factory',
          'spaceship_view',
          'bullet_view',
          'planet_view'
-         'astroid_view'
+         'asteroid_view'
          'camera',
          'planet',
-         'astroid_spwaner',
+         'asteroid_spwaner',
          'score',
          'score_view',
          'start_screen_view'
@@ -35,10 +35,10 @@ define ['entity_factory',
           SpaceshipView,
           BulletView,
           PlanetView
-          AstroidView,
+          AsteroidView,
           Camera,
           Planet,
-          AstroidSpwaner,
+          AsteroidSpwaner,
           Score,
           ScoreView,
           StartScreenView,
@@ -83,7 +83,7 @@ define ['entity_factory',
       @gameState = "gameOn"
       @player.control @spaceship
       @views.add "scoreView", @createScoreView(), 1
-      @astroidSpwaner.startSpwaning()
+      @asteroidSpwaner.startSpwaning()
       @powerupSpawner.startSpwaning()
 
     reset: ->
@@ -101,7 +101,7 @@ define ['entity_factory',
       @player.stopControling()
       @stopwatch.setMark("gameOver")
       @powerupSpawner.destroy()
-      @astroidSpwaner.destroy()
+      @asteroidSpwaner.destroy()
       @gameState = "gameOver"
 
     createGameObjects: ->
@@ -117,7 +117,7 @@ define ['entity_factory',
       @spaceship.setPosition new B2D.Vec2 0, -20
 
       @planet = @createPlanet()
-      @astroidSpwaner = @createAstroidSpawner()
+      @asteroidSpwaner = @createAsteroidSpawner()
       @camera = @createCamera()
       @views.add "worldView", @createWorldView()
       @player = new Player @camera, @world
@@ -145,8 +145,8 @@ define ['entity_factory',
 
       planet
 
-    createAstroidSpawner: ->
-      new AstroidSpwaner
+    createAsteroidSpawner: ->
+      new AsteroidSpwaner
         width: @worldWidth
         height: @worldHeight
         planet: @planet
@@ -176,13 +176,13 @@ define ['entity_factory',
       score = new Score
         upInterval: 300
 
-      @astroidSpwaner.events.on "newWave", (index) ->
+      @asteroidSpwaner.events.on "newWave", (index) ->
         score.setMultiplier (index + 1)
 
       score
 
     createWaveView: ->
-      new WaveView @stage.getContainer(), @camera, @astroidSpwaner
+      new WaveView @stage.getContainer(), @camera, @asteroidSpwaner
 
     createStartScreen: ->
       startScreen = new StartScreenView @stage.getContainer()
@@ -212,12 +212,12 @@ define ['entity_factory',
 
     createTutorialView: ->
       tutorialViewType = @config.tutorialViewType
-      new tutorialViewType @stage.getContainer(), @camera, @astroidSpwaner
+      new tutorialViewType @stage.getContainer(), @camera, @asteroidSpwaner
 
     registerViewTypes: (worldView) ->
       worldView.registerView('spaceship', SpaceshipView)
       worldView.registerView('bullet', BulletView)
-      worldView.registerView('astroid', AstroidView)
+      worldView.registerView('asteroid', AsteroidView)
       worldView.registerView('planet', PlanetView)
       worldView.registerView('score', ScoreView)
       worldView.registerView('speedPowerup', SpeedPowerupView, -1)
@@ -252,13 +252,13 @@ define ['entity_factory',
       unless @gameState == "gameOver"
         @stopwatch.pause()
         @powerupSpawner.pause()
-        @astroidSpwaner.pause()
+        @asteroidSpwaner.pause()
 
     resume: ->
       unless @gameState == "gameOver"
         @stopwatch.resume()
         @powerupSpawner.resume()
-        @astroidSpwaner.resume()
+        @asteroidSpwaner.resume()
 
     update: ->
       dt = @stopwatch.getFrameTime()

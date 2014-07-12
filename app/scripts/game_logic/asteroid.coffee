@@ -1,7 +1,7 @@
 define ['entity'], (Entity) ->
-  class Astroid extends Entity
+  class Asteroid extends Entity
     constructor: (options) ->
-      super 'astroid'
+      super 'asteroid'
       @radius = options.radius
       @planet = options.planet
       @density = options.density
