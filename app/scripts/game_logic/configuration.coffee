@@ -2,6 +2,7 @@ define ['tutorial_view', 'desktop_tutorial_view'], (TutorialView, DesktopTutoria
   Configuration =
     Mobile:
       type: 'mobile'
+      zoomRatio: 45
       Spaceship:
         speed: 150
         angularSpeed: 100
@@ -14,13 +15,14 @@ define ['tutorial_view', 'desktop_tutorial_view'], (TutorialView, DesktopTutoria
       tutorialViewType: TutorialView
     Desktop:
       type: 'desktop'
+      zoomRatio: 65
       Spaceship:
-        speed: 150
+        speed: 200
         angularSpeed: 50
         width: 2
         length: 3
-        cannonHeatRate: 0.13
+        cannonHeatRate: 0.1
         cannonCooldownRate: 0.3
         angularDamping: 4
-        linearDamping: 1.5
+        linearDamping: 2
       tutorialViewType: DesktopTutorialView

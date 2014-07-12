@@ -8,15 +8,15 @@ define ['events', 'pauseable_timeout'], (Events, PauseableTimeout)->
       @continueWave(0)
 
     continueWave: (waveIndex)->
-      if(waveIndex == @wavePlan.length)
-        return
-
       asteroidPlan = @wavePlan[waveIndex]
 
-      @waveTimeoutHandler = PauseableTimeout.setTimeout =>
+      _.defer =>
         @_spwanAsteroid asteroidPlan
-        @continueWave(waveIndex + 1)
-      , asteroidPlan.offset
+
+      if(waveIndex < @wavePlan.length - 1)
+        @waveTimeoutHandler = PauseableTimeout.setTimeout =>
+          @continueWave(waveIndex + 1)
+        , asteroidPlan.offset
 
     pause: ->
       @waveTimeoutHandler.pause()

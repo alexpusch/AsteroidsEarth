@@ -16,12 +16,14 @@ define ['box2d', 'dom_events'], (B2D, DOMEvents)->
         if handler?
           handler.apply(this, ['on'])
           e.preventDefault()
+          false
 
       @keyUpCallback = (e) =>
         handler = @mapping[e.keyCode]
         if handler?
           handler.apply(this, ['off'])
           e.preventDefault()
+          false
 
       @touchstartCallback = (e) =>
         @handleTouch e

@@ -5,7 +5,7 @@ define ['entity'], (Entity) ->
       @radius = options.radius
       @planet = options.planet
       @density = options.density
-      @forceWasApplied = false
+      @initialBoostWasApplied = false
 
     getEntityDef: ->
       bodyDef = new B2D.BodyDef
@@ -29,6 +29,12 @@ define ['entity'], (Entity) ->
       forceMagniture = G * @body.GetMass() * @body.GetMass()
       force?.Multiply(forceMagniture)
       @body.ApplyForce force, @body.GetWorldPoint(new B2D.Vec2(0,0))
+
+      unless @initialBoostWasApplied
+        @initialBoostWasApplied = true
+        speed = force.Copy()
+        speed.Multiply 0.1
+        @body.SetLinearVelocity speed
 
     getRadius: ->
       @radius
