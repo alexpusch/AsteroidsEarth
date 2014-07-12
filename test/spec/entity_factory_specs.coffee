@@ -1,8 +1,11 @@
 define ['entity_factory', 'world', 'spaceship', 'bullet', 'asteroid', 'speed_powerup'], (EntityFactory, World, Spaceship, Bullet, Asteroid, SpeedPowerup) ->
   describe "EntityFactory", ->
     beforeEach ->
+      config =
+        Spaceship: 1
+
       @world = jasmine.createSpyObj('world', ['registerEntity'])
-      @ef = new EntityFactory @world
+      @ef = new EntityFactory @world, config
 
     describe "createSpaceship", ->
       it "returns a new spaceship", ->
