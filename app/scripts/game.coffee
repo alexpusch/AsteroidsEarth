@@ -249,13 +249,13 @@ define ['entity_factory',
       [worldWidth, worldHeight]
 
     pause: ->
-      unless @gameState == "gameOver"
+      if @gameState == "gameOn"
         @stopwatch.pause()
         @powerupSpawner.pause()
         @asteroidSpwaner.pause()
 
     resume: ->
-      unless @gameState == "gameOver"
+      if @gameState == "gameOn"
         @stopwatch.resume()
         @powerupSpawner.resume()
         @asteroidSpwaner.resume()
