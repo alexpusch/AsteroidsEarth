@@ -1,10 +1,12 @@
-Asteroid: Earth
+Asteroids: Earth
 ====================
 
 The Asteroids have come to earth! In its final days Earth sends its best Asteroids fighting hero to save the day.
 
 Asteroid: Earth is a cross platform HTML 5 game. The same JS code is run in browser, and as a mobile app.
 
+## Get the game in [Play Store](https://play.google.com/store/apps/details?id=alex.games.asteroidsearth)
+## Play the game in [Browser](http://alexpusch.github.io/AsteroidsEarth/)
 Tools used
 -----------
 
