@@ -7,7 +7,7 @@ define ->
       alpha = (now - start)/duration
       @graphics.alpha = alpha
       if @graphics.alpha < 1
-        requestAnimFrame => 
+        requestAnimFrame =>
           @fadeIn(done, start, duration)
       else
         @graphics.alpha = 1
@@ -23,12 +23,12 @@ define ->
       alpha = 1 - (now - start)/duration
       @graphics.alpha = alpha
       if @graphics.alpha > 0
-        requestAnimFrame => 
+        requestAnimFrame =>
           @fadeOut(done, start, duration)
       else
         @graphics.alpha = 0
         done()
-    
+
     grow: (done, start, duration, options) ->
       from = @graphics.scale.x
       to = options.by * @graphics.scale.x
@@ -51,7 +51,7 @@ define ->
 
     animateParallel: (animationPlan) ->
       animationFunctions = @_createFunctions animationPlan
-      
+
       promise = new Promise (resolve, reject) ->
         async.parallel animationFunctions, ->
           resolve()
@@ -60,7 +60,7 @@ define ->
 
     animate: (animationPlan) ->
       animationFunctions = @_createFunctions animationPlan
-      
+
       promise = new Promise (resolve, reject) ->
         async.series animationFunctions, ->
           resolve()
@@ -74,8 +74,7 @@ define ->
           currentAnimation = @[animation.type]
           currentDuration = animation.duration
           options = _(animation).clone()
-          (done) => 
-            # console.log "start animation", options
+          (done) =>
             animationStart = new Date()
             currentAnimation.call(@, done, animationStart, currentDuration, options)
 

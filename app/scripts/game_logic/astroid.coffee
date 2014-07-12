@@ -1,8 +1,4 @@
 define ['entity'], (Entity) ->
-  window.log = _.throttle (text) ->
-    console.log text
-  , 100
-
   class Astroid extends Entity
     constructor: (options) ->
       super 'astroid'
@@ -32,7 +28,6 @@ define ['entity'], (Entity) ->
       G = 0.003
       forceMagniture = G * @body.GetMass() * @body.GetMass()
       force?.Multiply(forceMagniture)
-      # window.log "force: #{forceMagniture} speed: #{@body.GetLinearVelocity().Length()}"
       @body.ApplyForce force, @body.GetWorldPoint(new B2D.Vec2(0,0))
 
     getRadius: ->

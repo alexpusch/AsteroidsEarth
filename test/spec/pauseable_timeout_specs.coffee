@@ -47,7 +47,6 @@ define ['pauseable_timeout'], (PauseableTimeout) ->
 
         runs ->
           flag = false
-          console.log "runs"
           jasmine.Clock.real.setTimeout.call window, ->
             flag = true
           , 250

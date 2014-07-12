@@ -28,7 +28,6 @@ define ['events', 'pauseable_timeout'], (Events, PauseableTimeout)->
       @waveTimeoutHandler.clear()
 
     _spwanAstroid: (astroidPlan)->
-      console.log "spwaning astroid"
       options =
           radius: astroidPlan.radius
           position: astroidPlan.position

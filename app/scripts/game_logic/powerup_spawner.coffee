@@ -42,7 +42,6 @@ define ['box2d', 'math_helpers', 'shield_powerup', 'pauseable_timeout'], (B2D, M
       nextSpawnTimeout = _.random @config.appearance.min, @config.appearance.max
 
       @timeoutHandler = PauseableTimeout.setTimeout =>
-        console.log "spawn powerup"
         @_spawnPowerup()
         @_spawnNext()
       , nextSpawnTimeout

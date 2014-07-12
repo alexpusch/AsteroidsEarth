@@ -19,9 +19,7 @@ define ->
     pause: ->
       now = new Date()
       @remainingTimeout = @remainingTimeout - (now - @timeAtStart)
-      console.log "pausing at #{now.getTime()}. remaningTime: #{@remainingTimeout}"
       clearTimeout @handler
 
     resume: ->
-      console.log "resuming at #{new Date().getTime()}"
       @start()

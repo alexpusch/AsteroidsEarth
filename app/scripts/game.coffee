@@ -142,7 +142,6 @@ define ['entity_factory',
         unless @gameState == "gameOver"
           @showGameOverEffect contactPoint
           @endGame()
-          console.log "game over"
 
       planet
 

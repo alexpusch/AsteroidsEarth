@@ -27,8 +27,6 @@ define ['typed_object', 'planet', 'wave', 'events', 'math_helpers'], (TypedObjec
 
     startNextWave: (waveIndex) ->
       wavePlan = @generageWavePlan(waveIndex)
-      console.log "wave plan #{waveIndex}"
-      console.log #{wavePlan}
       @events.trigger "newWave", waveIndex
       @currentWave = new Wave wavePlan
 
@@ -73,9 +71,6 @@ define ['typed_object', 'planet', 'wave', 'events', 'math_helpers'], (TypedObjec
         position: @_getRandomPosition radius
         offset: @_getRandomTimeOffset waveIndex
         density: @_getRandomDensity waveIndex
-
-      console.log astroidPlan
-
 
       astroidPlan
 

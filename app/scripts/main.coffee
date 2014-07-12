@@ -43,15 +43,12 @@ require  ['stage', 'asset_loader', 'splashscreen_view', 'game', 'dom_events', 'c
         paused = false
 
     DOMEvents.bind window, 'blur', ->
-      console.log "blur"
       pause()
 
     DOMEvents.bind window, 'focus', ->
-      console.log "focus"
       resume()
 
     CocoonJS.App.setAppShouldFinishCallback ->
-      console.log "app should finish"
       pause()
       CocoonJS.App.showMessageBox("Confirmation" , "Are you sure you want to quit?", "Yes", "No")
 
@@ -64,11 +61,9 @@ require  ['stage', 'asset_loader', 'splashscreen_view', 'game', 'dom_events', 'c
       false
 
     CocoonJS.App.onSuspending.addEventListener ->
-      console.log "onSuspending"
       pause()
 
     CocoonJS.App.onActivated.addEventListener ->
-      console.log "onActivated"
       resume()
 
   isMobileWeb = ->

@@ -28,8 +28,6 @@ define ['box2d', 'events', 'astroid', 'planet', 'spaceship', 'powerup'], (B2D, E
         contact.SetEnabled false
 
     PostSolve: ->
-      # console.log "PostSolve"
-
     _findWorldBody: (bodyA, bodyB) ->
       otherBody = null
 
