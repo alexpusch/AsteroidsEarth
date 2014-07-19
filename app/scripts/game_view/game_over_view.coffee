@@ -1,4 +1,4 @@
-define ['events', 'view', 'pixi_animator', 'pixi_layout'], (Events, View, Animator, PixiLayout) ->
+define ['events', 'view', 'pixi_animator', 'pixi_layout', 'math_helpers'], (Events, View, Animator, PixiLayout, MathHelpers) ->
   class GameOverScreen extends View
     constructor: (container, @score)->
       super container
@@ -9,26 +9,47 @@ define ['events', 'view', 'pixi_animator', 'pixi_layout'], (Events, View, Animat
       gameOverText = @_createGameOverText()
       scoreText = @_createScoreText()
       highScoreText = @_createHighScoreText()
-      @refreshGraphics = @_createRefreshButton()
 
       graphics.alpha = 0
-      graphics.width = @container.width
-      graphics.height = @container.height * 0.8
+      graphics.width = @container.width * 0.7
+      graphics.height = @container.height * 0.7
       graphics.y = @container.height * 0.1
+      graphics.x = (@container.width - graphics.width) / 2
+
+      textGraphics = new PIXI.DisplayObjectContainer()
+      textGraphics.width = graphics.width
+      PixiLayout.justify textGraphics, [
+        gameOverText,
+        scoreText,
+        highScoreText,
+      ]
+
+      bottomGraphics = new PIXI.DisplayObjectContainer()
+      bottomGraphics.width = graphics.width
+      bottomGraphics.height = textGraphics.height * 0.7
+
+      @refreshGraphics = @_createRefreshButton()
+      @refreshGraphics.x = 20
+      @refreshGraphics.width = bottomGraphics.height
+      @refreshGraphics.height = bottomGraphics.height
+
+      playstoreGraphics = @_createGetInPlaystoreButton()
+      PixiLayout.scaleToFit playstoreGraphics, @refreshGraphics.width * 0.7, @refreshGraphics.height * 0.7
+      playstoreGraphics.x = @refreshGraphics.x + @refreshGraphics.width + (bottomGraphics.width - (@refreshGraphics.x + @refreshGraphics.width))/2 - playstoreGraphics.width/2
+      playstoreGraphics.y = bottomGraphics.height/2 - playstoreGraphics.height/2
+
+      bottomGraphics.addChild @refreshGraphics
+      bottomGraphics.addChild playstoreGraphics
 
       PixiLayout.order graphics, [
-        element: gameOverText
-        height: 0.3
-      ,
-        element: scoreText
-        height: 0.2
-      ,
-        element: highScoreText
-        height: 0.1
-      ,
-        element: @refreshGraphics
-        height: 0.4
+        textGraphics,
+        bottomGraphics
       ]
+
+      graphics.height = textGraphics.height + bottomGraphics.height
+
+      PixiLayout.scaleToFit graphics, @container.width * 0.8, @container.height * 0.8
+      PixiLayout.center graphics, @container
 
       graphics
 
@@ -52,13 +73,13 @@ define ['events', 'view', 'pixi_animator', 'pixi_layout'], (Events, View, Animat
 
     _createGameOverText: ->
       new PIXI.Text "GAME OVER",
-        fill: "white"
+        fill: "#EEEEEE"
         font: "100px DroidSans"
         align: "center"
 
     _createScoreText: ->
       new PIXI.Text "SCORE: #{@score.getScore()}",
-        fill: "white"
+        fill: "#EEEEEE"
         font: "100px DroidSans"
         align: "center"
 
@@ -70,7 +91,7 @@ define ['events', 'view', 'pixi_animator', 'pixi_layout'], (Events, View, Animat
           align: "center"
       else
         new PIXI.Text "HIGHSCORE: #{@score.getHighScore()}",
-          fill: "white"
+          fill: "#EEEEEE"
           font: "100px DroidSans"
           align: "center"
 
@@ -88,3 +109,16 @@ define ['events', 'view', 'pixi_animator', 'pixi_layout'], (Events, View, Animat
         @events.trigger "gameStartClicked"
 
       refreshGraphics
+
+    _createGetInPlaystoreButton: ->
+      playstoreTexture = PIXI.Texture.fromImage("images/playstore_bag.png");
+      playstoreGraphics = new PIXI.Sprite(playstoreTexture);
+
+      playstoreGraphics.buttonMode = true
+      playstoreGraphics.interactive = true
+
+      playstoreGraphics.click = ->
+        url = "https://play.google.com/store/apps/details?id=alex.games.asteroidsearth"
+        # window.location = url
+        window.open(url)
+      playstoreGraphics

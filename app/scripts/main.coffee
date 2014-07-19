@@ -17,7 +17,7 @@ require  ['stage', 'asset_loader', 'splashscreen_view', 'game', 'dom_events', 'c
 
   showSplashScreen = (stage) ->
     splashscrenAssets = [
-      "images/splashscreen.png"
+      "images/splashscreen.png",
     ]
 
     AssetLoader.loadGraphicAssets(splashscrenAssets).then ->
@@ -125,7 +125,8 @@ require  ['stage', 'asset_loader', 'splashscreen_view', 'game', 'dom_events', 'c
       "images/mass.png",
       "images/shield.png",
       "images/shockwave.png",
-      "images/speed.png"
+      "images/speed.png",
+      "images/playstore_bag.png"
     ]
     stage.startMainLoop()
 
