@@ -12,7 +12,7 @@ define ['events'], (Events) ->
       @width = canvas.width
       @height = canvas.height
 
-      @pixiRenderer = PIXI.autoDetectRenderer(@width, @height, canvas)
+      @pixiRenderer = PIXI.autoDetectRenderer(@width, @height, canvas, false, true)
 
       @pixleRatio = window.devicePixelRatio
       @container = new PIXI.DisplayObjectContainer()

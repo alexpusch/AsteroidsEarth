@@ -69,6 +69,12 @@ require  ['stage', 'asset_loader', 'splashscreen_view', 'game', 'dom_events', 'c
   isMobileWeb = ->
     /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
 
+  isInIframe = ->
+    try
+      return window.self != window.top
+    catch e
+      return true
+
   window.isCocoonJS = ->
     navigator.isCocoonJS
 
@@ -93,6 +99,16 @@ require  ['stage', 'asset_loader', 'splashscreen_view', 'game', 'dom_events', 'c
         height: window.innerHeight
         container: document.body
       gameConfig = Configuration.Mobile
+    else if isInIframe()
+      window.focus()
+      DOMEvents.bind document, 'click', ->
+        window.focus()
+      setupPage "cocoon-template", "iframe"
+      options =
+        width: window.innerWidth
+        height: window.innerHeight
+        container: document.body
+      gameConfig = Configuration.Desktop
     else
       setupPage "desktop-template", "desktop"
       gameEl = document.getElementById "game"
