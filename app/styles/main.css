@@ -1,6 +1,6 @@
 @font-face{
     font-family: DroidSans;
-    src: url('../fonts/DroidSans.ttf');
+    src: url('fonts/DroidSans.ttf');
 }
 
 body#desktop {
