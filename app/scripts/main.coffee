@@ -67,6 +67,7 @@ require  ['stage', 'asset_loader', 'splashscreen_view', 'game', 'dom_events', 'c
       resume()
 
   isMobileWeb = ->
+    (not isCocoonJS()) and
     /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
 
   isInIframe = ->
@@ -144,12 +145,19 @@ require  ['stage', 'asset_loader', 'splashscreen_view', 'game', 'dom_events', 'c
       "images/speed.png",
       "images/playstore_bag.png"
     ]
+
+    fonts = [
+      src: "styles/fonts/DroidSans.ttf"
+      fontFamily: "DroidSans"
+    ]
+
     stage.startMainLoop()
 
     showSplashScreen(stage).then (splashScreen)->
       Promise.all([
         AssetLoader.loadAudioAssets(audioAssets),
         AssetLoader.loadGraphicAssets(graphicAssets),
+        AssetLoader.loadFonts fonts
         getDelayedPromise 2000
       ]).then ->
         splashScreen.fadeOut().then ->

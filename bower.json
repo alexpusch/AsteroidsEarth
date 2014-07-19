@@ -4,11 +4,12 @@
   "dependencies": {
     "async": "~0.8.0",
     "box2dweb": "latest",
-    "pixi" : "git@github.com:videlais/pixi.js.git#dev",
+    "pixi": "git@github.com:videlais/pixi.js.git#dev",
     "underscore": "~1.5.2",
     "es6-promise": "latest",
     "SoundJS": "latest",
-    "soundjsCocoonjsPlugin": "~0.5.2"
+    "soundjsCocoonjsPlugin": "~0.5.2",
+    "Font.js": "*"
   },
   "devDependencies": {
     "requirejs": "~2.1.9"

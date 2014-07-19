@@ -21,5 +21,27 @@ define ->
 
         assetLoader.load()
 
+    @loadFonts: (fontsData) ->
+      if isCocoonJS()
+        return Promise.resolve()
+      promises = _(fontsData).map (fontData) =>
+        @loadFont fontData
+
+      Promise.all promises
+
+    @loadFont: (fontData) ->
+      font = new Font()
+      font.src = fontData.src
+      font.fontFamily = fontData.fontFamily
+
+      promise = new Promise (resolve, reject) ->
+        font.onload = ->
+          resolve()
+
+        font.onerror = (msg) ->
+          reject msg
+
+      promise
+
     @loadAssets: (graphicAssets, audioAssets) ->
       Promise.all [@loadAudioAssets audioAssets, @loadGraphicAssets graphicAssets]
