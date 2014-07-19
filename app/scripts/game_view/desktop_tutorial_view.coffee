@@ -70,7 +70,7 @@ define ['view', 'math_helpers', 'pixi_animator'], (View, MathHelpers, Animator) 
 
       orGraphics = new PIXI.Text "/",
         font: "12pt Helvetica"
-        fill: "EEEEEE"
+        fill: "#EEEEEE"
         align: "center"
 
       orGraphics.position = new PIXI.Point x + gridUnit * 3.5 , y

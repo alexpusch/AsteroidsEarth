@@ -18,7 +18,7 @@ define ['tutorial_view', 'desktop_tutorial_view'], (TutorialView, DesktopTutoria
       zoomRatio: 65
       Spaceship:
         speed: 200
-        angularSpeed: 50
+        angularSpeed: 40
         width: 2
         length: 3
         cannonHeatRate: 0.1
