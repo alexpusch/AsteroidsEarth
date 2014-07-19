@@ -15,10 +15,11 @@ define ->
     @loadGraphicAssets: (assets) ->
       new Promise (resolve, reject) ->
         assetLoader = new PIXI.AssetLoader assets
-        assetLoader.load()
 
         assetLoader.addEventListener "onComplete", ->
           resolve()
+
+        assetLoader.load()
 
     @loadAssets: (graphicAssets, audioAssets) ->
       Promise.all [@loadAudioAssets audioAssets, @loadGraphicAssets graphicAssets]
